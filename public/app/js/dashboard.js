@@ -126,6 +126,50 @@ $(document).ready(function() {
             }
         });
     });
+
+    this.getMessageHistory = function(botId, clientId) {
+        var sendData = {
+            botId: botId,
+            clientId: clientId
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '/board/get/message/history',
+            data: sendData,
+            dataType: 'JSON'            
+        }).done(function(response) {
+            if(response && response.flag == true) {
+                for(var obj of response.data) {
+                    $('div#chatContent.content').append(' <div style="max-width: 70%; float: left; display:block;"> ' + 
+                                                            '<span style="font-size: 11px; color: black;">' +
+                                                                    '<strong>' + obj.clientname + '</strong> 11:57 AM ' +
+                                                                '</span>' +
+                                                                '<div style="margin-top:0px">' +
+                                                                    '<label style="padding:8px; border-radius: 5px; background-color:rgb(242, 246, 249); font-size: 17px; color:black">' +
+                                                                        obj.message +
+                                                                    '</label>' +
+                                                                '</div>' +
+                                                            '</div>');
+
+                    $('div#chatContent.content').append('<div style="height:55px;"></div>');
+
+                    $('div#chatContent.content').append('<div style="float: right; max-width: 70%; display:block;">' +
+                                                            '<span style="font-size: 11px; color: black;">' +
+                                                                '<strong>' + obj.botname + '</strong> 11:57 AM' +
+                                                        '</span>' +
+                                                            '<div style="margin-top:0px">' +
+                                                                '<label style="padding:8px; border-radius: 5px; background-color: rgb(219, 244, 253); font-size: 17px; color:black">' +
+                                                                    obj.reply +
+                                                                '</label>' +
+                                                            '</div>' +
+                                                        '</div>');
+
+                    $('div#chatContent.content').append('<div style="height:55px;"></div>');
+                }
+            }
+        })
+    }
  });
 
  

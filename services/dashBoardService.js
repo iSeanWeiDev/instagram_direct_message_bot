@@ -16,6 +16,7 @@ var DashBordService = {};
 
 DashBordService.getBotDetails = getBotDetails;
 DashBordService.getHistories = getHistories;
+DashBordService.getMessageHistoryById = getMessageHistoryById;
 
 function getBotDetails(userId, cb) {
     var selectQuery = 'SELECT \
@@ -295,6 +296,53 @@ function convertTime(mili, callback) {
         delta = parseInt(delta /  86400);
         callback(delta + ' days ago');
     }
+}
+
+/**
+ * @description
+ * Get Bot Message history by botid
+ * 
+ * @param {INTEGER} userId
+ * @param {INTEGER} botId
+ * @param {INTEGER} clientId 
+ * @param {OBJECT} cb 
+ */
+function getMessageHistoryById(userId, botId, clientId, cb) {
+    var selectQuery = `SELECT 
+                            a.id AS botid, 
+                            a.botname AS botname, 
+                            d.clientid AS clientid, 
+                            d.clientname AS clientname, 
+                            d."createdAt" AS timestamp, 
+                            d.message AS message, 
+                            b.message as reply
+                        FROM 
+                            public."Bots" AS a, 
+                            public."Replies" AS b, 
+                            public."Users" AS c,  
+                            public."RepliesHistories" AS d 
+                        WHERE 
+                            a.id = b.botid AND
+                            a.id = d.botid AND
+                            CAST(a.userid AS DECIMAL) = CAST(c.id AS DECIMAL) AND
+                            b.id = d.replyid AND
+                            c.id = ? AND
+                            a.id = ? AND
+                            d.clientid = ? 
+                        ORDER BY 
+                            d."createdAt"`;
+
+    sequelize.query(selectQuery, {
+        replacements: [
+            userId,
+            botId,
+            clientId
+        ]
+    }).then(function(result) {
+        cb(result[0]);
+    }).catch(function(error) {
+        console.log('Get History count data error: ' + error);
+    });
 }
 
 // Export DashBordService module.

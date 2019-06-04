@@ -48,7 +48,7 @@
                                 </thead>
                                 <tbody style="cursor: pointer;">
                                 <% data.forEach(function(element) { %>
-                                    <tr class="text-center align-middle">
+                                    <tr onclick="getMessageHistory(<%=element.botId%>, <%=element.clientId%>)" class="text-center align-middle" data-target="#messageHistory<%=element.botId%><%=element.clientName%>" style="cursor: pointer" data-toggle="modal">
                                         <th scope="row">
                                             <%= element.botName %>
                                         </th>
@@ -69,10 +69,49 @@
                                             </strong>
                                         </td>
                                     </tr>
-                                <% }) %>
+                                <% }); %>
                                 </tbody>
                             </table>
                             
+                            <% data.forEach(function(element) { %>
+                                <!-- Begin Modal -->
+                                <div class="modal" id="messageHistory<%=element.botId%><%=element.clientName%>" tabindex="-1" role="dialog" aria-hidden="true">
+                                    <div class="modal-dialog modal-full-right" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <img src="<%=element.image%>" class="rounded-circle border-primary" style="border: 5px solid; width: 90px;" alt="">
+                                                <div class="form-group p-1 pl-3">
+                                                    <h4 class="modal-title">
+                                                        <strong class="text-primary">
+                                                            <%= element.clientName %>
+                                                        </strong>
+                                                    </h4>
+                                                    <span class="pb-0 font-italic font-weight-bold"><%= element.botName %></span><br>
+                                                    <span class="pb-0 font-italic font-weight-bold"><%= element.last%></span>
+                                                </div>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">×</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body offset-1 p-4" id="result">
+                                                <div class="pl-3 pr-3 pt-3 pb-3" style="background-color: transparent; border-radius: 25px;">
+                                                    <div class="form-group">
+                                                        <div class="content" id="chatContent">
+                
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End Modal -->
+                            <% }); %>
+
+
                             <% if(data.length == 0) { %>
                             <div class="col-12 text-center pt-3 text-danger font-weight-bold">
                                 <label class="pl-3 pt-2 pr-3 pb-2 border-danger" style="border: 3px solid;"> 

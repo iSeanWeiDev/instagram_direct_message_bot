@@ -15,6 +15,7 @@ var router = express.Router();
 var BoardController = require('../controllers/boardController');
 
 router.post('/get/init', BoardController.init);
+router.post('/get/message/history', BoardController.getMessageHistory);
 
 // Export module.
 module.exports = router;
