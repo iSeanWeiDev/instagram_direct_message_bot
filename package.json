@@ -1,0 +1,31 @@
+{
+  "name": "instagram-direct-message-bot-v1.1.1",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "bluebird": "^3.5.4",
+    "body-parser": "^1.19.0",
+    "child_process": "^1.0.2",
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "ejs": "^2.6.1",
+    "express": "~4.16.1",
+    "express-ejs-layouts": "^2.5.0",
+    "express-session": "^1.16.1",
+    "http-errors": "~1.6.3",
+    "instagram-private-api": "^0.10.1",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.11",
+    "morgan": "~1.9.1",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0",
+    "path": "^0.12.7",
+    "pg": "^7.11.0",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^5.8.6"
+  }
+}

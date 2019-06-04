@@ -1,0 +1,145 @@
+body {
+  font-size: .875rem;
+}
+
+/* Navbar style */
+.navbar {
+  background-color: #3f51b5;
+}
+  
+.navbar-brand {
+  padding-top: .75rem;
+  -webkit-box-shadow: 1px 0 3px 0 rgba(0, 0, 0, .25);
+        box-shadow: 1px 0 3px 0 rgba(0, 0, 0, .25);
+}
+
+.navbar .form-control {
+  padding: .75rem 1rem;
+  border-width: 0;
+  border-radius: 0;
+}
+
+.border-top { border-top: 1px solid #e5e5e5; }
+.border-bottom { border-bottom: 1px solid #e5e5e5; }
+
+/* Sidbar style */
+.sidebar {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 0; /* Behind the navbar */
+  padding: 0;
+  -webkit-box-shadow: 5px 0 5px -2px #888;
+      box-shadow: 5px 0 5px -2px #888;
+}
+
+.sidebar-sticky {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 48px; /* Height of navbar */
+  height: calc(100vh - 48px);
+  padding-top: .5rem;
+  overflow-x: hidden;
+  overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+}
+
+.sidebar .nav-link {
+  font-weight: 500;
+  color: #333;
+}
+
+.sidebar .nav-link .feather {
+  margin-right: 4px;
+  color: #999;
+}
+
+.sidebar .nav-link.active {
+  color: #007bff;
+}
+
+.sidebar .nav-link:hover .feather,
+.sidebar .nav-link.active .feather {
+  color: inherit;
+}
+
+.sidebar-heading {
+  font-size: .75rem;
+  text-transform: uppercase;
+}
+
+.card-bots {
+  cursor: pointer !important;
+}
+
+/* .card-bots :hover {
+  width: 98%;
+  height: 98%;
+  color: #007bff;
+  text-transform: uppercase;
+}
+.card-bots :hover button{
+  width: 45%;
+  height: 50%;
+} */
+
+/* Design Modal */
+.modal-full-right .modal-content {
+  min-height: 100vh;
+}
+
+@keyframes fadeInLeft {
+  from {
+      opacity:0;
+      -webkit-transform: translatex(-100px);
+      -moz-transform: translatex(-100px);
+      -o-transform: translatex(-100px);
+      transform: translatex(-100px);
+  }
+  to {
+      opacity:1;
+      -webkit-transform: translatex(0);
+      -moz-transform: translatex(0);
+      -o-transform: translatex(0);
+      transform: translatex(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+      opacity:0;
+      -webkit-transform: translatex(100px);
+      -moz-transform: translatex(100px);
+      -o-transform: translatex(100px);
+      transform: translatex(100px);
+  }
+  to {
+      opacity:1;
+      -webkit-transform: translatex(0);
+      -moz-transform: translatex(0);
+      -o-transform: translatex(0);
+      transform: translatex(0);
+  }
+}
+
+.modal-full-right {
+  min-width: 35%;
+  margin: 0;
+  float: right;
+  -webkit-animation-name: fadeInRight;
+  -moz-animation-name: fadeInRight;
+  -o-animation-name: fadeInRight;
+  animation-name: fadeInRight;
+  -webkit-animation-fill-mode: both;
+  -moz-animation-fill-mode: both;
+  -o-animation-fill-mode: both;
+  animation-fill-mode: both;
+  -webkit-animation-duration: 0.5s;
+  -moz-animation-duration: 0.5s;
+  -o-animation-duration: 0.5s;
+  animation-duration: 0.5s;
+  -webkit-animation-delay: 0.5s;
+  -moz-animation-delay: 0.5s;
+  -o-animation-duration: 0.5s;
+  animation-delay: 0.5s;
+}

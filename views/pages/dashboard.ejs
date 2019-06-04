@@ -1,0 +1,172 @@
+<body data-gr-c-s-loaded="true" class="bg-light">
+    <!-- Begin import page header -->
+    <% include ../partials/header %>
+    <!-- End import page header -->
+
+    <div class="container-fluid">
+
+        <!-- Begin import page sidebar -->
+        <% include ../partials/sidebar %>
+        <!-- End import page sidebar -->
+
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+            <div class="row">
+                <div class="col-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="form-group pl-3">
+                                <h4 class="text-info">
+                                    <strong>
+                                        Last Dialogs
+                                    </strong>
+                                </h4>
+                            </div>
+                            <table class="table table-hover">
+                                <thead class="bg-light">
+                                    <tr class="text-center">
+                                        <th scope="col">
+                                            <strong>
+                                            Bot
+                                            </strong>
+                                        </th>
+                                        <th scope="col">
+                                            <strong>
+                                                Client
+                                            </strong>
+                                        </th>
+                                        <th scope="col">
+                                            <strong>
+                                            Last
+                                            </strong>
+                                        </th>
+                                        <th scope="col">
+                                            <strong>
+                                            Messges
+                                            </strong>    
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody style="cursor: pointer;">
+                                <% data.forEach(function(element) { %>
+                                    <tr class="text-center align-middle">
+                                        <th scope="row">
+                                            <%= element.botName %>
+                                        </th>
+                                        <td class="float-left">
+                                            <img src="<%= element.image%>" class="rounded-circle border-info" style="width: 35px; border: 2px solid;" alt="">
+                                            <strong>
+                                            &nbsp;<%= element.clientName %>
+                                            </strong>
+                                        </td>
+                                        <td>
+                                            <strong>
+                                            <%= element.last%>
+                                            </strong>
+                                        </td>
+                                        <td>
+                                            <strong>
+                                            <%= element.count%>
+                                            </strong>
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                                </tbody>
+                            </table>
+                            
+                            <% if(data.length == 0) { %>
+                            <div class="col-12 text-center pt-3 text-danger font-weight-bold">
+                                <label class="pl-3 pt-2 pr-3 pb-2 border-danger" style="border: 3px solid;"> 
+                                No data to display 
+                                </label> 
+                            </div>'
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="form-inline pl-3">
+                                <h4 class="text-success">
+                                    <strong>
+                                        Quick States
+                                    </strong>
+                                </h4>
+                                <div class="form-group pl-3 pt-0 ">
+                                    <select id="dayFilter" class="form-control">
+                                        <option value="1" selected> Today </option>
+                                        <option value="2">Yesterday</option>
+                                        <option value="3">Week</option>
+                                        <option value="4">months</option>
+                                        <option value="5">Years</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <table class="table table-hover">
+                                    <thead class="bg-light">
+                                        <tr class="text-center">
+                                            <th scope="col">
+                                                <strong>
+                                                Bot
+                                                </strong>
+                                            </th>
+                                            <th scope="col">
+                                                <strong>
+                                                Dialogs started
+                                                </strong>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody style="cursor: pointer;" id="dialogTbody">
+                                        <!-- Inputed dialogs -->
+                                    </tbody>
+                                </table>
+                                <div id="dialogDiv">
+                                    <!-- Inputed dialogs -->
+                                </div>
+                            </div>
+                            <hr>
+
+                            <div class="form-group">
+                                <table class="table table-hover">
+                                    <thead class="bg-light">
+                                        <tr class="text-center">
+                                            <th scope="col">
+                                                <strong>
+                                                Bot
+                                                </strong>
+                                            </th>
+                                            <th scope="col">
+                                                <strong>
+                                                Comment added
+                                                </strong>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody style="cursor: pointer;" id="commentTbody">
+                                        <!-- Inputed dialogs -->
+                                    </tbody>
+                                </table>
+                                <div id="commentDiv">
+                                    <!-- Inputed dialogs -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Begin import page footer -->
+    <% include ../partials/footer%>
+    <!-- End import page footer -->
+
+
+    <!-- Begin import jabascript libs -->
+    <% include ../partials/scripts %>
+    <!-- End import jabascript libs -->
+
+    <script src="app/js/dashboard.js"></script>
+</body>

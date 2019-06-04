@@ -1,0 +1,260 @@
+/* This is demo purpose Body CSS */
+/* Smartphones (portrait and landscape) */
+ @media screen and (min-width: 320px) and (max-width: 667px) {
+    /* logo center */
+     .logo > h1 {
+         letter-spacing:5px;
+         font-size: 25px;
+         font-weight: 800;
+         text-transform:uppercase;
+         text-shadow: 2px 2px #000;
+    }
+    /* Login Heading */
+     .logo > h2 {
+         font-family: "Open Sans", sans-serif;
+         font-size: 15px;
+         font-weight: 400;
+         margin: 11px 0px;
+         color:#fff;
+    }
+     .logo span {
+         color: #ffc815;
+         font-size: 25px;
+    }
+    /* Logo postion */
+     .logo {
+         position: absolute;
+         display: block;
+         color: #fff;
+         top: 25px;
+         text-align:center;
+         left: 10%;
+         right: 10%;
+    }
+    /* Images Box */
+     .logo > h2::after {
+         background: #ffc815;
+         content: "";
+         height: 3px;
+         left: 50%;
+         margin-left: -30px;
+         position: absolute;
+         top: -9px;
+         width: 60px;
+    }
+     .image-heading {
+         margin: 50px 0 80px;
+    }
+    /* title */
+     .heading-title {
+         text-transform: uppercase;
+         color: #333;
+         margin: 50px 0;
+    }
+    /* footer copyright */
+     .copyright {
+         margin: 30px 0;
+         font-size: 12px;
+    }
+    /* copyright link */
+     .copyright > a {
+         color: #FF2B42;
+    }
+    /* margin top */
+     .row.mar-top {
+         margin-top: 50px;
+    }
+     .btn-btm {
+         margin: 30px 0px;
+    }
+     .btn-success {
+         font-size:13px;
+         font-family: "Open Sans", sans-serif;
+    }
+     .top-btn {
+         margin:0 auto;
+    }
+}
+/* iPads (portrait and landscape) */
+ @media screen and (min-width: 768px) and (max-width: 1223px) {
+    /* logo center */
+     .logo > h1 {
+         letter-spacing:5px;
+         font-size: 30px;
+         font-weight: 800;
+         text-transform:uppercase;
+         text-shadow: 2px 2px #000;
+    }
+    /* Login Heading */
+     .logo > h2 {
+         font-family: "Open Sans", sans-serif;
+         font-size: 15px;
+         font-weight: 400;
+         margin: 20px 0px;
+         color:#fff;
+    }
+     .logo span {
+         color: #ffc815;
+         font-size: 30px;
+    }
+    /* Logo postion */
+     .logo {
+         position: absolute;
+         display: block;
+         color: #fff;
+         top: 120px;
+         text-align:center;
+         left:15%;
+         right:15%;
+    }
+    /* Images Box */
+     .logo > h2::after {
+         background: #ffc815;
+         content: "";
+         height: 3px;
+         left: 50%;
+         margin-left: -30px;
+         position: absolute;
+         top: -9px;
+         width: 60px;
+    }
+     .image-heading {
+         margin: 50px 0 80px;
+    }
+    /* title */
+     .heading-title {
+         text-transform: uppercase;
+         color: #333;
+         margin: 50px 0;
+    }
+    /* footer copyright */
+     .copyright {
+         margin: 30px 0;
+         font-size: 12px;
+    }
+    /* copyright link */
+     .copyright > a {
+         color: #FF2B42;
+    }
+    /* margin top */
+     .row.mar-top {
+         margin-top: 50px;
+    }
+     .btn-btm{
+         margin-top:50px;
+    }
+     .btn-success {
+         font-size:1rem;
+         font-family: "Open Sans", sans-serif;
+    }
+     .top-btn {
+         margin:0 auto;
+    }
+}
+/* Desktops and laptops */
+ @media screen and (min-width: 1224px) {
+    /* logo center */
+     .logo > h1 {
+         letter-spacing:5px;
+         font-size: 60px;
+         font-weight: 800;
+         text-transform:uppercase;
+         text-shadow: 2px 2px #000;
+    }
+    /* Login Heading */
+     .logo > h2 {
+         font-family: "Open Sans", sans-serif;
+         font-size: 30px;
+         font-weight: 400;
+         margin: 30px 0px;
+         color:#fff;
+    }
+     .logo span {
+         color: #ffc815;
+         font-size: 60px;
+    }
+    /* Logo postion */
+     .logo {
+         position: absolute;
+         display: block;
+         color: #fff;
+         width: 100%;
+         top: 200px;
+         text-align:center;
+    }
+    /* Images Box */
+     .logo > h2::after {
+         background: #ffc815;
+         content: "";
+         height: 3px;
+         left: 50%;
+         margin-left: -30px;
+         position: absolute;
+         top: -9px;
+         width: 60px;
+    }
+     .image-heading {
+         margin: 50px 0 80px;
+    }
+    /* title */
+     .heading-title {
+         text-transform: uppercase;
+         color: #333;
+         margin: 50px 0;
+    }
+    /* heading */
+     .text-heading {
+         color: #666666;
+         font-size: 15px;
+         font-weight: 400;
+         text-transform: capitalize;
+         font-family: "Open Sans", sans-serif;
+         padding: 25px 0px;
+    }
+    /* show_grid */
+     .show_grid img {
+         box-shadow: 0px 5px 10px rgba(0,0,0,.2);
+         transition: all .5s ease-in-out;
+    }
+     .show_grid img {
+         width: 100%;
+         border-radius: 6px;
+         -webkit-border-radius: 6px;
+         -o-border-radius: 6px;
+         -moz-border-radius: 6px;
+         box-sizing: border-box;
+         z-index: 2;
+    }
+     .show_grid img:hover {
+         box-shadow: 0px 10px 20px rgba(0,0,0,.5);
+         transition: all .5s ease-in-out;
+         transform: scale(1.02, 1.02);
+    }
+     .btn-success{
+         margin-top:50px;
+    }
+    /* footer copyright */
+     .copyright {
+         margin: 150px 0 50px 0px;
+         font-size: 12px;
+    }
+    /* copyright link */
+     .copyright > a {
+         color: #FF2B42;
+    }
+    /* margin top */
+     .row.mar-top {
+         margin-top: 50px;
+    }
+     .top-btn {
+         margin:0 auto;
+    }
+}
+/* Large screens -- -- -- -- -- - */
+ @media screen and (min-width: 1824px) {
+    /* Styles */
+}
+ .demo {
+     font-family: "Open Sans", sans-serif;
+     background: #f9f9f9;
+}

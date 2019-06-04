@@ -1,0 +1,243 @@
+<body data-gr-c-s-loaded="true" class="bg-light">
+    <!-- Begin import page header -->
+    <% include ../partials/header %>
+    <!-- End import page header -->
+
+    <div class="container-fluid">
+
+        <!-- Begin import page sidebar -->
+        <% include ../partials/sidebar %>
+        <!-- End import page sidebar -->
+
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+            <% if(data.rows.length == 0) { %>
+            <div class="container pt-5">
+                <div class="col-md-6 offset-xl-3 mt-5">
+                    <div class="card p-3">
+                        <div class="card-body">
+                            <div class="text-center">
+                                <h4 class="text-danger">
+                                    <strong>
+                                        There is no BOTs to display.
+                                    </strong>
+                                </h4>
+                            </div><hr>
+                           
+                            <div class="text-center pt-3">
+                                <h5 class="text-info">
+                                    <b>
+                                        If you want to create new bot, click
+                                        <a href="/connect" class="text-success">
+                                            here
+                                        </a>
+                                    </b>
+                                </h5>
+                                
+                            </div>
+
+                            <div class="pt-3 text-center">
+                                <a href="/connect" class="btn btn-outline-success font-weight-bold">
+                                    create new bot
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+            <div class="row">
+                <% data.rows.forEach(function(bot) { %>
+                <div class="col-md-3 mt-3 mb-3 card-bots">
+                    <div class="card">
+                        <img src="assets/images/bot.jpg" class="card-img bot-img" alt="header-image">
+                        <div class="card-img-overlay pr-2 pt-2">
+                            <div class="fixed-right text-right text-white">
+                                <i onclick=" deleteBot(<%= bot.dataValues.id %>)" class="material-icons outlined">
+                                    cancel
+                                </i>
+                            </div>
+                        </div>
+                        <div class="card-body text-center">
+                            <h5 class="card-title text-success font-weight-bold">
+                                <strong>
+                                   <b> <%= bot.dataValues.botname%> </b>
+                                </strong>
+                            </h5>
+                            <div class="btn-group-toggle">
+                                <button type="button" data-toggle="modal" data-target="#editBotModall<%= bot.dataValues.id%>" class="btn font-weight-bold btn-outline-primary">
+                                    Edit Bot
+                                </button>
+                                <button type="button" data-toggle="modal" data-target="#challengeModal<%= bot.dataValues.id%>" class="btn font-weight-bold btn-danger">
+                                    <strong>
+                                        challenge
+                                    </strong>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Begin Modals -->
+                        <!-- Begin of challenge modal -->
+                        <div class="modal fade" id="editBotModall<%= bot.dataValues.id%>" role="dialog" tabindex="-1" aria-labelledby="editBotModall<%= bot.dataValues.id%>Title" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content ">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title text-success font-weight-bold" id="editBotModall<%= bot.dataValues.id%>Title">
+                                            Edit Bot --
+                                            <%= bot.dataValues.botname%>
+                                        </h5>
+                                        
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <img src="<%= bot.dataValues.image%>" class="rounded-circle border-success" style="width: 100%; border: 5px solid;" alt="">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="input-group mb-3">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text" id="basic-addon1">
+                                                            <i class="material-icons text-primary">
+                                                                perm_identity &nbsp;
+                                                            </i>
+                                                        </span>
+                                                    </div>
+                                                    <input id="accountName" value="<%= bot.dataValues.accountname %>" type="text" class="form-control" placeholder=" &nbsp;Account name" disabled />
+                                                </div>
+                                                <div class="input-group mb-3">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text" id="basic-addon1">
+                                                            <i class="material-icons text-primary">
+                                                                lock &nbsp;
+                                                            </i>
+                                                        </span>
+                                                    </div>
+                                                    <input id="password" value="<%= bot.dataValues.password %>" type="text" class="form-control" placeholder=" &nbsp;Password" disabled />
+                                                </div>
+                                                <div class="input-group mb-3">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text" id="basic-addon1">
+                                                            <i class="material-icons text-primary">
+                                                                timer &nbsp;
+                                                            </i>
+                                                        </span>
+                                                    </div>
+                                                    <input id="delay" value="<%= bot.dataValues.delay %>" type="text" class="form-control" placeholder=" &nbsp;Delay time" />
+                                                </div>
+                                                <div class="input-group mb-3">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text" id="basic-addon1">
+                                                            <i class="material-icons text-primary">
+                                                                comment &nbsp;
+                                                            </i>
+                                                        </span>
+                                                    </div>
+                                                    <input id="maxDailyComment" value="<%= bot.dataValues.max %>" type="text" class="form-control" placeholder=" &nbsp;Max daily comment" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Begin Load more -->
+                                        <div class="text-center">
+                                            <a class="btn btn-primary" onclick="loadMore(<%= bot.dataValues.id%>)" data-toggle="collapse" href="#loadMore<%= bot.dataValues.id%>" role="button" aria-expanded="false" aria-controls="loadMore<%= bot.dataValues.id%>">
+                                                load more
+                                            </a>
+                                        </div>
+
+                                        <div class="collapse" id="loadMore<%= bot.dataValues.id%>">
+                                            <div class="card card-body">
+                                                <div class="form-group">
+                                                    <label for="filters">
+                                                        Filters (hashtags)
+                                                    </label>
+                                                    <textarea class="form-control" rows="3" id="filters<%=bot.dataValues.id%>" aria-describedby="filters-small" placeholder="Enter filters"></textarea>
+                                                    <small id="filters-small" class="form-text text-muted">You need to put the filters with <strong> comma(,) </strong>.</small>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="comments">Comments to commit</label>
+                                                    <textarea class="form-control" rows="3" id="comments<%=bot.dataValues.id%>" aria-describedby="comments-small" placeholder="Enter comments"></textarea>
+                                                    <small id="comments-small" class="form-text text-muted">You need to put the comments with <strong> comma(,) </strong>.</small>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="replies">Direct Messages to reply</label>
+                                                    <textarea class="form-control" rows="3" id="replies<%=bot.dataValues.id%>" aria-describedby="replies-small" placeholder="Enter replies"></textarea>
+                                                    <small id="replies-small" class="form-text text-muted">You need to put the messages with <strong> comma(,) </strong>.</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- End Load more -->
+
+                                    </div>
+                                    <div class="modal-footer mb-3 mr-3">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-outline-success" onclick="saveProperties(<%= bot.dataValues.id%>)">Save changes</button>
+                                    </div>
+                                </div>
+                            </div>                            
+                        </div>
+                        <!-- End of challenge modal -->
+
+                        <!-- Begin of Edit Bot Modal -->
+                        <div class="modal fade" id="challengeModal<%= bot.dataValues.id%>" role="dialog" tabindex="-1" aria-labelledby="challengeModal<%= bot.dataValues.id%>Title" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title text-primary font-weight-bold" id="challengeModal<%= bot.dataValues.id%>Title">
+                                            Challenge --
+                                            <%= bot.dataValues.botname%>
+                                        </h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="text-center p-5">
+                                            <h4 class="text-danger">
+                                                Add Your Phone Number
+                                            </h4>
+                                            <label for="">
+                                                Help us keep the Instagram community safe by entering phone number. 
+                                                We will text you a security code
+                                            </label>
+                                        </div>
+                                        <div class="input-group pr-5 pl-5">
+                                            <input id="max-comment-daily" type="number" class="form-control" placeholder="&nbsp; Input your phone number." aria-label="Please input your phone number." aria-describedby="basic-addon2" autofocus required>
+                                            <div class="input-group-append">
+                                                <button onclick="challengeBot(<%= bot.dataValues.id%>)" type="button" class="ml-auto p-2 pl-3 pr-3 btn btn-raised btn-success">Send</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <div class="text-center pr-lg-5 pl-lg-5">
+                                            <p>Your phone number will be added to your profile but won't be visible to anyone other than you. 
+                                                Instagram doesn't charge for this service. Standard messaging rates apply.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End of Edit Bot Modal -->
+                        <!-- End of Modals -->
+
+                    </div>
+                </div>
+                <% }); %>
+            </div>
+        </main>
+    </div>
+
+    <!-- Begin import page footer -->
+    <% include ../partials/footer%>
+    <!-- End import page footer -->
+
+    <!-- Begin import jabascript libs -->
+    <% include ../partials/scripts %>
+    <!-- End import jabascript libs -->
+
+    <script src="app/js/allbots.js"></script>
+</body>

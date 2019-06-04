@@ -1,0 +1,271 @@
+<body data-gr-c-s-loaded="true" class="bg-light">
+    <!-- Begin import page header -->
+    <% include ../partials/header %>
+    <!-- End import page header -->
+
+    <div class="container-fluid">
+
+        <!-- Begin import page sidebar -->
+        <% include ../partials/sidebar %>
+        <!-- End import page sidebar -->
+
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+            <div class="container">
+                <div class="col-md-8 offset-xl-2 mt-5">
+                    <div class="card">
+                        <div class="card-body pt-1 pr-1 pl-1 pb-1">
+                            <!-- Begin Header of tab panels -->
+                            <ul class="nav nav-tabs bg-primary" id="pills-tab" role="tablist">
+                                <li class="nav-item">
+                                    <a  class="nav-link active" 
+                                        id="validate-tab"
+                                        href="#validate-pan" 
+                                        role="tab" 
+                                        aria-controls="validate-pan" 
+                                        data-toggle="pill">
+
+                                        Validate Bot
+                                    </a>
+                                </li>
+                                <li class="nav-item" id="filter-list-item">
+                                    <a  class="nav-link" 
+                                        id="filter-tab"
+                                        href="#filter-pan" 
+                                        role="tab" 
+                                        aria-controls="filter-pan" 
+                                        data-toggle="pill">
+                                        
+                                        Filters
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a  class="nav-link"
+                                        id="comment-tab"
+                                        href="#comment-pan" 
+                                        role="tab" 
+                                        aria-controls="comment-pan" 
+                                        data-toggle="pill">
+
+                                        Comments
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a  class="nav-link"
+                                        id="message-tab"
+                                        href="#message-pan" 
+                                        role="tab" 
+                                        aria-controls="message-pan" 
+                                        data-toggle="pill">
+
+                                        Default replies
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a  class="nav-link"
+                                        id="setting-tab"
+                                        href="#setting-pan" 
+                                        role="tab" 
+                                        aria-controls="setting-pan" 
+                                        data-toggle="pill">
+
+                                        Settings
+                                    </a>
+                                </li>
+                            </ul>
+                            <!-- End Header of tab panels -->
+
+                            <!-- Begin tab sub pages -->
+                            <div class="tab-content" id="pills-tabContent">
+                                <!-- begin validate bot tab panel -->
+                                <div class="tab-pane fade show active" id="validate-pan" role="tabpanel" aria-labelledby="validate-tab">
+                                    <form action="/bot/validate" id="validateBot" method="POST" class="needs-validation">
+                                        <div class="form-goup pr-5 pl-5 text-center font-weight-bold mt-5">
+                                            <h2><strong>VALIDATE BOT</strong></h2>
+                                            <label class="text-secondary pt-2">Before validate new bot, please check you are already login user</label>
+                                            <hr>
+                                        </div>
+                                        <div class="row pt-3">
+                                            <div class="col-md-6">
+                                                <div class="pl-lg-5 pr-lg-5">
+                                                    <div class="input-group mb-3">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text" id="basic-addon1">
+                                                                <i class="material-icons text-primary">
+                                                                    pets &nbsp;
+                                                                </i>
+                                                            </span>
+                                                        </div>
+                                                        <input id="botName" name="botName" type="text" class="form-control" placeholder=" &nbsp;Bot Name" autocomplete="on" autofocus required/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="pl-lg-5 pr-lg-5">
+                                                    <div class="input-group mb-3">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text" id="basic-addon1">
+                                                                <i class="material-icons text-primary">
+                                                                    perm_identity &nbsp;
+                                                                </i>
+                                                            </span>
+                                                        </div>
+                                                        <input id="userName" name="userName" type="text" class="form-control" placeholder=" &nbsp;Username" autocomplete="on" required/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row pt-3">
+                                            <div class="col-md-6">
+                                                <div class="pl-lg-5 pr-lg-5">
+                                                    <div class="input-group mb-3">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text" id="basic-addon1">
+                                                                <i class="material-icons text-primary">
+                                                                    timer &nbsp;
+                                                                </i>
+                                                            </span>
+                                                        </div>
+                                                        <input id="responseDelay" name="responseDelay" type="number" value="15" class="form-control" placeholder=" &nbsp;Response Delay" autocomplete="on" required/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="pl-lg-5 pr-lg-5">
+                                                    <div class="input-group mb-3">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text" id="basic-addon1">
+                                                                <i class="material-icons text-primary">
+                                                                    lock &nbsp;
+                                                                </i>
+                                                            </span>
+                                                        </div>
+                                                        <input id="password" name="password" type="password" class="form-control" placeholder=" &nbsp;Password" autocomplete="on" required/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group d-lg-flex align-items-right pr-lg-5 mt-lg-3">
+                                            <button type="submit" class="ml-auto p-2 pl-3 pr-3 btn btn-raised btn-success">
+                                                Validate Bot
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <!-- end validate bot tab panel -->
+
+                                <!-- begin input filter tab panel -->
+                                <div class="tab-pane fade" id="filter-pan" role="tabpane" aria-labelledby="filter-tab">
+                                    <form action="/bot/save/filters" method="POST" id="saveFilters" class="needs-validation pr-5 pl-5">
+                                        <div class="form-goup text-center font-weight-bold mt-5">
+                                            <h2><strong>HASHTAG FILTERS</strong></h2>
+                                            <label class="text-secondary pt-2">You must enter the hash tags separated by a comma(<strong>,</strong>).</label>
+                                            <hr>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <textarea id="filters" class="form-control" name="" id="" cols="30" rows="5" placeholder="&nbsp; Please input your hashtags" autofocus required></textarea>
+                                        </div>
+
+                                        <div class="form-group d-lg-flex align-items-right pr-lg-5 mt-lg-3">
+                                            <button type="submit" class="ml-auto p-2 pl-3 pr-3 btn btn-raised btn-success">
+                                                Input Hash tags
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <!-- end input filter tab panel -->
+
+                                <!-- begin input comment tab panel -->
+                                <div class="tab-pane fade" id="comment-pan" role="tabpanel" aria-labelledby="comment-tab">
+                                    <form action="/bot/add/comment" method="POST" id="saveComment" class="needs-validation pr-5 pl-5">
+                                        <div class="form-goup text-center font-weight-bold mt-5">
+                                            <h2><strong>ADD COMMENT</strong></h2>
+                                            <!-- <label class="text-secondary pt-2">Do not upload on comments that violate human.</label> -->
+                                            <hr>
+                                        </div>
+                                        <div class="form-group">
+                                            <textarea id="show-comments" class="form-control" name="" id="" cols="30" rows="15" disabled></textarea>
+                                        </div>
+
+                                        <div class="input-group mb-5 pt-3 pr-3 pl-3">
+                                            <input id="comment" type="text" class="form-control" placeholder="&nbsp; Please add your comment." aria-label="Please Add your comment" aria-describedby="basic-addon2" required/>
+                                            <div class="input-group-append">
+                                                <button type="submit" class="ml-auto p-2 pl-3 pr-3 btn btn-raised btn-success">Submit</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <!-- end input comment tab panel -->
+
+                                <!-- begin direct message tab panel -->
+                                <div class="tab-pane fade" id="message-pan" role="tabpanel" aria-labelledby="message-tab">
+                                    <form action="/bot/add/message" method="POST" id="saveReply" class="needs-validation pr-5 pl-5">
+                                        <div class="form-goup text-center font-weight-bold mt-5">
+                                            <h2><strong>DEFAULT REPLY</strong></h2>
+                                            <!-- <label class="text-secondary pt-2">Do not upload on message that violate human.</label> -->
+                                            <hr>
+                                        </div>
+                                        <div class="form-group">
+                                            <textarea id="show-messages" class="form-control" name="" id="" cols="30" rows="15" disabled></textarea>
+                                        </div>
+
+                                        <div class="input-group mb-5 pt-3 pr-3 pl-3">
+                                            <input id="message" type="text" class="form-control" placeholder="&nbsp; Please add your message." aria-label="Please add your message" aria-describedby="basic-addon2" autofocus required>
+                                            <div class="input-group-append">
+                                                <button type="submit" class="ml-auto p-2 pl-3 pr-3 btn btn-raised btn-success">Submit</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <!-- end direct message tab panel -->
+
+                                <!-- begin activity setting tab panel -->
+                                <div class="tab-pane fade" id="setting-pan" role="tabpanel" aria-labelledby="setting-tab">
+                                    <form action="/bot/set/max" method="POST" id="setMaxCommentDaily" class="needs-validation pr-5 pl-5">
+                                        <div class="form-goup text-center font-weight-bold mt-5">
+                                            <h2><strong>Activity Settings</strong></h2>
+                                            <label class="text-secondary pt-2">You need to set the activity with setting.</label>
+                                            <hr>
+                                        </div>
+
+                                        <div class="input-group mb-5 pt-3 pr-3 pl-3">
+                                            <input id="max-comment-daily" type="number" class="form-control" placeholder="&nbsp; Max Comments Daily." aria-label="Please input your bot max comment daily." aria-describedby="basic-addon2" autofocus required>
+                                            <div class="input-group-append">
+                                                <button type="submit" class="ml-auto p-2 pl-3 pr-3 btn btn-raised btn-success">Save</button>
+                                            </div>
+                                        </div>
+                                    </form>
+
+                                    <div class="form-group d-lg-flex align-items-right pr-lg-5 mt-lg-3">
+                                        <div class="form-group pl-5">
+                                            <h5 class="error-text valid-feedback">
+                                                <strong class="error-text-content"></strong>
+                                            </h5>
+                                        </div>
+                                        
+                                        <button onclick="createNewBot()" type="button" class="ml-auto p-2 pl-3 pr-3 btn btn-raised btn-primary">
+                                            Create Bot
+                                        </button>
+                                    </div>
+                                </div>
+                                <!-- end activity setting tab panel -->
+                            </div>
+                            <!-- End tab sub pages -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Begin import page footer -->
+    <% include ../partials/footer%>
+    <!-- End import page footer -->
+
+    <!-- Begin import jabascript libs -->
+    <% include ../partials/scripts %>
+    <!-- End import jabascript libs -->
+
+    <script src="app/js/connect.js"></script>
+</body>
