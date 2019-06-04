@@ -334,11 +334,6 @@ BotController.deleteBotById = function(req, res) {
         arrBotProcess = arrBotProcessBackup.slice(0);
         arrBotProcessName = arrBotProcessNameBackup.slice(0);
 
-
-        console.log('///////////////deleted bot count//////////////////////');
-        console.log(arrBotProcessName.length);
-
-        ////////////////////////////////////////
         BotModel.update(updateBotData, {
             where: {
                 id: req.body.botId,
