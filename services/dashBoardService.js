@@ -9,7 +9,7 @@
 // Import npm modules.
 var Sequelize = require('sequelize');
 
-var sequelize = new Sequelize('postgres://postgres:Rango941001top@@@@localhost:5433/instagram_dev');
+var sequelize = new Sequelize('postgres://postgres:Rango941001top@@@@localhost:5432/instagram_dev');
 
 // Definition Dashboard Service module.
 var DashBordService = {};
