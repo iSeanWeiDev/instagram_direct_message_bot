@@ -46,6 +46,10 @@ $(document).ready(function() {
                             status:'success'
                         }
                     );
+
+                    setTimeout(() => {
+                        window.open('/', '_self');
+                    }, 1000);
                 } else {
                     var mkConfig = {
                         positionY: 'top',
