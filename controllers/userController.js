@@ -68,7 +68,9 @@ UserController.login = function(req, res) {
             if(isMatch && !err) {
                 req.session.user = {
                     id: user.dataValues.id,
-                    username: user.dataValues.username
+                    username: user.dataValues.username,
+                    firstName: user.dataValues.firstname,
+                    lastName: user.dataValues.lastname
                 };
                 
                 req.session.authenticated = true;
