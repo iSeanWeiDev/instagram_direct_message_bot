@@ -202,13 +202,45 @@ $(document).ready(function() {
                     $('h5.error-text').removeClass('valid-feedback');
                     $('h5.error-text').addClass('text-success');
                     $('strong.error-text-content').append(response.message);
+
+                    var mkConfig = {
+                        positionY: 'top',
+                        positionX: 'right',
+                        max: 10,
+                        scrollable: false
+                    };
+                
+                    mkNotifications(mkConfig);
+                
+                    mkNoti(
+                        'Congratration!',
+                        response.message,
+                        {
+                            status:'success'
+                        }
+                    );
                     setTimeout(() => {
                         window.open('connect', '_self');
                     }, 500);
 
                     gBotId = 0;
                 } else {
-                    console.log(response);
+                    var mkConfig = {
+                        positionY: 'top',
+                        positionX: 'right',
+                        max: 10,
+                        scrollable: false
+                    };
+                
+                    mkNotifications(mkConfig);
+                
+                    mkNoti(
+                        'Create Bot Failure!',
+                        response.message,
+                        {
+                            status:'danger'
+                        }
+                    );
                 }
             });
         } else {
@@ -216,6 +248,23 @@ $(document).ready(function() {
             $('h5.error-text').removeClass('valid-feedback');
             $('h5.error-text').addClass('text-danger');
             $('strong.error-text-content').append('Invalid Bot details, Click <a href="/connect" class="text-primary"> here </a> to create news.');
+            
+            var mkConfig = {
+                positionY: 'top',
+                positionX: 'right',
+                max: 10,
+                scrollable: false
+            };
+        
+            mkNotifications(mkConfig);
+        
+            mkNoti(
+                'Create Bot Failure!',
+                'Invalid Bot Deails, Try again!',
+                {
+                    status:'danger'
+                }
+            );
         }
     }
 });

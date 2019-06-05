@@ -22,7 +22,8 @@ body {
 
 /* Navbar style */
 .navbar {
-  background-color: #3f51b5;
+  background-color: #0029ff;
+  /* background-color: #3f51b5; */
 }
   
 .navbar-brand {
@@ -249,6 +250,10 @@ body {
   height: 50%;
 } */
 
+/* Main tag design*/
+main {
+  min-height: 840px !important;
+}
 /* Design Modal */
 .modal-full-right .modal-content {
   min-height: 100vh;
