@@ -23,17 +23,48 @@ $(document).ready(function() {
                 code: code.val()
             }
             
-            console.log(sendData);
-
             $.ajax({
                 method: 'POST',
                 url: '/user/signup',
                 data: sendData
             }).done(function(response) {
-                // $('h5.error-text').removeClass('valid-feedback');
-                // $('h5.error-text').addClass('text-success');
-                // $('strong.error-text-content').append(response.message);
                 console.log(response);
+                if(response.flag == true) {
+                    var mkConfig = {
+                        positionY: 'top',
+                        positionX: 'right',
+                        max: 10,
+                        scrollable: false
+                    };
+                
+                    mkNotifications(mkConfig);
+                
+                    mkNoti(
+                        'Congratration!',
+                        response.message,
+                        {
+                            status:'success'
+                        }
+                    );
+                } else {
+                    var mkConfig = {
+                        positionY: 'top',
+                        positionX: 'right',
+                        max: 10,
+                        scrollable: false
+                    };
+                
+                    mkNotifications(mkConfig);
+                
+                    mkNoti(
+                        'Sign up failure!',
+                        response.message,
+                        {
+                            status:'danger'
+                        }
+                    );
+                }
+                
             });
         }
 

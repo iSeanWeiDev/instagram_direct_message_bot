@@ -22,32 +22,58 @@ UserController.signup = function(req, res) {
             message: 'Please, fill in all the fields.'
         });
     } else {
-        var newUser = {
-            username: req.body.email.split('@')[0],
-            firstname: req.body.firstName,
-            lastname: req.body.lastName,
-            email: req.body.email,
-            password: req.body.password,
-            code: req.body.code,
-            status: 1
-        }
-        UserModel.create(newUser)
-            .then(function(user) {
-                if(user) {
-                    res.status(200).json({
-                        flag: true,
-                        message: 'Successfully created your account.'
-                    });
-                } else {
-                    res.status(404).json({
-                        flag: false,
-                        message: 'Invalidated your details.'
-                    });
-                }
-            })
-            .catch(function(error) {
-                console.log('Create new user error: ' + error);
+        if (req.body.code != 5826) {
+            res.json({
+                flag: false,
+                message: 'Invalid code.'
             });
+        } else {
+            UserModel.findAndCountAll({
+                where: {
+                    email: req.body.email
+                }
+            }).then(function(result) {
+                if(result.count > 0) {
+                     res.json({
+                        flag: false,
+                        message: 'Duplicated email'
+                     });
+                } else {
+                    var newUser = {
+                        username: req.body.email.split('@')[0],
+                        firstname: req.body.firstName,
+                        lastname: req.body.lastName,
+                        email: req.body.email,
+                        password: req.body.password,
+                        code: req.body.code,
+                        status: 1
+                    }
+
+                    UserModel.create(newUser)
+                        .then(function(user) {
+                            if(user) {
+                                res.status(200).json({
+                                    flag: true,
+                                    message: 'Successfully created your account.'
+                                });
+                            } else {
+                                res.status(404).json({
+                                    flag: false,
+                                    message: 'Invalidated your details.'
+                                });
+                            }
+                        })
+                        .catch(function(error) {
+                            console.log('Create new user error: ' + error);
+                        });
+                }
+            }).catch(function(error) {
+                res.json({
+                    flag: false,
+                    message: 'Email validation error' + error
+                })
+            })
+        }
     }
 }
 
@@ -76,17 +102,20 @@ UserController.login = function(req, res) {
                 req.session.authenticated = true;
                 res.status(200).json({
                     flag: true,
-                    message: 'Welcome!'
+                    message: 'Welcome to meta medias!'
                 });
             } else {
-                res.status(401).json({
+                res.json({
                     flag: false,
                     message: 'Authentication failed. Wrong password.'
                 });
             }            
         });
     }).catch(function(error) {
-        console.log('Find user error: ' + error);
+        res.json({
+            flag: false,
+            message: 'Find user error: ' + error
+        });
     })
 }
 
