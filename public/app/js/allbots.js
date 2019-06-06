@@ -103,4 +103,14 @@ $(document).ready(function() {
     this.challengeBot = function(id) {
         console.log(id);
     }
+
+    /**
+     * @description
+     * Take challenge by botid, useid, and verification code.
+     * 
+     * @param {INTEGER} id
+     */
+    this.verifyBot = function(id) {
+        console.log(id);
+    }
 });

@@ -10,9 +10,22 @@ $(document).ready(function() {
 
     $('form').submit(function(event) {
         if(password.val() != rpassword.val()) {
-            $('h5.error-text').removeClass('valid-feedback');
-            $('h5.error-text').addClass('text-danger');
-            $('strong.error-text-content').append('Invalid password.');
+            var mkConfig = {
+                positionY: 'top',
+                positionX: 'right',
+                max: 10,
+                scrollable: false
+            };
+        
+            mkNotifications(mkConfig);
+        
+            mkNoti(
+                'Sign up failure!',
+                'Please input same as password!',
+                {
+                    status:'danger'
+                }
+            );
         } else {
             var sendData = {
                 firstName: firstName.val(),

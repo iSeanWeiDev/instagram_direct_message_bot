@@ -84,7 +84,7 @@ UserController.login = function(req, res) {
         }
     }).then(function(user) {
         if(!user) {
-            return res.status(401).json({
+            return res.json({
                 flag: false,
                 message: 'Authentication failed. User not found.',
             });

@@ -73,6 +73,16 @@
                                     </strong>
                                 </button>
                             </div>
+
+                            <div class="form-group mb-0">
+                                <div class="switch">
+                                    <i class="fa fa-pause text-danger" style="font-size: 20px;"></i>
+                                    <label>
+                                        <input class="ml-3 mr-3" type="checkbox" checked>
+                                        <i class="fa fa-play text-success" style="font-size: 20px;"></i>
+                                    </label>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Begin Modals -->
@@ -206,9 +216,34 @@
                                             </label>
                                         </div>
                                         <div class="input-group pr-5 pl-5">
-                                            <input id="max-comment-daily" type="number" class="form-control" placeholder="&nbsp; Input your phone number." aria-label="Please input your phone number." aria-describedby="basic-addon2" autofocus required>
+                                            <input id="phoneNumber" type="number" class="form-control" placeholder="&nbsp; Input your phone number." aria-label="Please input your phone number." aria-describedby="basic-addon2" autofocus required>
                                             <div class="input-group-append">
-                                                <button onclick="challengeBot(<%= bot.dataValues.id%>)" type="button" class="ml-auto p-2 pl-3 pr-3 btn btn-raised btn-success">Send</button>
+                                                <button 
+                                                    onclick="challengeBot(<%= bot.dataValues.id%>)" 
+                                                    type="button" 
+                                                    class="btn btn-raised btn-success" 
+                                                    data-toggle="collapse" 
+                                                    href="#challenge<%= bot.dataValues.id%>" 
+                                                    role="button" 
+                                                    aria-expanded="false"
+                                                    aria-controls="challenge<%= bot.dataValues.id%>">
+                                                    Send
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="collapse" id="challenge<%= bot.dataValues.id%>">
+                                            <div class="form-group text-center">
+                                                <h6>Input your verification code.</h6>
+                                                <div class="input-group pr-5 pl-5">
+                                                    <input id="" type="number" class="form-control" placeholder="&nbsp; Input your challenge code." aria-label="Input your challenge code." aria-describedby="basic-addon3" autofocus required>
+                                                    <div class="input-group-append">
+                                                        <botton
+                                                            onclick="verifyBot(<%= bot.dataValues.id%>)" 
+                                                            class="btn btn-raised btn-success">
+                                                            Challenge
+                                                        </botton>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
