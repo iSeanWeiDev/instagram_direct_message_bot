@@ -269,6 +269,8 @@ function getMessageById(botId, cb) {
  * @param {OBJECT} cb 
  */
 function getCountOfReplyHistoriesById(botId, clientId, cb) {
+    var botId = botId;
+    var clientId = clientId.toString();
     RepliesHistoryModel.findAndCountAll({
         where: {
             botid: botId,
