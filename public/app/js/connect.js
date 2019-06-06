@@ -51,8 +51,15 @@ $(document).ready(function() {
     var filters = $('textarea#filters.form-control');
 
     $('form#saveFilters').submit(function(event) {
-        var arrFilters = filters.val().replace(/ /g, '').split(',');
+        var arrFilters = [];
+        var arrData = filters.val().replace(/\n/g, '').replace(/ /g, '').replace(/#/g, '').split(',');
         
+        for(var obj of arrData) {
+            if(obj != '') {
+                arrFilters.push(obj);
+            }
+        }
+
         if(gBotId > 0) {
             var sendData = {
                 botId: gBotId,
@@ -75,11 +82,41 @@ $(document).ready(function() {
                     $('div#comment-pan.tab-pane.fade').addClass('active show');
                     $('a#comment-tab.nav-link').addClass('active show');
                 } else {
-                    console.log(response);
+                    var mkConfig = {
+                        positionY: 'top',
+                        positionX: 'right',
+                        max: 10,
+                        scrollable: false
+                    };
+                
+                    mkNotifications(mkConfig);
+                
+                    mkNoti(
+                        'Submit filters error!',
+                        response.message,
+                        {
+                            status:'danger'
+                        }
+                    );
                 }
             });
         } else {
-            console.log('Submit filters error!');
+            var mkConfig = {
+                positionY: 'top',
+                positionX: 'right',
+                max: 10,
+                scrollable: false
+            };
+        
+            mkNotifications(mkConfig);
+        
+            mkNoti(
+                'Submit filters error!',
+                'Please check network connection.',
+                {
+                    status:'danger'
+                }
+            );
         }
 
         // stop the form from submitting the normal way and refreshing the page
@@ -163,26 +200,45 @@ $(document).ready(function() {
     var maxCommentDaily = $('input#max-comment-daily.form-control');
     
     $('form#setMaxCommentDaily').submit(function(event) {
-        var sendData = {
-            botId: gBotId,
-            maxCommentDaily: maxCommentDaily.val()
-        }
-
-        $.ajax({
-            type: "POST",
-            url: '/bot/set/max',
-            data: sendData,
-            dataType: 'JSON'
-        }).done(function(response) {
-            if(response && response.flag == true) {
-                console.log(response);
-            } else {
-                console.log('Submit set max counts of comment per day error!');
+        if(gBotId > 0) {
+            var sendData = {
+                botId: gBotId,
+                maxCommentDaily: maxCommentDaily.val()
             }
-        });
-
-        // stop the form from submitting the normal way and refreshing the page
-        event.preventDefault();
+    
+            $.ajax({
+                type: "POST",
+                url: '/bot/set/max',
+                data: sendData,
+                dataType: 'JSON'
+            }).done(function(response) {
+                if(response && response.flag == true) {
+                    console.log(response);
+                } else {
+                    console.log('Submit set max counts of comment per day error!');
+                }
+            });
+    
+            // stop the form from submitting the normal way and refreshing the page
+            event.preventDefault();
+        } else {
+            var mkConfig = {
+                positionY: 'top',
+                positionX: 'right',
+                max: 10,
+                scrollable: false
+            };
+        
+            mkNotifications(mkConfig);
+        
+            mkNoti(
+                'Create Bot Error!',
+                'Please check network connection.',
+                {
+                    status:'danger'
+                }
+            );
+        }
     });
 
     /* Begin create new bot */

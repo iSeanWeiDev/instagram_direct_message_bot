@@ -225,12 +225,12 @@
                                     <form action="/bot/set/max" method="POST" id="setMaxCommentDaily" class="needs-validation pr-5 pl-5">
                                         <div class="form-goup text-center font-weight-bold mt-5">
                                             <h2><strong>Activity Settings</strong></h2>
-                                            <label class="text-secondary pt-2">You need to set the activity with setting.</label>
+                                            <label class="text-secondary pt-2">Maximum comment daily is 200.</label>
                                             <hr>
                                         </div>
 
                                         <div class="input-group mb-5 pt-3 pr-3 pl-3">
-                                            <input id="max-comment-daily" type="number" class="form-control" placeholder="&nbsp; Max Comments Daily." aria-label="Please input your bot max comment daily." aria-describedby="basic-addon2" autofocus required>
+                                            <input id="max-comment-daily" type="number" min="0" max="200" class="form-control" placeholder="&nbsp; Max Comments Daily." aria-label="Please input your bot max comment daily." aria-describedby="basic-addon2" autofocus required>
                                             <div class="input-group-append">
                                                 <button type="submit" class="ml-auto p-2 pl-3 pr-3 btn btn-raised btn-success">Save</button>
                                             </div>
