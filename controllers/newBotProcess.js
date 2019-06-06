@@ -60,12 +60,19 @@ process.on('message', function(data) {
                                          * 1. Get count of reply messages from history.
                                          * 2. Current reply list and count.
                                          */
-
-                                        if(countReplyHistories < messages.count)  // if already send all messages
-                                        {
+                                        if(countReplyHistories > 0) {
                                             var replyIndex = countReplyHistories;
                                             var replyMessage = messages.rows[replyIndex].message;
                                             var replyId = messages.rows[replyIndex].id;
+                                        } else {
+                                            var replyIndex = 0;
+                                            var replyMessage = messages.rows[replyIndex].message;
+                                            var replyId = messages.rows[replyIndex].id;
+                                        }
+
+                                        if(countReplyHistories < messages.count)  // if already send all messages
+                                        {
+                                            
 
                                             if(parseInt(clientId) > 0 && message) {
 
