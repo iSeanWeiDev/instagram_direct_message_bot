@@ -140,9 +140,13 @@ $(document).ready(function() {
             dataType: 'JSON'            
         }).done(function(response) {
             if(response && response.flag == true) {
+                // Initialize the chat history.
+                $('div#chatContent.content').html('');
+                
                 for(var obj of response.data) {
-                    $('div#chatContent.content').append(' <div style="max-width: 70%; float: left; display:block;"> ' + 
-                                                            '<span style="font-size: 11px; color: black;">' +
+                    $('div#chatContent.content').append('<div class="row pl-lg-5" style="width: 100%; !important"> ' + 
+                                                            '<div style="max-width: 70%; float: left;">' +
+                                                                '<span style="font-size: 11px; color: black;">' +
                                                                     '<strong>' + obj.clientname + '</strong> 11:57 AM ' +
                                                                 '</span>' +
                                                                 '<div style="margin-top:0px">' +
@@ -150,22 +154,24 @@ $(document).ready(function() {
                                                                         obj.message +
                                                                     '</label>' +
                                                                 '</div>' +
-                                                            '</div>');
-
-                    $('div#chatContent.content').append('<div style="height:55px;"></div>');
-
-                    $('div#chatContent.content').append('<div style="float: right; max-width: 70%; display:block;">' +
-                                                            '<span style="font-size: 11px; color: black;">' +
-                                                                '<strong>' + obj.botname + '</strong> 11:57 AM' +
-                                                        '</span>' +
-                                                            '<div style="margin-top:0px">' +
-                                                                '<label style="padding:8px; border-radius: 5px; background-color: rgb(219, 244, 253); font-size: 17px; color:black">' +
-                                                                    obj.reply +
-                                                                '</label>' +
                                                             '</div>' +
                                                         '</div>');
 
-                    $('div#chatContent.content').append('<div style="height:55px;"></div>');
+
+                    $('div#chatContent.content').append('<div class="form-group pr-lg-5">' +
+                                                            '<div style="float: right; max-width: 70%;">' + 
+                                                                '<span style="font-size: 11px; color: black;">' +
+                                                                    '<strong>' + obj.botname + '</strong> 11:57 AM' +
+                                                                '</span>' +
+                                                                '<div style="margin-top:0px">' +
+                                                                    '<label style="padding:8px; border-radius: 5px; background-color: rgb(219, 244, 253); font-size: 17px; color:black">' +
+                                                                        obj.reply +
+                                                                    '</label>' +
+                                                                '</div>' +
+                                                            '</div>' +
+                                                        '</div>');
+
+                   
                 }
             }
         })
