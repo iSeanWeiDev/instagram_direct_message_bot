@@ -176,6 +176,26 @@ $(document).ready(function() {
             }
         })
     }
+
+    this.sendMessage = function(botId, clientId) {
+        if($('input#input-direct-message').val() != '') {
+            var sendData = {
+                botId: botId,
+                clientId: clientId,
+                message: $('input#input-direct-message').val()
+            }
+    
+            $.ajax({
+                type: 'POST',
+                url: '/board/send/message',
+                data: sendData,
+                dataType: 'JSON',
+                async: false
+            }).done(function(response) {
+                console.log(response);
+            });
+        }
+    }
  });
 
  

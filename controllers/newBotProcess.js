@@ -52,7 +52,7 @@ process.on('message', function(data) {
                                     var clientId = inbox[countOfInbox].clientId;
 
                                     // Get count of reply histories by bot ID.
-                                    BotService.getCountOfReplyHistoriesById(botId, function(countReplyHistories) {
+                                    BotService.getCountOfReplyHistoriesById(botId, clientId, function(countReplyHistories) {
                                         /**
                                          * @description
                                          * How to make the messages one by one.
@@ -61,36 +61,32 @@ process.on('message', function(data) {
                                          * 2. Current reply list and count.
                                          */
 
-                                        if(countReplyHistories > 0) {
-                                            var replyIndex = countReplyHistories % messages.count;
+                                        if(countReplyHistories < messages.count)  // if already send all messages
+                                        {
+                                            var replyIndex = countReplyHistories;
                                             var replyMessage = messages.rows[replyIndex].message;
                                             var replyId = messages.rows[replyIndex].id;
-                                        } else {
-                                            var replyIndex = 0;
-                                            var replyMessage = messages.rows[replyIndex].message;
-                                            var replyId = messages.rows[replyIndex].id;
-                                        }
-                                        
 
-                                        if(parseInt(clientId) > 0 && message) {
+                                            if(parseInt(clientId) > 0 && message) {
 
-                                            // Direct message to client with client id using reply messages.
-                                            BotService.directMessageToClient(gSession, clientId, replyMessage, function(resultOfDM) {
-                                                var saveData = {
-                                                    botId:  botId,
-                                                    clientId: resultOfDM.id,
-                                                    clientName: resultOfDM.name,
-                                                    message: message,
-                                                    imageUrl: resultOfDM.imgUrl,
-                                                    replyId: replyId
-                                                }
-
-                                                // save all history to database.
-                                                BotService.saveReplyHistory(saveData, function(response){
-                                                    //console.log(response.id);
+                                                // Direct message to client with client id using reply messages.
+                                                BotService.directMessageToClient(gSession, clientId, replyMessage, function(resultOfDM) {
+                                                    var saveData = {
+                                                        botId:  botId,
+                                                        clientId: resultOfDM.id,
+                                                        clientName: resultOfDM.name,
+                                                        message: message,
+                                                        imageUrl: resultOfDM.imgUrl,
+                                                        replyId: replyId
+                                                    }
+    
+                                                    // save all history to database.
+                                                    BotService.saveReplyHistory(saveData, function(response){
+                                                        //console.log(response.id);
+                                                    });
+                                                    
                                                 });
-                                                
-                                            });
+                                            }
                                         }
                                     });
 

@@ -265,12 +265,14 @@ function getMessageById(botId, cb) {
  * Get Count of Reply histories by botid.
  * 
  * @param {INTEGER} botId 
+ * @param {INTEGER} clientId
  * @param {OBJECT} cb 
  */
-function getCountOfReplyHistoriesById(botId, cb) {
+function getCountOfReplyHistoriesById(botId, clientId, cb) {
     RepliesHistoryModel.findAndCountAll({
         where: {
-            botid: botId
+            botid: botId,
+            clientid: clientId
         }
     }).then(function(result) {
         cb(result.count);

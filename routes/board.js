@@ -16,6 +16,7 @@ var BoardController = require('../controllers/boardController');
 
 router.post('/get/init', BoardController.init);
 router.post('/get/message/history', BoardController.getMessageHistory);
+router.post('/send/message', BoardController.sendMessage);
 
 // Export module.
 module.exports = router;

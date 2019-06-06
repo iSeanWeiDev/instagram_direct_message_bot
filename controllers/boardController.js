@@ -7,6 +7,9 @@
 'use strict';
 
 var BoardService = require('../services/dashBoardService');
+var BotService = require('../services/botService');
+var BotModel = require('../models').Bot;
+var Client = require('instagram-private-api').V1;
 
 // Define Bot controller.
 var BoardController = {};
@@ -44,5 +47,50 @@ BoardController.getMessageHistory = function(req, res) {
     });  
 }
 
+/**
+ * @description
+ * Send message to client with client id.
+ * 
+ * @param {OBJECT} req
+ * @param {OBJECT} res
+ */
+BoardController.sendMessage = function(req, res) {
+    var botId = req.body.botId,
+        clientId = req.body.clientId,
+        message = req.body.message;
+
+    BotModel.findOne({
+        where: {
+            id: botId
+        }
+    }).then(function(bot) {
+        console.log(bot);
+        var name = bot.dataValues.accountname,
+            password = bot.dataValues.password;
+
+        BotService.validateBot(name, password, function(cb) {
+            if(cb.flag == true) {
+                var session = cb.session;
+
+                BotService.directMessageToClient(session, clientId, message, function(result) {
+                    console.log(result);
+                    var saveData = {
+                        botId: botId,
+                        clientid: result.id,
+                        clientname: result.name,
+                        image: result.image,
+                        
+                    }
+
+                    BotService.saveReplyHistory(saveData, function(response) {
+                        console.log(response);
+                    })
+                }); 
+            }
+        });
+    }).catch(function(error) {
+        console.log('Get Bot Detail error: ' + error);
+    });
+}
 // Export BotController.
 module.exports = BoardController;

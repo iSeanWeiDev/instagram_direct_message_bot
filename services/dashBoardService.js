@@ -7,6 +7,7 @@
 
 'use strict';
 // Import npm modules.
+
 var Sequelize = require('sequelize');
 
 var sequelize = new Sequelize('postgres://postgres:Rango941001top@@@@localhost:5432/instagram_dev');

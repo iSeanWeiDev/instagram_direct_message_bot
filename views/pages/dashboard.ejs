@@ -100,21 +100,28 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="input-group mb-3 pl-5 pr-5">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text" id="basic-addon1">
-                                                        <a href="#" style="font-size: 20px;">
-                                                            <i class="fa fa-smile"></i>
-                                                        </a>
-                                                    </span>
-                                                </div>
-                                                <input type="text" class="form-control" placeholder="&nbsp; Type a message here" aria-label="Type a message here" aria-describedby="basic-addon1">
-                                                <div class="input-group-append">
-                                                    <button class="rounded-circle border-success btn btn-success" type="button">
-                                                        <i class="fa fa-send"></i>
+                                                <div class="input-group mb-3 pl-5 pr-5">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text" id="basic-addon1">
+                                                            <a href="#" style="font-size: 20px;">
+                                                                <i class="fa fa-smile"></i>
+                                                            </a>
+                                                        </span>
+                                                    </div>
+                                                    <input 
+                                                        id="input-direct-message"
+                                                        type="text" 
+                                                        class="form-control pl-3" 
+                                                        placeholder="&nbsp; Type a message here" 
+                                                        aria-label="Type a message here" 
+                                                        aria-describedby="basic-addon1"
+                                                        required />
+                                                    <button 
+                                                        onclick="sendMessage(<%=element.botId%>, <%=element.clientId%>)"
+                                                        class="btn btn-primary">
+                                                        send
                                                     </button>
                                                 </div>
-                                            </div>
                                             <div class="modal-footer">
                                                 <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button> -->
                                             </div>
