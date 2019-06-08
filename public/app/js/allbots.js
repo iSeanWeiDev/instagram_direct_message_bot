@@ -113,4 +113,13 @@ $(document).ready(function() {
     this.verifyBot = function(id) {
         console.log(id);
     }
+
+    $('input[type="checkbox"]#botOnOff').change(function() {
+        if($(this).prop("checked") == true){
+            alert("Checkbox is checked.");
+        }
+        else if($(this).prop("checked") == false){
+            alert("Checkbox is unchecked.");
+        }
+    })
 });

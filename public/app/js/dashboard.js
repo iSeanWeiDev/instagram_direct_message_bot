@@ -185,15 +185,15 @@ $(document).ready(function() {
                 message: $('input#input-direct-message').val()
             }
     
-            $.ajax({
-                type: 'POST',
-                url: '/board/send/message',
-                data: sendData,
-                dataType: 'JSON',
-                async: false
-            }).done(function(response) {
-                console.log(response);
-            });
+            // $.ajax({
+            //     type: 'POST',
+            //     url: '/board/send/message',
+            //     data: sendData,
+            //     dataType: 'JSON',
+            //     async: false
+            // }).done(function(response) {
+            //     console.log(response);
+            // });
         }
     }
  });
