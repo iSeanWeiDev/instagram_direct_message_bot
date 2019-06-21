@@ -227,6 +227,7 @@ Follow this steps:
 #### bootstrap 4 material
 https://fezvrasta.github.io/bootstrap-material-design/
 https://fezvrasta.github.io/bootstrap-material-design/docs/4.0/getting-started/introduction/
+https://xdsoft.net/jqplugins/datetimepicker/
 
 #### Font-Awesome url
 https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons

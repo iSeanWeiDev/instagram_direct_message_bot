@@ -5,7 +5,7 @@
  */
 
 var app = require('../app');
-var debug = require('debug')('instagram-direct-message-bot-v1.1.1:server');
+var debug = require('debug')('ig-dm-bot:server');
 var http = require('http');
 var config = require('../config/env');
 

@@ -1,0 +1,519 @@
+<body data-gr-c-s-loaded="true">
+    <div class="container-scroller">
+        <!-- partial:../../partials/_navbar.html -->
+        <% include ../partials/_navbar %>
+        <!-- partial -->
+
+        <div class="container-fluid page-body-wrapper">
+
+        <!-- partial:../../partials/_sidebar.html -->
+        <% include ../partials/_sidebar %>
+        <!-- partial -->
+
+            <div class="main-panel">
+                <div class="content-wrapper"> 
+                    <div class="col-md-8 offset-xl-2 mt-5">
+                        <div class="card">
+                            <div class="card-body p-1">
+                                <!-- Begin Header of tab panels -->
+                                <ul class="nav nav-tabs bg-primary"  id="pills-tab" role="tablist">
+                                    <li class="nav-item">
+                                        <a  class="nav-link pt-3 pb-3 active" 
+                                            id="validate-tab"
+                                            href="#validate-pan" 
+                                            role="tab" 
+                                            aria-controls="validate-pan" 
+                                            data-toggle="pill">
+            
+                                            Validate
+                                        </a>
+                                    </li>
+                                    <li class="nav-item" id="filter-list-item">
+                                        <a  class="nav-link pt-3 pb-3" 
+                                            id="filter-tab"
+                                            href="#filter-pan" 
+                                            role="tab" 
+                                            aria-controls="filter-pan" 
+                                            data-toggle="pill">
+                                            
+                                            Filters
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a  class="nav-link pt-3 pb-3"
+                                            id="comment-tab"
+                                            href="#comment-pan" 
+                                            role="tab" 
+                                            aria-controls="comment-pan" 
+                                            data-toggle="pill">
+            
+                                            Comments
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a  class="nav-link pt-3 pb-3"
+                                            id="message-tab"
+                                            href="#message-pan" 
+                                            role="tab" 
+                                            aria-controls="message-pan" 
+                                            data-toggle="pill">
+            
+                                            Default Replies
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a  class="nav-link pt-3 pb-3"
+                                            id="fum-tab"
+                                            href="#fum-pan" 
+                                            role="tab" 
+                                            aria-controls="fum-pan" 
+                                            data-toggle="pill">
+            
+                                            Follow Up Message
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a  class="nav-link pt-3 pb-3"
+                                            id="setting-tab"
+                                            href="#setting-pan" 
+                                            role="tab" 
+                                            aria-controls="setting-pan" 
+                                            data-toggle="pill">
+            
+                                            Settings
+                                        </a>
+                                    </li>
+                                </ul>
+                                <!-- End Header of tab panels -->
+            
+                                <!-- Begin tab sub pages -->
+                                <div class="tab-content" id="pills-tabContent">
+                                    <!-- begin validate bot tab panel -->
+                                    <div class="tab-pane fade show active" id="validate-pan" role="tabpanel" aria-labelledby="validate-tab">
+                                        <div class="row p-3">
+                                            <div class="col-md-6">
+                                                <form action="#" class="forms-sample">
+                                                    <div class="form-group text-center">
+                                                        <h2 class="mb-0">
+                                                            <b>
+                                                                Validate Bot
+                                                            </b>
+                                                        </h2>
+                                                        <h6 class="text-secondary pl-3 pr-3">
+                                                            <b>
+                                                                Before validate new bot, please check you are already login user
+                                                            </b>
+                                                        </h6>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <div class="input-group-prepend bg-primary">
+                                                            <span class="input-group-text bg-transparent" style="font-size: 18px">
+                                                                <i class="mdi mdi-robot text-white"></i>
+                                                            </span>
+                                                            </div>
+                                                            <input type="text" 
+                                                                class="form-control form-control-lg" 
+                                                                style="font-size: 14px" 
+                                                                placeholder="Bot name" 
+                                                                aria-label="Bot name" 
+                                                                aria-describedby="Bot name">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <div class="input-group-prepend bg-primary">
+                                                            <span class="input-group-text bg-transparent" style="font-size: 18px">
+                                                                <i class="mdi mdi-account text-white"></i>
+                                                            </span>
+                                                            </div>
+                                                            <input type="text" 
+                                                                class="form-control form-control-lg" 
+                                                                style="font-size: 14px" 
+                                                                placeholder="Account name" 
+                                                                aria-label="Account name" 
+                                                                aria-describedby="Account name">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <div class="input-group-prepend bg-primary">
+                                                            <span class="input-group-text bg-transparent" style="font-size: 18px">
+                                                                <i class="mdi mdi-lock text-white"></i>
+                                                            </span>
+                                                            </div>
+                                                            <input type="text" 
+                                                                class="form-control form-control-lg" 
+                                                                style="font-size: 14px" 
+                                                                placeholder="Account password" 
+                                                                aria-label="Account password" 
+                                                                aria-describedby="Account password">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <div class="input-group-prepend bg-primary">
+                                                            <span class="input-group-text bg-transparent" style="font-size: 18px">
+                                                                <i class="mdi mdi-network text-white"></i>
+                                                            </span>
+                                                            </div>
+                                                            <input type="text" 
+                                                                class="form-control form-control-lg" 
+                                                                style="font-size: 14px" 
+                                                                placeholder="Proxy URL" 
+                                                                aria-label="Proxy URL" 
+                                                                aria-describedby="Proxy URL">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-check form-check-flat ml-3">
+                                                        <label class="form-check-label">
+                                                            <input type="checkbox" class="form-check-input"> 
+                                                            Use the proxy provided by our service. 
+                                                            <i class="input-helper"></i>
+                                                        </label>
+                                                    </div>
+
+                                                    <div class="form-group text-right">
+                                                        <button class="btn btn-rounded btn-success">
+                                                            <h6 class="p-0 m-0">
+                                                                <i class="mdi mdi-check-decagram"></i>
+                                                                Validate Bot
+                                                            </h6>
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <img class="imgCreateBot" src="assets/images/instagram-validate.png" width="100%" height="100%" alt="">
+                                            </div>
+                                        </div>
+                                    </div>
+            
+                                    <!-- begin input filter tab panel -->
+                                    <div class="tab-pane fade" id="filter-pan" role="tabpane" aria-labelledby="filter-tab">
+                                        <div class="row p-3">
+                                            <div class="col-md-6">
+                                                <form action="#" class="forms-sample">
+                                                    <div class="form-group text-center">
+                                                        <h2 class="mb-0">
+                                                            <b>
+                                                                Hashtags for Filtering
+                                                            </b>
+                                                        </h2>
+                                                        <h6 class="text-secondary pl-3 pr-3">
+                                                            <b>
+                                                                You must enter the hash tags separated by a comma(,).
+                                                            </b>
+                                                        </h6>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <textarea 
+                                                            class="form-control" 
+                                                            id="exampleTextarea1" 
+                                                            rows="3" 
+                                                            style="font-size: 15px;"
+                                                            placeholder="Please input your hashtags"
+                                                            spellcheck="false"></textarea>
+                                                    </div>
+
+                                                    <div class="form-group text-right">
+                                                        <button class="btn btn-rounded btn-success">
+                                                            <h6 class="p-0 m-0">
+                                                                <i class="mdi mdi-filter"></i>
+                                                                Insert Filters
+                                                            </h6>
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <img class="imgCreateBot" src="assets/images/instagram-hashtag.png" width="100%"  alt="">
+                                            </div>
+                                        </div>
+                                    </div>
+            
+                                    <!-- begin input comment tab panel -->
+                                    <div class="tab-pane fade" id="comment-pan" role="tabpanel" aria-labelledby="comment-tab">
+                                        <div class="row p-3">
+                                            <div class="col-md-6">
+                                                <form action="#" class="forms-sample">
+                                                    <div class="form-goup text-center font-weight-bold">
+                                                        <h2><strong>Add Comments</strong></h2>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <textarea 
+                                                            id="show-comments" 
+                                                            class="form-control" 
+                                                            name="" 
+                                                            id="" 
+                                                            cols="30" 
+                                                            rows="15" disabled></textarea>
+                                                    </div>
+            
+                                                    <div class="input-group pr-3 pl-3">
+                                                        <input id="comment" 
+                                                            type="text" 
+                                                            class="form-control" 
+                                                            placeholder="&nbsp; Please add your comment." 
+                                                            aria-label="Please Add your comment" 
+                                                            aria-describedby="basic-addon2" required/>
+                                                        <div class="input-group-append">
+                                                            <button type="submit" 
+                                                                class="ml-auto p-2 pl-3 pr-3 btn btn-raised btn-success">
+                                                            Submit
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <img 
+                                                    class="imgCreateBot" 
+                                                    src="assets/images/instagram-comment.png" 
+                                                    width="100%"  
+                                                    alt="">
+                                            </div>
+                                        </div>
+                                    </div>
+            
+                                    <!-- begin direct message tab panel -->
+                                    <div class="tab-pane fade" id="message-pan" role="tabpanel" aria-labelledby="message-tab">
+                                        <div class="row p-3">
+                                            <div class="col-md-6">
+                                                <img 
+                                                    class="imgCreateBot" 
+                                                    src="assets/images/instagram-message.png" 
+                                                    width="100%"  
+                                                    alt="">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <form action="#" class="forms-sample">
+                                                    <div class="form-goup text-center font-weight-bold">
+                                                        <h2><strong>Default Reply</strong></h2>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <textarea 
+                                                            id="show-messages" 
+                                                            class="form-control" 
+                                                            name="" 
+                                                            id="" 
+                                                            cols="30" 
+                                                            rows="15" disabled></textarea>
+                                                    </div>
+            
+                                                    <div class="input-group pr-3 pl-3">
+                                                        <input id="message" 
+                                                            type="text" 
+                                                            class="form-control" 
+                                                            placeholder="&nbsp; Please add your message." 
+                                                            aria-label="Please add your message" 
+                                                            aria-describedby="basic-addon2" 
+                                                            autofocus required>
+                                                        <div class="input-group-append">
+                                                            <button type="submit" class="ml-auto p-2 pl-3 pr-3 btn btn-raised btn-success">Submit</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- begin follow up message tab panel -->
+                                    <div class="tab-pane fade" id="fum-pan" role="tabpanel" aria-labelledby="fum-pan">
+                                        <form action="#" class="sample-form p-3">
+                                            <div class="form-group text-center ">
+                                                <h2 class="mb-0">
+                                                    <b>
+                                                        Follow Up Message
+                                                    </b>
+                                                </h2>
+                                                <h6 class="text-secondary pl-3 pr-3">
+                                                    <b>
+                                                        This functionality will allow you to add messages on specific dates to make the bot send a DM to each client to follow up with them
+                                                    </b>
+                                                </h6>
+                                            </div>
+    
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="exampleTextarea1">In 2 Days</label>
+                                                        <textarea class="form-control" id="exampleTextarea1" rows="2" spellcheck="false"></textarea>
+                                                    </div>
+                                                </div>
+    
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="exampleTextarea1">In 6 Days</label>
+                                                        <textarea class="form-control" id="exampleTextarea1" rows="2" spellcheck="false"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="exampleTextarea1">In 12 Days</label>
+                                                        <textarea class="form-control" id="exampleTextarea1" rows="2" spellcheck="false"></textarea>
+                                                    </div>
+                                                </div>
+    
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="exampleTextarea1">In 21 days</label>
+                                                        <textarea class="form-control" id="exampleTextarea1" rows="2" spellcheck="false"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="exampleTextarea1">In 1 month</label>
+                                                        <textarea class="form-control" id="exampleTextarea1" rows="2" spellcheck="false"></textarea>
+                                                    </div>
+                                                </div>
+    
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="exampleTextarea1">In 2 months</label>
+                                                        <textarea class="form-control" id="exampleTextarea1" rows="2" spellcheck="false"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="exampleTextarea1">In 3 months</label>
+                                                        <textarea class="form-control" id="exampleTextarea1" rows="2" spellcheck="false"></textarea>
+                                                    </div>
+                                                </div>
+    
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="exampleTextarea1">In 4 months</label>
+                                                        <textarea class="form-control" id="exampleTextarea1" rows="2" spellcheck="false"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group text-right">
+                                                <button class="btn btn-rounded btn-success">
+                                                    <h6 class="p-0 m-0">
+                                                        <i class="mdi mdi-content-save"></i>
+                                                        Save Followup Messages
+                                                    </h6>
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+            
+                                    <!-- begin activity setting tab panel -->
+                                    <div class="tab-pane fade" id="setting-pan" role="tabpanel" aria-labelledby="setting-tab">
+                                        <div class="row p-3">
+                                            <div class="col-md-6">
+                                                <img 
+                                                    class="imgCreateBot" 
+                                                    src="assets/images/instagram-setting.png" 
+                                                    width="100%"  
+                                                    alt="">
+                                            </div>
+                                             
+                                            <div class="col-md-6">
+                                                <form action="#" class="forms-sample">
+                                                    <div class="form-group text-center">
+                                                        <h2 class="mb-0">
+                                                            <b>
+                                                                Bot Setting
+                                                            </b>
+                                                        </h2>
+                                                        <h6 class="text-secondary pl-3 pr-3">
+                                                            <b>
+                                                                The setting for the amount of comment per day and direct message delay.
+                                                            </b>
+                                                        </h6>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <div class="input-group-prepend bg-primary">
+                                                            <span class="input-group-text bg-transparent" style="font-size: 18px">
+                                                                <i class="mdi mdi-clock text-white"></i>
+                                                            </span>
+                                                            </div>
+                                                            <input type="text" 
+                                                                class="form-control form-control-lg" 
+                                                                style="font-size: 14px" 
+                                                                placeholder="Direct message Delay" 
+                                                                aria-label="Direct message Delay" 
+                                                                aria-describedby="Direct message Delay">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <div class="input-group-prepend bg-primary">
+                                                            <span class="input-group-text bg-transparent" style="font-size: 18px">
+                                                                <i class="mdi mdi-counter text-white"></i>
+                                                            </span>
+                                                            </div>
+                                                            <input type="text" 
+                                                                class="form-control form-control-lg" 
+                                                                style="font-size: 14px" 
+                                                                placeholder="The amount of comment per day" 
+                                                                aria-label="The amount of comment per day" 
+                                                                aria-describedby="The amount of comment per day">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-check form-check-flat ml-3">
+                                                        <label class="form-check-label">
+                                                            <input type="checkbox" class="form-check-input"> 
+                                                            Use the proxy provided by our service. 
+                                                            <i class="input-helper"></i>
+                                                        </label>
+                                                    </div>
+
+                                                    <div class="form-group text-right">
+                                                        <button class="btn btn-rounded btn-success">
+                                                            <h6 class="p-0 m-0">
+                                                                <i class="mdi mdi-content-save-settings"></i>
+                                                                Save Bot Setting
+                                                            </h6>
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                   
+                </div>
+            <!-- content-wrapper ends -->
+
+            <!-- partial:../../partials/_footer.html -->
+            <% include ../partials/_footer %>
+            <!-- partial -->
+            </div>
+        <!-- main-panel ends -->
+        </div>
+        <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+
+    <% include ../partials/_scripts %>
+</body>

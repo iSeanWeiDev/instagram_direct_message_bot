@@ -1,0 +1,97 @@
+.nav-tabs .nav-item .show .nav-link, .nav-tabs .nav-link.active {
+    color: #377dff !important;
+    background-color: #fff !important;
+    border-color: #dee2e6 #dee2e6 #fff;
+    border-radius: 0px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    border-top: 3px solid #377dff !important;
+    text-transform: uppercase;
+}
+.nav-tabs .nav-link{
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    
+}
+.blog-bx-exp .blog-nav{
+    width:100%;
+    border-bottom:2px solid #f8f8f8;
+}
+.blog-bx-exp .tab-content .tab-pane .tab-sug-post .emb-post{
+    margin-bottom:15px;
+}
+
+.card-bots {
+    cursor: pointer !important;
+}
+
+  /* Design Modal */
+.modal-full-right .modal-content {
+    min-height: 100vh;
+}
+
+@keyframes fadeInLeft {
+    from {
+        opacity:0;
+        -webkit-transform: translatex(-100px);
+        -moz-transform: translatex(-100px);
+        -o-transform: translatex(-100px);
+        transform: translatex(-100px);
+    }
+    to {
+        opacity:1;
+        -webkit-transform: translatex(0);
+        -moz-transform: translatex(0);
+        -o-transform: translatex(0);
+        transform: translatex(0);
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+        opacity:0;
+        -webkit-transform: translatex(100px);
+        -moz-transform: translatex(100px);
+        -o-transform: translatex(100px);
+        transform: translatex(100px);
+    }
+    to {
+        opacity:1;
+        -webkit-transform: translatex(0);
+        -moz-transform: translatex(0);
+        -o-transform: translatex(0);
+        transform: translatex(0);
+    }
+}
+
+.modal-full-right {
+    min-width: 35%;
+    margin: 0;
+    float: right;
+    -webkit-animation-name: fadeInRight;
+    -moz-animation-name: fadeInRight;
+    -o-animation-name: fadeInRight;
+    animation-name: fadeInRight;
+    -webkit-animation-fill-mode: both;
+    -moz-animation-fill-mode: both;
+    -o-animation-fill-mode: both;
+    animation-fill-mode: both;
+    -webkit-animation-duration: 0.5s;
+    -moz-animation-duration: 0.5s;
+    -o-animation-duration: 0.5s;
+    animation-duration: 0.5s;
+    -webkit-animation-delay: 0.5s;
+    -moz-animation-delay: 0.5s;
+    -o-animation-duration: 0.5s;
+    animation-delay: 0.5s;
+}
+
+
+@media (max-width: 750px ) {
+    .imgCreateBot {
+        display: none;
+    }
+}

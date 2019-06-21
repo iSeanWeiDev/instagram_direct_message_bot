@@ -1,231 +1,222 @@
-<body data-gr-c-s-loaded="true" class="bg-light">
-    <!-- Begin import page header -->
-    <% include ../partials/header %>
-    <!-- End import page header -->
+<body data-gr-c-s-loaded="true">
+    <div class="container-scroller">
+        <!-- partial:../../partials/_navbar.html -->
+        <% include ../partials/_navbar %>
+        <!-- partial -->
 
-    <div class="container-fluid">
+        <div class="container-fluid page-body-wrapper">
 
-        <!-- Begin import page sidebar -->
-        <% include ../partials/sidebar %>
-        <!-- End import page sidebar -->
+        <!-- partial:../../partials/_sidebar.html -->
+        <% include ../partials/_sidebar %>
+        <!-- partial -->
 
-        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
-            <div class="row">
-                <div class="col-6">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="form-group pl-3">
-                                <h4 class="text-info">
-                                    <strong>
-                                        Last Dialogs
-                                    </strong>
-                                </h4>
-                            </div>
-                            <table class="table table-hover">
-                                <thead class="bg-light">
-                                    <tr class="text-center">
-                                        <th scope="col">
+            <div class="main-panel">
+                <div class="content-wrapper"> 
+                    <div class="row">
+                        <div class="col-md-7">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="form-group pl-3">
+                                        <h4 class="text-primary">
                                             <strong>
-                                            Bot
+                                                Last Dialogs
                                             </strong>
-                                        </th>
-                                        <th scope="col">
-                                            <strong>
-                                                Client
-                                            </strong>
-                                        </th>
-                                        <th scope="col">
-                                            <strong>
-                                            Last
-                                            </strong>
-                                        </th>
-                                        <th scope="col">
-                                            <strong>
-                                            Messges
-                                            </strong>    
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody style="cursor: pointer;">
-                                <% data.forEach(function(element) { %>
-                                    <tr onclick="getMessageHistory(<%=element.botId%>, <%=element.clientId%>)" class="text-center align-middle" data-target="#messageHistory<%=element.botId%><%=element.clientName%>" style="cursor: pointer" data-toggle="modal">
-                                        <th scope="row">
-                                            <%= element.botName %>
-                                        </th>
-                                        <td class="float-left">
-                                            <img src="<%= element.image%>" class="rounded-circle border-info" style="width: 35px; border: 2px solid;" alt="">
-                                            <strong>
-                                            &nbsp;<%= element.clientName %>
-                                            </strong>
-                                        </td>
-                                        <td>
-                                            <strong>
-                                            <%= element.last%>
-                                            </strong>
-                                        </td>
-                                        <td>
-                                            <strong>
-                                            <%= element.count%>
-                                            </strong>
-                                        </td>
-                                    </tr>
-                                <% }); %>
-                                </tbody>
-                            </table>
-                            
-                            <% data.forEach(function(element) { %>
-                                <!-- Begin Modal -->
-                                <div class="modal" id="messageHistory<%=element.botId%><%=element.clientName%>" tabindex="-1" role="dialog" aria-hidden="true">
-                                    <div class="modal-dialog modal-full-right" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <img src="<%=element.image%>" class="rounded-circle border-primary" style="border: 5px solid; width: 90px;" alt="">
-                                                <div class="form-group p-1 pl-3">
-                                                    <h4 class="modal-title">
-                                                        <strong class="text-primary">
-                                                            <%= element.clientName %>
-                                                        </strong>
-                                                    </h4>
-                                                    <span class="pb-0 font-italic font-weight-bold"><%= element.botName %></span><br>
-                                                    <span class="pb-0 font-italic font-weight-bold"><%= element.last%></span>
-                                                </div>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">×</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body" style="min-height: 380px; max-height: 750px; overflow: auto !important;" id="result">
-                                                <div class="row p-3">
-                                                    <div class="content" id="chatContent" style="width: 100% !important;">
-                                                        <!-- input the text at there -->
+                                        </h4>
+                                    </div>
+                                    <table class="table table-hover">
+                                        <thead class="bg-secondary">
+                                            <tr class="text-center">
+                                                <th scope="col">
+                                                    <strong>
+                                                    Bot
+                                                    </strong>
+                                                </th>
+                                                <th scope="col">
+                                                    <strong>
+                                                        Client
+                                                    </strong>
+                                                </th>
+                                                <th scope="col">
+                                                    <strong>
+                                                    Last
+                                                    </strong>
+                                                </th>
+                                                <th scope="col">
+                                                    <strong>
+                                                    Messges
+                                                    </strong>    
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody style="cursor: pointer;">
+                                            <tr class="text-center align-middle"  data-toggle="modal" data-target="#messageHistory" style="cursor: pointer;">
+                                                <th scope="row">
+                                                    test
+                                                </th>
+                                                <td class="float-left">
+                                                    <img src="" class="rounded-circle border-info" style="width: 35px; border: 2px solid;" alt="">
+                                                    <strong>
+                                                    &nbsp;test
+                                                    </strong>
+                                                </td>
+                                                <td>
+                                                    <strong>
+                                                    test
+                                                    </strong>
+                                                </td>
+                                                <td>
+                                                    <strong>
+                                                    test
+                                                    </strong>
+                                                </td>
+                                            </tr>
+                                      
+                                        </tbody>
+                                    </table>
+ 
+                                    <!-- Begin Modal -->
+                                    <div class="modal fade" id="messageHistory" tabindex="-1" role="dialog" ria-labelledby="messageHistoryLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-full-right" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <img src="" class="rounded-circle border-primary" style="border: 5px solid; width: 90px;" alt="">
+                                                    <div class="form-group p-1 pl-3">
+                                                        <h4 class="modal-title" id="messageHistoryLabel">
+                                                            <strong class="text-primary">
+                                                                
+                                                            </strong>
+                                                        </h4>
+                                                        <span class="pb-0 font-italic font-weight-bold"></span><br>
+                                                        <span class="pb-0 font-italic font-weight-bold"></span>
                                                     </div>
-                                                </div>
-                                            </div>
-                                                <div class="input-group mb-3 pl-5 pr-5">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text" id="basic-addon1">
-                                                            <a href="#" style="font-size: 20px;">
-                                                                <i class="fa fa-smile"></i>
-                                                            </a>
-                                                        </span>
-                                                    </div>
-                                                    <input 
-                                                        id="input-direct-message"
-                                                        type="text" 
-                                                        class="form-control pl-3" 
-                                                        placeholder="&nbsp; Type a message here" 
-                                                        aria-label="Type a message here" 
-                                                        aria-describedby="basic-addon1"
-                                                        required />
-                                                    <button 
-                                                        onclick="sendMessage(<%=element.botId%>, <%=element.clientId%>)"
-                                                        class="btn btn-primary">
-                                                        send
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">×</span>
                                                     </button>
                                                 </div>
-                                            <div class="modal-footer">
-                                                <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button> -->
+                                                <div class="modal-body" style="min-height: 380px; max-height: 750px; overflow: auto !important;" id="result">
+                                                    <div class="row p-3">
+                                                        <div class="content" id="chatContent" style="width: 100% !important;">
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                    <div class="input-group mb-3 pl-5 pr-5">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text" id="basic-addon1">
+                                                                <a href="#" style="font-size: 20px;">
+                                                                    <i class="fa fa-smile"></i>
+                                                                </a>
+                                                            </span>
+                                                        </div>
+                                                        <input 
+                                                            id="input-direct-message"
+                                                            type="text" 
+                                                            class="form-control pl-3" 
+                                                            placeholder="&nbsp; Type a message here" 
+                                                            aria-label="Type a message here" 
+                                                            aria-describedby="basic-addon1"
+                                                            required />
+                                                        <button 
+                                                            class="btn btn-primary">
+                                                            send
+                                                        </button>
+                                                    </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+                                    <!-- End Modal -->
                                 </div>
-                                <!-- End Modal -->
-                            <% }); %>
-
-
-                            <% if(data.length == 0) { %>
-                            <div class="col-12 text-center pt-3 text-danger font-weight-bold">
-                                <label class="pl-3 pt-2 pr-3 pb-2 border-danger" style="border: 3px solid;"> 
-                                No data to display 
-                                </label> 
-                            </div>'
-                            <% } %>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="col-6">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="form-inline pl-3">
-                                <h4 class="text-success">
-                                    <strong>
-                                        Quick Stats
-                                    </strong>
-                                </h4>
-                                <div class="form-group pl-3 pt-0 ">
-                                    <select id="dayFilter" class="form-control">
-                                        <option value="1" selected> Today </option>
-                                        <option value="2">Yesterday</option>
-                                        <option value="3">Week</option>
-                                        <option value="4">months</option>
-                                        <option value="5">Years</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <table class="table table-hover">
-                                    <thead class="bg-light">
-                                        <tr class="text-center">
-                                            <th scope="col">
-                                                <strong>
-                                                Bot
-                                                </strong>
-                                            </th>
-                                            <th scope="col">
-                                                <strong>
-                                                Dialogs started
-                                                </strong>
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody style="cursor: pointer;" id="dialogTbody">
-                                        <!-- Inputed dialogs -->
-                                    </tbody>
-                                </table>
-                                <div id="dialogDiv">
-                                    <!-- Inputed dialogs -->
-                                </div>
-                            </div>
-                            <hr>
 
-                            <div class="form-group">
-                                <table class="table table-hover">
-                                    <thead class="bg-light">
-                                        <tr class="text-center">
-                                            <th scope="col">
-                                                <strong>
-                                                Bot
-                                                </strong>
-                                            </th>
-                                            <th scope="col">
-                                                <strong>
-                                                Comment added
-                                                </strong>
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody style="cursor: pointer;" id="commentTbody">
-                                        <!-- Inputed dialogs -->
-                                    </tbody>
-                                </table>
-                                <div id="commentDiv">
-                                    <!-- Inputed dialogs -->
+                        <div class="col-md-5">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="form-inline pl-3">
+                                        <h4 class="text-success">
+                                            <strong>
+                                                Quick Stats
+                                            </strong>
+                                        </h4>
+                                        <div class="form-group pl-3 pt-0 ">
+                                            <select id="dayFilter" class="form-control">
+                                                <option value="1" selected> Today </option>
+                                                <option value="2">Yesterday</option>
+                                                <option value="3">Week</option>
+                                                <option value="4">months</option>
+                                                <option value="5">Years</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <table class="table table-hover">
+                                            <thead class="bg-secondary">
+                                                <tr class="text-center">
+                                                    <th scope="col">
+                                                        <strong>
+                                                        Bot
+                                                        </strong>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <strong>
+                                                        Dialogs started
+                                                        </strong>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody style="cursor: pointer;" id="dialogTbody">
+                                                <!-- Inputed dialogs -->
+                                            </tbody>
+                                        </table>
+                                        <div id="dialogDiv">
+                                            <!-- Inputed dialogs -->
+                                        </div>
+                                    </div>
+                                    <hr>
+        
+                                    <div class="form-group">
+                                        <table class="table table-hover">
+                                            <thead class="bg-secondary">
+                                                <tr class="text-center">
+                                                    <th scope="col">
+                                                        <strong>
+                                                        Bot
+                                                        </strong>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <strong>
+                                                        Comment added
+                                                        </strong>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody style="cursor: pointer;" id="commentTbody">
+                                                <!-- Inputed dialogs -->
+                                            </tbody>
+                                        </table>
+                                        <div id="commentDiv">
+                                            <!-- Inputed dialogs -->
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            <!-- content-wrapper ends -->
+
+            <!-- partial:../../partials/_footer.html -->
+            <% include ../partials/_footer %>
+            <!-- partial -->
             </div>
-        </main>
+        <!-- main-panel ends -->
+        </div>
+        <!-- page-body-wrapper ends -->
     </div>
+    <!-- container-scroller -->
 
-    <!-- Begin import page footer -->
-    <% include ../partials/footer%>
-    <!-- End import page footer -->
-
-
-    <!-- Begin import jabascript libs -->
-    <% include ../partials/scripts %>
-    <!-- End import jabascript libs -->
-
-    <script src="app/js/dashboard.js"></script>
+    <% include ../partials/_scripts %>
 </body>

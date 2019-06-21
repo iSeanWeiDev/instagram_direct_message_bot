@@ -3,12 +3,10 @@
  * app.js
  * 
  * created by super-sean
- * version 1.1.1
+ * version 2.0.1
  */
+'use strict';
 
- 'use strict';
-
-// Import npm modules.
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -19,13 +17,9 @@ var expressLayouts = require('express-ejs-layouts');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 
-// Import main modules.
 var config = require('./config/env');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var botRouter = require('./routes/bots');
-var boardRouter = require('./routes/board');
-var apiRouter = require('./routes/api');
 
 // Initialize application.
 var app = express();
@@ -39,7 +33,7 @@ app.set('views', path.join(__dirname, '/views'));
 app.set('view engine', 'ejs');
 
 // Set Development method.
-// app.use(logger('dev'));
+app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
@@ -53,10 +47,7 @@ app.use(session(config.session));
 
 // Rendering routes using express router.
 app.use('/', indexRouter);
-app.use('/user', usersRouter);
-app.use('/bot', botRouter);
-app.use('/api', apiRouter);
-app.use('/board', boardRouter);
+app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
