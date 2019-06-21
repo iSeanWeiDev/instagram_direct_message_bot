@@ -11,6 +11,9 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Scheduler.associate = function(models) {
     // associations can be defined here
+    Scheduler.belongsTo(models.Bot, {
+      foreignKey: 'id'
+    });
   };
   return Scheduler;
 };
