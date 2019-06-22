@@ -7,8 +7,24 @@
           <div class="dot-indicator bg-success"></div>
         </div>
         <div class="text-wrapper">
-          <p class="profile-name">Allen Moreno</p>
-          <p class="designation">Premium user</p>
+          <p class="profile-name"><%= user.userName%></p>
+          <% switch(parseInt(user.role)) {
+            case 0: %>
+          <p class="designation">Ultimate user</p>
+          <%  break;
+              case 1: %> 
+          <p class="designation">TIER 1 user</p>
+          <%  break;
+              case 2: %>
+          <p class="designation">TIER 2 user</p>
+          <%  break;
+              case 3: %>
+          <p class="designation">TIER 3 user</p>   
+          <%  break;
+              case 4: %>
+          <p class="designation">Super Admin</p>
+          <%  break; 
+          } %>
         </div>
       </a>
     </li>
@@ -42,6 +58,7 @@
       </a>
     </li>
 
+    <% if(parseInt(user.role) == 4) { %>
     <li class="nav-item">
       <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
         <i class="menu-icon typcn typcn-document-add"></i>
@@ -68,5 +85,6 @@
         </ul>
       </div>
     </li>
+    <% } %>
   </ul>
 </nav>

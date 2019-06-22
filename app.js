@@ -7,6 +7,7 @@
  */
 'use strict';
 
+// Import npm modules.
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -17,6 +18,7 @@ var expressLayouts = require('express-ejs-layouts');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 
+// Import main modules.
 var config = require('./config/env');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -38,7 +40,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 // Set Project structure.
-app.use(cookieParser())
+app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(expressLayouts);
 

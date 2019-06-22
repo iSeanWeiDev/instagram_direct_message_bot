@@ -5,13 +5,96 @@
                 <div class="row w-100">
                     <div class="col-lg-4 mx-auto">
                         <div class="text-center mb-3">
-                            <img src="assets/images/logo-white.png" width="70%" alt="">
+                            <a href="/">
+                                <img src="assets/images/logo-white.png" width="70%" alt="">
+                            </a>
                         </div>
                         <div class="auto-form-wrapper">
-                            <form action="#">
+                            <form action="/users/signup" id="signup" method="post" class="form-validation">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <input type="text" id="first-name" class="form-control" placeholder="Firs tname" autocomplete="on" autofocus required/>
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <i class="mdi mdi-check-circle-outline"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <input type="text" id="last-name" class="form-control" placeholder="Last name" autocomplete="on" required/>
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <i class="mdi mdi-check-circle-outline"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <input type="text" id="user-name" class="form-control" placeholder="User name" autocomplete="on" required/>
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <i class="mdi mdi-check-circle-outline"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <input type="email" id="email" class="form-control" placeholder="Email" autocomplete="on" required/>
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <i class="mdi mdi-check-circle-outline"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <input type="password" id="password" class="form-control" placeholder="Password" autocomplete="on" required/>
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <i class="mdi mdi-check-circle-outline"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <input type="password" id="rpassword" class="form-control" placeholder="Confirm password" autocomplete="on" required/>
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <i class="mdi mdi-check-circle-outline"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="form-group">
                                     <div class="input-group">
-                                        <input type="text" class="form-control" placeholder="Username">
+                                        <input type="text" id="bill-token" class="form-control" placeholder="Access token" autocomplete="on" required>
                                         <div class="input-group-append">
                                             <span class="input-group-text">
                                                 <i class="mdi mdi-check-circle-outline"></i>
@@ -19,34 +102,18 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <input type="password" class="form-control" placeholder="Password">
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">
-                                                <i class="mdi mdi-check-circle-outline"></i>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <input type="password" class="form-control" placeholder="Confirm Password">
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">
-                                                <i class="mdi mdi-check-circle-outline"></i>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
+
+                                
                                 <div class="form-group d-flex justify-content-left">
                                     <div class="form-check form-check-flat mt-0">
                                         <label class="form-check-label">
-                                        <input type="checkbox" class="form-check-input" checked> I agree to the terms </label>
+                                            <input type="checkbox" id="checkbox" class="form-check-input" required/> 
+                                            I agree to the terms and policy
+                                        </label>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <button class="btn btn-primary submit-btn btn-block">REGISTER</button>
+                                    <button type="submit" class="btn btn-primary submit-btn btn-block">REGISTER</button>
                                 </div>
                                 <div class="text-block text-center my-3">
                                     <span class="text-small font-weight-semibold">Already have and account ?</span>
@@ -64,4 +131,6 @@
     <!-- container-scroller -->
 
     <% include ../../partials/_scripts %>
+
+    <script src="app/js/auth/signup.js"></script>
 </body>
