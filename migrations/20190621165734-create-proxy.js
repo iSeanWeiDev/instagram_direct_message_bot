@@ -11,8 +11,8 @@ module.exports = {
       url: {
         type: Sequelize.STRING(500)
       },
-      state: {
-        type: Sequelize.INTEGER
+      expire_date: {
+        type: Sequelize.DATE
       },
       createdAt: {
         allowNull: false,

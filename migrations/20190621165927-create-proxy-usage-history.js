@@ -11,8 +11,14 @@ module.exports = {
       bot_id: {
         type: Sequelize.INTEGER
       },
+      is_manual: {
+        type: Sequelize.STRING(1)
+      },
       proxy_id: {
         type: Sequelize.INTEGER
+      },
+      proxy_url: {
+        type: Sequelize.STRING(100)
       },
       createdAt: {
         allowNull: false,

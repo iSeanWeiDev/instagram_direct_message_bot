@@ -13,6 +13,7 @@ const UserModel = require('../models').User;
 // Define user controller.
 var UserController = {}; 
 
+// Register user by user email.
 UserController.signup = function(req, res) {
     UserModel.findAll({
         where: {
@@ -61,7 +62,8 @@ UserController.signup = function(req, res) {
         });
     })
 }
-    
+
+// Authenticate the user by email and create the session.
 UserController.login = function(req, res) {
     UserModel.findOne({
         where: {

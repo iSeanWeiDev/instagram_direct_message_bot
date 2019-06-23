@@ -94,7 +94,7 @@
                                     <div class="tab-pane fade show active" id="validate-pan" role="tabpanel" aria-labelledby="validate-tab">
                                         <div class="row p-3">
                                             <div class="col-md-6">
-                                                <form action="#" class="forms-sample">
+                                                <form action="/bots/validate" id="validate-bot-form" method="post"  class="needs-validation">
                                                     <div class="form-group text-center">
                                                         <h2 class="mb-0">
                                                             <b>
@@ -115,12 +115,13 @@
                                                                 <i class="mdi mdi-robot text-white"></i>
                                                             </span>
                                                             </div>
-                                                            <input type="text" 
+                                                            <input type="text" id="bot-name"
                                                                 class="form-control form-control-lg" 
                                                                 style="font-size: 14px" 
                                                                 placeholder="Bot name" 
                                                                 aria-label="Bot name" 
-                                                                aria-describedby="Bot name">
+                                                                aria-describedby="Bot name"
+                                                                autofocus required />
                                                         </div>
                                                     </div>
 
@@ -131,12 +132,13 @@
                                                                 <i class="mdi mdi-account text-white"></i>
                                                             </span>
                                                             </div>
-                                                            <input type="text" 
+                                                            <input type="text" id="account-name"
                                                                 class="form-control form-control-lg" 
                                                                 style="font-size: 14px" 
                                                                 placeholder="Account name" 
                                                                 aria-label="Account name" 
-                                                                aria-describedby="Account name">
+                                                                aria-describedby="Account name"
+                                                                required />
                                                         </div>
                                                     </div>
 
@@ -147,12 +149,13 @@
                                                                 <i class="mdi mdi-lock text-white"></i>
                                                             </span>
                                                             </div>
-                                                            <input type="text" 
+                                                            <input type="text" id="account-password" 
                                                                 class="form-control form-control-lg" 
                                                                 style="font-size: 14px" 
                                                                 placeholder="Account password" 
                                                                 aria-label="Account password" 
-                                                                aria-describedby="Account password">
+                                                                aria-describedby="Account password"
+                                                                required />
                                                         </div>
                                                     </div>
 
@@ -163,18 +166,18 @@
                                                                 <i class="mdi mdi-network text-white"></i>
                                                             </span>
                                                             </div>
-                                                            <input type="text" 
+                                                            <input type="text" id="customer-proxy-url"
                                                                 class="form-control form-control-lg" 
                                                                 style="font-size: 14px" 
                                                                 placeholder="Proxy URL" 
                                                                 aria-label="Proxy URL" 
-                                                                aria-describedby="Proxy URL">
+                                                                aria-describedby="Proxy URL" />
                                                         </div>
                                                     </div>
 
                                                     <div class="form-check form-check-flat ml-3">
                                                         <label class="form-check-label">
-                                                            <input type="checkbox" class="form-check-input"> 
+                                                            <input id="switch-proxy" type="checkbox" class="form-check-input"> 
                                                             Use the proxy provided by our service. 
                                                             <i class="input-helper"></i>
                                                         </label>
@@ -516,4 +519,6 @@
     <!-- container-scroller -->
 
     <% include ../partials/_scripts %>
+
+    <script src="app/js/createBot.js"></script>
 </body>
