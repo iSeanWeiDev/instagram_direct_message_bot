@@ -52,10 +52,10 @@
                                     </li>
                                     <li class="nav-item">
                                         <a  class="nav-link pt-3 pb-3"
-                                            id="message-tab"
-                                            href="#message-pan" 
+                                            id="reply-tab"
+                                            href="#reply-pan" 
                                             role="tab" 
-                                            aria-controls="message-pan" 
+                                            aria-controls="reply-pan" 
                                             data-toggle="pill">
             
                                             Default Replies
@@ -204,7 +204,7 @@
                                     <div class="tab-pane fade" id="filter-pan" role="tabpane" aria-labelledby="filter-tab">
                                         <div class="row p-3">
                                             <div class="col-md-6">
-                                                <form action="#" class="forms-sample">
+                                                <form action="/bots/save/filters" id="save-filters-form" method="post"  class="needs-validation">
                                                     <div class="form-group text-center">
                                                         <h2 class="mb-0">
                                                             <b>
@@ -221,7 +221,7 @@
                                                     <div class="form-group">
                                                         <textarea 
                                                             class="form-control" 
-                                                            id="exampleTextarea1" 
+                                                            id="filters" 
                                                             rows="3" 
                                                             style="font-size: 15px;"
                                                             placeholder="Please input your hashtags"
@@ -229,7 +229,7 @@
                                                     </div>
 
                                                     <div class="form-group text-right">
-                                                        <button class="btn btn-rounded btn-success">
+                                                        <button type="submit" class="btn btn-rounded btn-success">
                                                             <h6 class="p-0 m-0">
                                                                 <i class="mdi mdi-filter"></i>
                                                                 Insert Filters
@@ -249,7 +249,7 @@
                                     <div class="tab-pane fade" id="comment-pan" role="tabpanel" aria-labelledby="comment-tab">
                                         <div class="row p-3">
                                             <div class="col-md-6">
-                                                <form action="#" class="forms-sample">
+                                                <form action="/bots/save/comment" method="POST" id="save-comment-form" class="needs-validation">
                                                     <div class="form-goup text-center font-weight-bold">
                                                         <h2><strong>Add Comments</strong></h2>
                                                     </div>
@@ -289,8 +289,8 @@
                                         </div>
                                     </div>
             
-                                    <!-- begin direct message tab panel -->
-                                    <div class="tab-pane fade" id="message-pan" role="tabpanel" aria-labelledby="message-tab">
+                                    <!-- begin direct reply tab panel -->
+                                    <div class="tab-pane fade" id="reply-pan" role="tabpanel" aria-labelledby="reply-tab">
                                         <div class="row p-3">
                                             <div class="col-md-6">
                                                 <img 
@@ -300,13 +300,13 @@
                                                     alt="">
                                             </div>
                                             <div class="col-md-6">
-                                                <form action="#" class="forms-sample">
+                                                <form action="/bots/save/reply" id="save-reply-form" class="need-validation">
                                                     <div class="form-goup text-center font-weight-bold">
                                                         <h2><strong>Default Reply</strong></h2>
                                                     </div>
                                                     <div class="form-group">
                                                         <textarea 
-                                                            id="show-messages" 
+                                                            id="show-reply" 
                                                             class="form-control" 
                                                             name="" 
                                                             id="" 
@@ -315,11 +315,11 @@
                                                     </div>
             
                                                     <div class="input-group pr-3 pl-3">
-                                                        <input id="message" 
+                                                        <input id="reply" 
                                                             type="text" 
                                                             class="form-control" 
-                                                            placeholder="&nbsp; Please add your message." 
-                                                            aria-label="Please add your message" 
+                                                            placeholder="&nbsp; Add your direct message here." 
+                                                            aria-label="Add your direct message here." 
                                                             aria-describedby="basic-addon2" 
                                                             autofocus required>
                                                         <div class="input-group-append">
@@ -333,7 +333,7 @@
 
                                     <!-- begin follow up message tab panel -->
                                     <div class="tab-pane fade" id="fum-pan" role="tabpanel" aria-labelledby="fum-pan">
-                                        <form action="#" class="sample-form p-3">
+                                        <form action="/bots/save/fum" id="save-fum-form" method="post" class="need-validation p-3">
                                             <div class="form-group text-center ">
                                                 <h2 class="mb-0">
                                                     <b>
@@ -350,15 +350,15 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label for="exampleTextarea1">In 2 Days</label>
-                                                        <textarea class="form-control" id="exampleTextarea1" rows="2" spellcheck="false"></textarea>
+                                                        <label for="fum-2th-message">In 2 Days</label>
+                                                        <textarea class="form-control" id="fum-2th-message" rows="2" spellcheck="false"></textarea>
                                                     </div>
                                                 </div>
     
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label for="exampleTextarea1">In 6 Days</label>
-                                                        <textarea class="form-control" id="exampleTextarea1" rows="2" spellcheck="false"></textarea>
+                                                        <label for="fum-6th-message">In 6 Days</label>
+                                                        <textarea class="form-control" id="fum-6th-message" rows="2" spellcheck="false"></textarea>
                                                     </div>
                                                 </div>
                                             </div>
@@ -366,15 +366,15 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label for="exampleTextarea1">In 12 Days</label>
-                                                        <textarea class="form-control" id="exampleTextarea1" rows="2" spellcheck="false"></textarea>
+                                                        <label for="fum-12th-message">In 12 Days</label>
+                                                        <textarea class="form-control" id="fum-12th-message" rows="2" spellcheck="false"></textarea>
                                                     </div>
                                                 </div>
     
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label for="exampleTextarea1">In 21 days</label>
-                                                        <textarea class="form-control" id="exampleTextarea1" rows="2" spellcheck="false"></textarea>
+                                                        <label for="fum-21th-message">In 21 days</label>
+                                                        <textarea class="form-control" id="fum-21th-message" rows="2" spellcheck="false"></textarea>
                                                     </div>
                                                 </div>
                                             </div>
@@ -382,15 +382,15 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label for="exampleTextarea1">In 1 month</label>
-                                                        <textarea class="form-control" id="exampleTextarea1" rows="2" spellcheck="false"></textarea>
+                                                        <label for="fum-1month-message">In 1 month</label>
+                                                        <textarea class="form-control" id="fum-1month-message" rows="2" spellcheck="false"></textarea>
                                                     </div>
                                                 </div>
     
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label for="exampleTextarea1">In 2 months</label>
-                                                        <textarea class="form-control" id="exampleTextarea1" rows="2" spellcheck="false"></textarea>
+                                                        <label for="fum-2month-message">In 2 months</label>
+                                                        <textarea class="form-control" id="fum-2month-message" rows="2" spellcheck="false"></textarea>
                                                     </div>
                                                 </div>
                                             </div>
@@ -398,21 +398,21 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label for="exampleTextarea1">In 3 months</label>
-                                                        <textarea class="form-control" id="exampleTextarea1" rows="2" spellcheck="false"></textarea>
+                                                        <label for="fum-3month-message">In 3 months</label>
+                                                        <textarea class="form-control" id="fum-3month-message" rows="2" spellcheck="false"></textarea>
                                                     </div>
                                                 </div>
     
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label for="exampleTextarea1">In 4 months</label>
-                                                        <textarea class="form-control" id="exampleTextarea1" rows="2" spellcheck="false"></textarea>
+                                                        <label for="fum-4month-message">In 4 months</label>
+                                                        <textarea class="form-control" id="fum-4month-message" rows="2" spellcheck="false"></textarea>
                                                     </div>
                                                 </div>
                                             </div>
 
                                             <div class="form-group text-right">
-                                                <button class="btn btn-rounded btn-success">
+                                                <button type="submit" class="btn btn-rounded btn-success">
                                                     <h6 class="p-0 m-0">
                                                         <i class="mdi mdi-content-save"></i>
                                                         Save Followup Messages
@@ -434,7 +434,7 @@
                                             </div>
                                              
                                             <div class="col-md-6">
-                                                <form action="#" class="forms-sample p-3">
+                                                <form action="/bots/save/setting" id="save-setting-form" class="need-validation p-3">
                                                     <div class="form-group text-center">
                                                         <h2 class="mb-0">
                                                             <b>
@@ -455,12 +455,14 @@
                                                                 <i class="mdi mdi-clock text-white"></i>
                                                             </span>
                                                             </div>
-                                                            <input type="text" 
+                                                            <input type="number" id="message-delay"
+                                                                min="100" max="5000"
                                                                 class="form-control form-control-lg" 
                                                                 style="font-size: 14px" 
                                                                 placeholder="Direct message Delay" 
                                                                 aria-label="Direct message Delay" 
-                                                                aria-describedby="Direct message Delay">
+                                                                aria-describedby="Direct message Delay"
+                                                                autofocus required />
                                                         </div>
                                                     </div>
 
@@ -471,25 +473,27 @@
                                                                 <i class="mdi mdi-counter text-white"></i>
                                                             </span>
                                                             </div>
-                                                            <input type="text" 
+                                                            <input type="text" id="amount-comment"
+                                                                min="0" max="200"
                                                                 class="form-control form-control-lg" 
                                                                 style="font-size: 14px" 
                                                                 placeholder="The amount of comment per day" 
                                                                 aria-label="The amount of comment per day" 
-                                                                aria-describedby="The amount of comment per day">
+                                                                aria-describedby="The amount of comment per day"
+                                                                required />
                                                         </div>
                                                     </div>
 
                                                     <div class="form-check form-check-flat ml-3">
                                                         <label class="form-check-label">
-                                                            <input type="checkbox" class="form-check-input"> 
-                                                            Use the proxy provided by our service. 
+                                                            <input type="checkbox" id="confirm-setting" class="form-check-input"> 
+                                                            Confirm your bot setting before create new bot. 
                                                             <i class="input-helper"></i>
                                                         </label>
                                                     </div>
 
                                                     <div class="form-group text-right">
-                                                        <button class="btn btn-rounded btn-success">
+                                                        <button type="submit" class="btn btn-rounded btn-success">
                                                             <h6 class="p-0 m-0">
                                                                 <i class="mdi mdi-content-save-settings"></i>
                                                                 Save Bot Setting
