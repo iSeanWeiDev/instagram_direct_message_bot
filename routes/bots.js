@@ -19,6 +19,6 @@ router.post('/save/comment', BotController.saveComment);
 router.post('/save/reply', BotController.saveReply);
 router.post('/save/fum', BotController.saveFUMessage);
 router.post('/save/setting', BotController.saveSettings);
-router.post('/create', BotController.createNewBot);
+router.post('/create/new', BotController.createNewBot);
 
 module.exports = router;

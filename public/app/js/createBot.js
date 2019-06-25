@@ -21,11 +21,21 @@ $(document).ready(function() {
         customerProxyUrl = $('input#customer-proxy-url.form-control'),
         switchProxy = $('input#switch-proxy.form-check-input');
 
+    switchProxy.change(function() {
+        if(switchProxy.is(":checked")) {
+            customerProxyUrl.val('');
+            customerProxyUrl.attr("readonly", "true");
+        } else {
+            customerProxyUrl.removeAttr("readonly");
+        }
+    })
+
     $('form#validate-bot-form').submit(function(event) {
         var proxyUrl = customerProxyUrl.val();
         
         if(switchProxy.is(":checked")) {
             proxyUrl = null;
+            switchProxy.css('disply', 'none');
         }
 
         var newBotData = {
@@ -372,15 +382,59 @@ $(document).ready(function() {
                 data: settingData
             }).done(function(response) {
                 if(response && response.flag == true) {
+                    mkNoti(
+                        'Success!',
+                        response.message,
+                        {
+                            status:'success'
+                        }
+                    );
+
                     $.confirm({
                         title: 'Success!',
                         content: 'You can create a bot by inputed your details.',
                         buttons: {
                             confirm: function () {
-                                $.alert('Confirmed!');
+                                var sendData = {
+                                    botId: gBotId
+                                }
+                                
+                                $.ajax({
+                                    method: 'POST',
+                                    url: '/bots/create/new',
+                                    data: sendData
+                                }).done(function(response) {
+                                    if(response && response.flag == true) {
+                                        mkNoti(
+                                            'Congratration!',
+                                            response.message,
+                                            {
+                                                status:'success'
+                                            }
+                                        );
+
+                                        setTimeout(() => {
+                                            window.open('connect', '_self');
+                                        }, 1000);
+                                    } else {
+                                        mkNoti(
+                                            'Create Bot Failure!',
+                                            response.message,
+                                            {
+                                                status:'danger'
+                                            }
+                                        );
+                                    }
+                                });
                             },
                             cancel: function () {
-                                $.alert('Canceled!');
+                                mkNoti(
+                                    'Create Bot canceled!',
+                                    'Check your bot state and create if you want.',
+                                    {
+                                        status:'info'
+                                    }
+                                );
                             }
                         }
                     });

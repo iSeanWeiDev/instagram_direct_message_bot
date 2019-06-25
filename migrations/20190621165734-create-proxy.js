@@ -14,6 +14,9 @@ module.exports = {
       expire_date: {
         type: Sequelize.DATE
       },
+      state: {
+        type: Sequelize.INTEGER
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

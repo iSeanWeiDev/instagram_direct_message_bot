@@ -10,19 +10,34 @@
 var Client = require('instagram-private-api').V1,
     path = require('path'),
     _ = require('lodash'),
-    Promise = require('bluebird');
+    Promise = require('bluebird'),
+    Sequelize = require('sequelize');
+
+var sequelize = new Sequelize('postgres://postgres:Rango941001top@@@@localhost:5432/instagram_dev');
 
 // Definition Bot Service module.
 var BotService = {};
 
 // Define BotService Sub Functions.
 BotService.validateBot = validateBot;
+BotService.saveBotDetail = saveBotDetail;
 BotService.getProxy = getProxy;
 BotService.saveFilters = saveFilters;
 BotService.saveComment = saveComment;
 BotService.saveReply = saveReply;
 BotService.saveFUMessage = saveFUMessage;
 BotService.saveSetting = saveSetting;
+BotService.getBotProperties = getBotProperties;
+BotService.updateBotState = updateBotState;
+BotService.getMediaIdByHashTag= getMediaIdByHashTag;
+BotService.commitByMediaId = commitByMediaId;
+BotService.saveCommitHistory = saveCommitHistory;
+BotService.getInboxById = getInboxById;
+BotService.getCountOfReplyHistoriesById = getCountOfReplyHistoriesById;
+BotService.directMessageToClient = directMessageToClient;
+BotService.saveReplyHistory = saveReplyHistory;
+BotService.getClientIdList = getClientIdList;
+BotService.saveFUMHistory = saveFUMHistory;
 
 // Import Data Models
 var ProxyModel = require('../models').Proxy;
@@ -32,6 +47,9 @@ var CommentModel = require('../models').Comment;
 var ReplyModel = require('../models').Reply;
 var FUMModel = require('../models').FollowUpMessage;
 var BotModel = require('../models').Bot;
+var CommentHistoryModel = require('../models').CommentHistory;
+var ReplyHistoryModel = require('../models').ReplyHistory;
+var FollowUpMessageHistoryModel = require('../models').FollowUpMessageHistory;
 
 /**
  * @description
@@ -78,11 +96,125 @@ function validateBot(name, password, proxy, cb) {
 }
 
 /**
- * @ignore SQL required.
+ * @description
+ * Save bot detail when it validated
+ * 
+ * @param {OBJECT} data 
+ * @param {OBJECT} proxyData
+ * @param {OBJECT} cb 
+ */
+function saveBotDetail(data, proxyData, cb) {
+    BotModel.create(data)
+        .then(function(bot) {
+            if(proxyData.isManual == true) {
+                var newProxyUsageHistoryData = {
+                    bot_id: bot.dataValues.id,
+                    is_manual: "Y",
+                    proxy_id: null,
+                    proxy_url: proxyData.url
+                }
+
+                ProxyUsageHistoryModel.create(newProxyUsageHistoryData)
+                    .then(function(history) {
+                        cb({
+                            flag: true,
+                            message: 'Successfully created your bot!',
+                            botId: history.dataValues.bot_id
+                        });
+                    })
+                    .catch(function(error) {
+                        console.log('Save Proxy Usage History error: ' + error);
+
+                        cb({
+                            flag: false,
+                            message: 'Server connection error'
+                        });
+                    });
+            } else {
+                var updateProxyData = {
+                    state: proxyData.state + 1
+                }
+
+                ProxyModel.update(updateProxyData, {
+                    where: {
+                        id: proxyData.id
+                    }
+                }).then(function() {
+                    var newProxyUsageHistoryData = {
+                        bot_id: bot.dataValues.id,
+                        is_manual: "N",
+                        proxy_id: proxyData.id,
+                        proxy_url: proxyData.url
+                    }
+
+                    ProxyUsageHistoryModel.create(newProxyUsageHistoryData)
+                        .then(function(history) {
+                            cb({
+                                flag: true,
+                                message: 'Successfully created your bot!',
+                                botId: history.dataValues.bot_id
+                            });
+                        })
+                        .catch(function(error) {
+                            console.log('Save Proxy Usage History error: ' + error);
+
+                            cb({
+                                flag: false,
+                                message: 'Server connection error'
+                            });
+                        });
+                }).catch(function(error) {
+                    console.log('Update proxy state error: ' + error);
+    
+                    cb({
+                        flag: false,
+                        message: 'Server connection error'
+                    })
+                });
+            }
+        })
+        .catch(function(error) {
+            console.log('Create new bot error: ' + error);
+
+            res.json({
+                flag: false,
+                message: 'Server connection error!'
+            });
+        });
+}
+
+/**
+ * @descriptin
+ * If want to use our service proxy, then we need to service the proxy as user want.
+ * 
  * @param {*} cb 
  */
 function getProxy(cb) {
+    var selectQuery = ` SELECT * FROM (
+                            SELECT 
+                                A.id, A.url, A.state
+                            FROM
+                                "public"."Proxies" AS A
+                            WHERE
+                                A.state < 4
+                                AND A."expire_date" > DATE(now())
+                        ) AA
+                        LIMIT 1 `;
 
+    sequelize.query(selectQuery)
+        .then(function(result){
+            cb({
+                flag: true,
+                data: result[0][0]
+            })
+        })
+        .catch(function(error) {
+            console.log('Get Proxy error:' + error);
+            cb({
+                flag: false,
+                message: 'Server connection error'
+            })
+        });
 }
 
 /**
@@ -94,31 +226,22 @@ function getProxy(cb) {
  */
 function saveFilters(data, cb) {
     var botId = data.botId,
-        arrFilter = data.filters,
-        countArrFilter = data.filters.length - 1;
+        arrFilter = data.filters;
 
+        
+    var countArrFilter = data.filters.length;
     async function saveFilter() {
+        countArrFilter--;
+
         var newFilterRow = {
             bot_id: botId,
             hashtag: arrFilter[countArrFilter],
             state: 1 
         }
 
-        FilterModel.create(newFilterRow)
-            .then(function(filter) {
-                if(filter) {
-                    countArrFilter--;
-                }
-            })
-            .catch(function(error) {
-                console.log('Save filter error: ' + error);
-                cb({
-                    flag: false,
-                    message: 'Server connection error!' 
-                })
-            });
+        FilterModel.create(newFilterRow);
 
-        if(countArrFilter >= 0) {
+        if(countArrFilter > 0) {
             // Recursive call.
             saveFilter();
 
@@ -141,7 +264,7 @@ function saveFilters(data, cb) {
  * @param {OBJECT} cb 
  */
 function saveComment(data, cb) {
-    var botId = data.bodId,
+    var botId = data.botId,
         text = data.comment;
 
     var newCommentRow = {
@@ -178,7 +301,7 @@ function saveComment(data, cb) {
  * @param {OBJECT} cb 
  */
 function saveReply(data, cb) {
-    var botId = data.bodId,
+    var botId = data.botId,
         text = data.reply;
 
     var newReplyRow = {
@@ -254,7 +377,10 @@ function saveSetting(data, cb) {
         }
     }).then(function(response) {
         if(response[0] == 1) {
-            console.log()
+            cb({
+                flag: true,
+                message: 'Setted your setting to your bot!'
+            })
         }
 
     }).catch(function(error) {
@@ -269,12 +395,391 @@ function saveSetting(data, cb) {
 
 /**
  * @description
- * Return Random integer within max values.
+ * get bot properties by bot id.
  * 
- * @param {INTEGER} count 
+ * @param {INTEGER} botId 
+ * @param {OBJECT} cb 
  */
-function getRandomInt(count) {
-    return Math.floor(Math.random() * Math.floor(count) + 1) ;
+function getBotProperties(botId, cb) {
+    var getData = new Promise(function(resolve) {
+        var arrFilter = [],
+            arrComment = [],
+            arrReply = [],
+            arrFUM = [];
+
+        BotModel.findOne({
+            where: {
+                id: botId
+            }
+        }).then(function(bot) {
+            ProxyUsageHistoryModel.findOne({
+                attributes: ['id', 'proxy_url'],
+                where: {
+                    bot_id: botId
+                }
+            }).then(function(proxy) {
+                FilterModel.findAll({
+                    attributes: ['id','hashtag'],
+                    where: {
+                        bot_id: botId,
+                        state: 1
+                    }
+                }).then(function(filters) {
+                    for(var obj of filters) {
+                        arrFilter.push(obj.dataValues);
+                    }
+        
+                    CommentModel.findAll({
+                        attributes: ['id', 'text'],
+                        where: {
+                            bot_id: botId,
+                            state: 1
+                        }
+                    }).then(function(comments) {
+                        for(var obj of comments) {
+                            arrComment.push(obj.dataValues);
+                        }
+        
+                        ReplyModel.findAll({
+                            attributes: ['id', 'text'],
+                            where: {
+                                bot_id: botId,
+                                state: 1
+                            }
+                        }).then(function(replies) {
+                            for(var obj of replies) {
+                                arrReply.push(obj.dataValues);
+                            }
+        
+                            FUMModel.findAll({
+                                attributes: ['id', 'start_date', 'text'],
+                                where: {
+                                    bot_id: botId,
+                                    state: 1
+                                }
+                            }).then(function(fums) {
+                                for(var obj of fums) {
+                                    arrFUM.push(obj.dataValues);
+                                }
+        
+                                var botData = {
+                                    flag: true,
+                                    bot: bot.dataValues,
+                                    proxy: proxy.dataValues,
+                                    filters: arrFilter,
+                                    comments: arrComment,
+                                    replies: arrReply,
+                                    fums: arrFUM
+                                }
+                        
+                                return resolve(botData);
+        
+                            }).catch(function(error) {
+                                console.log('Get follow up message error:' + error);
+                            });
+                        }).catch(function(error) {
+                            console.log('Get reply error: ' +  error);
+                        });
+                    }).catch(function(error) {
+                        console.log('Get comment error: ' + error);
+                    });
+                }).catch(function(error) {
+                    console.log('Get filters error: ' + error);
+                });
+            }).catch(function(error) {
+                console.log('Get proxy error: ' + error);
+            })
+            
+        }).catch(function(error) {
+            console.log('Get bot detail error: ' + error);
+        });
+    });
+
+    getData.then(function(data) {
+        cb(data);
+    })
 }
+
+/**
+ * 
+ * @param {INTEGER} botId 
+ * @param {OBJECT} cb 
+ */
+function updateBotState(botId, cb) {
+    var updateData = {
+        status: 1
+    }
+
+    BotModel.update(updateData, {
+        where: {
+            id: botId
+        }
+    }).then(function(result) {
+        if(result[0] == 1) {
+            cb({
+                flag: true,
+                message: 'Successfully, created your bot!'
+            })
+        }
+    }).catch(function(error) {
+        console.log('Update bot state error: ' + error);
+
+        cb({
+            flag: false,
+            message: 'Update bot state error'
+        })
+    });
+}
+
+/**
+ * @description
+ * Get media id list by hashtag from api
+ * 
+ * @param {OBJECT} session 
+ * @param {STRING} hashtag 
+ * @param {OBJECT} cb 
+ */
+function getMediaIdByHashTag(session, hashtag, cb) {
+    var feed = new Client.Feed.TaggedMedia(session, hashtag);
+
+    var pFeed = new Promise(function(resolve) {
+        return resolve(feed.get());
+    });
+
+    pFeed.then(function(results) {
+        var arrMediaIdList = [];
+
+        for(var obj of results) {
+            arrMediaIdList.push(obj.caption.media_id);
+        }
+
+        cb({
+            flag: true,
+            data: arrMediaIdList
+        });
+
+        arrMediaIdList = [];
+    }).catch(function(error) {
+        console.log('Get Media Id by hashTag error: ' + error);
+        cb({
+            flag: false
+        })
+    });
+}
+
+/**
+ * @description
+ * commit to posted media by media id
+ * 
+ * @param {OBJECT} session 
+ * @param {INTEGER} mediaId 
+ * @param {STRING} commentText 
+ * @param {OBJECT} cb 
+ */
+function commitByMediaId(session, mediaId, commentText, cb) {
+    Client.Comment.create(session, mediaId, commentText)
+        .then(function(result) {
+            cb({
+                flag: true,
+                data: result
+            });
+        })
+        .catch(function(error) {
+            console.log('Commit to post by media id error: ' + error);
+            cb({
+                flag: false
+            })
+        });
+}
+
+/**
+ * @description
+ * save commited history
+ * 
+ * @param {OBJECT} data 
+ * @param {OBJECT} cb 
+ */
+function saveCommitHistory(data, cb) {
+    CommentHistoryModel.create(data)
+        .then(function() {
+            cb({
+                flag: true
+            })
+        })
+        .catch(function(error) {
+            console.log('Save commit history error: ' + error);
+            cb({
+                flag: false
+            })
+        });
+}
+
+/**
+ * @description
+ * get inbox data by account id from Instagram API
+ * 
+ * @param {OBJECT} session 
+ * @param {OBJECT} cb 
+ */
+function getInboxById(session, cb) {
+    var feed = new Client.Feed.Inbox(session);
+
+    var pFeed = new Promise(function(resolve) {
+        return resolve(feed.get());
+    });
+
+    pFeed.then(function(results) {
+        var countResult = results.length;
+        var accountId;
+        var text = '';
+        var clientId;
+        var arrSendData = [];
+
+        async function getNewInbox() {
+            countResult--;
+
+            results[countResult].items.forEach(function(item) {
+                text = item._params.text;
+                accountId = item._params.userId;
+            });
+
+            results[countResult].accounts.forEach(function(account) {
+                clientId = account.pk;
+            });
+
+            if(accountId == clientId && text != undefined) {
+                var objSendData = {
+                    text: text,
+                    clientId: clientId
+                }
+
+                arrSendData.push(objSendData);
+            }
+
+            if(countResult > 0) {
+                getNewInbox();
+            }
+        }
+        getNewInbox();
+
+        cb(arrSendData);
+
+        arrSendData = [];
+    });
+}
+
+/**
+ * @description
+ * Get Count of Reply histories by botid.
+ * 
+ * @param {INTEGER} botId 
+ * @param {INTEGER} clientId
+ * @param {OBJECT} cb 
+ */
+function getCountOfReplyHistoriesById(botId, clientId, cb) {
+    var botId = botId;
+    var clientId = clientId.toString();
+
+    ReplyHistoryModel.count({
+        where: {
+            bot_id: botId,
+            client_id: clientId
+        }
+    }).then(function(result) {
+        console.log(result);
+    }).catch(function(error) {
+        console.log('Count bot history error: ' + error);
+    });
+}
+
+/**
+ * @description
+ * 
+ * 
+ * @param {OBJECT} session 
+ * @param {STRING} clientId 
+ * @param {STRING} replyText 
+ * @param {OBJECT} cb 
+ */
+function directMessageToClient(session, clientId, replyText, cb) {
+    Client.Thread.configureText(session, clientId, replyText)
+        .then(function(result) {
+            var sendData = {
+                id: result[0].accounts[0].id,
+                name: result[0].accounts[0].username,
+                imgUrl: result[0].accounts[0].profile_pic_url
+            }
+
+            cb(sendData);
+        })
+        .catch(function(error) {
+            console.log('Direct Message Error: ' + error);
+        });
+}
+
+/**
+ * @description
+ * save reply history to database.
+ * 
+ * @param {OBJECT} data 
+ * @param {OBJECT} cb 
+ */
+function saveReplyHistory(data, cb) {
+    ReplyHistoryModel.create(data)
+        .then(function(history) {
+            cb({
+                id: history.dataValues.id
+            });
+        })
+        .catch(function(error) {
+            console.log('Create new history error: ' + error);
+        });
+}
+
+/**
+ * @description
+ * Get Client id list from replyhistory table.
+ * 
+ * @param {INTEGER} botId 
+ * @param {OBJECT} cb 
+ */
+function getClientIdList(botId, cb) {
+    ReplyHistoryModel.findAll({
+        attributes: ['client_id'],
+        where: {
+            bot_id: botId
+        }
+    }).then(function(result) { 
+        var arrClientId = [];
+
+        for(var obj of result) {
+            arrClientId.push(obj.dataValues.client_id);
+        }
+
+        cb(arrClientId);
+
+        arrClientId = [];
+    }).catch(function(error) {
+        console.log('Get Client ID list error: ' + error);
+    });
+}
+
+/**
+ * @description
+ * 
+ * 
+ * @param {OBJECT} data 
+ * @param {OBJECT} cb 
+ */
+function saveFUMHistory(data, cb) {
+    FollowUpMessageHistoryModel.create(data)
+        .then(function(history) {
+            cb(history.dataValues);
+        })
+        .catch(function(error) {
+            console.log('Save follow up message history error: ' + error);
+        });
+}
+
 // Export BotService module.
 module.exports = BotService;

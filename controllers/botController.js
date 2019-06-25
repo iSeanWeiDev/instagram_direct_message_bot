@@ -16,6 +16,14 @@ var BotService = require('../services/botService');
 // Define user controller.
 var BotController = {};
 
+// Global values.
+var arrBotProcess = [];
+var arrBotProcessName = [];
+var arrBotProcessBackup = [];
+var arrBotProcessNameBackup = [];
+
+var botNum = 0;
+
 // Validate bot by IG account detail and proxy.
 BotController.validateBot = function(req, res) {
     var botName = req.body.botName,
@@ -23,35 +31,96 @@ BotController.validateBot = function(req, res) {
         accountPass = req.body.accountPassword,
         proxyUrl = req.body.proxyUrl;
 
-
     if(proxyUrl == '') {
-        BotService.getProxy(function(proxy) {
-            BotService.validateBot(accountName, accountPass, proxy.url, function(response) {
-                if(response.flag == false) {
-                    switch(cb.type) {
-                        case 'CheckpointError':
-                            res.json({
-                                flag: false,
-                                message: 'You need to login your user'
+        BotService.getProxy(function(response) {
+            if(response && response.flag == true) {
+                var proxyId = response.data.id;
+                var autoProxyUrl = 'http://' + response.data.url;
+                var proxyState = response.data.state;
+                
+                BotService.validateBot(accountName, accountPass, autoProxyUrl, function(response) {
+                    if(response.flag == false) {
+                        switch(cb.type) {
+                            case 'CheckpointError':
+                                res.json({
+                                    flag: false,
+                                    message: 'You need to login your user'
+                                });
+            
+                                break;
+                            case 'AuthenticationError':
+                                res.json({
+                                    flag: false,
+                                    message: 'Authentication Error, Please retype your user detail.'
+                                });
+                                
+                                break;
+                            case 'CreateError':
+                                res.json({
+                                    flag: false,
+                                    message: 'Creating Session Error.'
+                                });
+            
+                                break;
+                        }
+                    } else {
+                        if(req.session.user.userId > 0) {
+                            var newBotData = {
+                                user_id: req.session.user.userId,
+                                bot_name: botName,
+                                account_name: accountName,
+                                account_password: accountPass,
+                                account_image_url: response.imageUrl,
+                                state: 0
+                            }
+
+                            var proxyData = {
+                                isManual: false,
+                                id: proxyId,
+                                url: autoProxyUrl,
+                                state: proxyState
+                            }
+
+                            BotService.saveBotDetail(newBotData, proxyData, function(response) {
+                                 res.json(response);
                             });
-        
-                            break;
-                        case 'AuthenticationError':
-                            res.json({
-                                flag: false,
-                                message: 'Authentication Error, Please retype your user detail.'
-                            });
+                        } else {
                             
-                            break;
-                        case 'CreateError':
-                            res.json({
-                                flag: false,
-                                message: 'Creating Session Error.'
-                            });
-        
-                            break;
+                        }
                     }
-                } else {
+                });
+            } else {
+                 res.json(response);
+            }
+        })
+    } else {
+        BotService.validateBot(accountName, accountPass, proxyUrl, function(response) {
+            if(response.flag == false) {
+                switch(cb.type) {
+                    case 'CheckpointError':
+                        res.json({
+                            flag: false,
+                            message: 'You need to login your user'
+                        });
+    
+                        break;
+                    case 'AuthenticationError':
+                        res.json({
+                            flag: false,
+                            message: 'Authentication Error, Please retype your user detail.'
+                        });
+                        
+                        break;
+                    case 'CreateError':
+                        res.json({
+                            flag: false,
+                            message: 'Creating Session Error.'
+                        });
+    
+                        break;
+                }
+            } else {
+                if(req.session.user.userId > 0) {
                     var newBotData = {
                         user_id: req.session.user.userId,
                         bot_name: botName,
@@ -61,48 +130,25 @@ BotController.validateBot = function(req, res) {
                         state: 0
                     }
 
-                    BotModel.create(newBotData)
-                        .then(function(bot) {
-                            var newProxyUsageHistoryData = {
-                                bot_id: bot.dataValues.id,
-                                is_manual: 'N',
-                                proxy_id: proxy.id,
-                                proxy_url: proxy.url
-                            }
+                    var proxyData = {
+                        isManual: true,
+                        url: proxyUrl
+                    }
 
-                            newProxyUsageHistoryData.create(newProxyUsageHistoryData)
-                                .then(function(history) {
-                                    res.json({
-                                        flag: true,
-                                        message: 'Successfully created your bot!',
-                                        botId: history.dataValues.bot_id
-                                    });
-                                })
-                                .catch(function(error) {
-                                    console.log('Save Proxy Usage History error: ' + error);
-                                });
-                        })
-                        .catch(function(error) {
-                            console.log('Create new bot error: ' + error);
-                            res.json({
-                                flag: false,
-                                message: 'Server connection error!'
-                            })
-                        });
+                    BotService.saveBotDetail(newBotData, proxyData, function(response) {
+                         res.json(response);
+                    });
+                } else {
+                    res.json({
+                        flag: false,
+                        message: 'Server connection error!'
+                    });
                 }
-            });
-        });
-    } else {
-        BotService.validateBot(accountName, accountPass, proxyUrl, function(response) {
-            if(response.flag == true) {
-
-            } else {
-                
             }
         });
     }
 
-    
+   
 }
 
 // Save filters by array to rows.
@@ -136,6 +182,7 @@ BotController.saveFUMessage = function(req, res) {
     for(var obj of arrData) {
         var startDate = (new Date()).getTime();
         var deltaDate = obj.day * 86400000;
+
         arrFUMData.push({
             bot_id: botId,
             start_date: new Date(startDate + deltaDate).toISOString(),
@@ -144,8 +191,9 @@ BotController.saveFUMessage = function(req, res) {
         });
     }
     
-    BotService.saveFUMessage(arrData, function(response) {
-        req.json(response);
+
+    BotService.saveFUMessage(arrFUMData, function(response) {
+        res.json(response);
         arrFUMData = [];
     });
 
@@ -160,7 +208,26 @@ BotController.saveSettings = function(req, res) {
 
 // Create bot by bot details
 BotController.createNewBot = function(req, res) {
+    BotService.getBotProperties(req.body.botId, function(response) {
+        // console.log(response);
+        arrBotProcess.push(fork(path.join(__dirname, 'newBotProcess.js')));
+        arrBotProcessName.push(req.body.botId);
 
+        arrBotProcess[botNum].on('message', function(data) {
+            // if(data == 1) {
+            //     BotService.updateBotState(req.body.botId, function(cb) {
+            //         if(cb.flag == true) {
+            //             botNum = botNum + 1;
+            //             res.json(cb);
+            //         } else {
+            //             res.json(cb);
+            //         };
+            //     });
+            // }
+        });
+
+        arrBotProcess[botNum].send(response);
+    });
 }
 
 // Export module with UserController.
