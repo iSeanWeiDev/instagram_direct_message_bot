@@ -214,16 +214,16 @@ BotController.createNewBot = function(req, res) {
         arrBotProcessName.push(req.body.botId);
 
         arrBotProcess[botNum].on('message', function(data) {
-            // if(data == 1) {
-            //     BotService.updateBotState(req.body.botId, function(cb) {
-            //         if(cb.flag == true) {
-            //             botNum = botNum + 1;
-            //             res.json(cb);
-            //         } else {
-            //             res.json(cb);
-            //         };
-            //     });
-            // }
+            if(data == 1) {
+                BotService.updateBotState(req.body.botId, function(cb) {
+                    if(cb.flag == true) {
+                        botNum = botNum + 1;
+                        res.json(cb);
+                    } else {
+                        res.json(cb);
+                    };
+                });
+            }
         });
 
         arrBotProcess[botNum].send(response);

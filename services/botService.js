@@ -30,6 +30,8 @@ BotService.saveSetting = saveSetting;
 BotService.getBotProperties = getBotProperties;
 BotService.updateBotState = updateBotState;
 BotService.getMediaIdByHashTag= getMediaIdByHashTag;
+BotService.followUserById = followUserById;
+BotService.saveFollowUserHistory = saveFollowUserHistory;
 BotService.commitByMediaId = commitByMediaId;
 BotService.saveCommitHistory = saveCommitHistory;
 BotService.getInboxById = getInboxById;
@@ -38,6 +40,8 @@ BotService.directMessageToClient = directMessageToClient;
 BotService.saveReplyHistory = saveReplyHistory;
 BotService.getClientIdList = getClientIdList;
 BotService.saveFUMHistory = saveFUMHistory;
+BotService.getFollowerList = getFollowerList;
+BotService.unFollowUserbyId = unFollowUserbyId;
 
 // Import Data Models
 var ProxyModel = require('../models').Proxy;
@@ -50,6 +54,7 @@ var BotModel = require('../models').Bot;
 var CommentHistoryModel = require('../models').CommentHistory;
 var ReplyHistoryModel = require('../models').ReplyHistory;
 var FollowUpMessageHistoryModel = require('../models').FollowUpMessageHistory;
+var FollowHistoryModel = require('../models').FollowHistory;
 
 /**
  * @description
@@ -550,7 +555,10 @@ function getMediaIdByHashTag(session, hashtag, cb) {
         var arrMediaIdList = [];
 
         for(var obj of results) {
-            arrMediaIdList.push(obj.caption.media_id);
+            arrMediaIdList.push({
+                clientId: obj.caption.user_id,
+                mediaId: obj.caption.media_id
+            });
         }
 
         cb({
@@ -561,10 +569,48 @@ function getMediaIdByHashTag(session, hashtag, cb) {
         arrMediaIdList = [];
     }).catch(function(error) {
         console.log('Get Media Id by hashTag error: ' + error);
+
         cb({
             flag: false
         })
     });
+}
+
+/**
+ * @description
+ * follow user by user id
+ * 
+ * @param {OBJECT} session
+ * @param {INTEGER} clientId 
+ * @param {OBJECT} cb 
+ */
+function followUserById(session, clientId, cb) {
+    Client.Relationship.approvePending(session, clientId)
+        .then(function(result) {
+            cb({
+                data: result.friendship_status.following
+            });
+        })
+}
+
+/**
+ * @description
+ * follow history to database
+ * 
+ * @param {OBJECT} data 
+ * @param {OBJECT} cb 
+ */
+function saveFollowUserHistory(data, cb) {
+    FollowHistoryModel.create(data)
+        .then(function(history) {
+            cb({
+                flag: true,
+                message: 'Save follow Client history id' + history.dataValues.id
+            })
+        })
+        .catch(function(error) {
+            console.log('Save follow client history error: ' + error);
+        })
 }
 
 /**
@@ -779,6 +825,68 @@ function saveFUMHistory(data, cb) {
         .catch(function(error) {
             console.log('Save follow up message history error: ' + error);
         });
+}
+
+/**
+ * @description
+ * get follower list from database
+ * 
+ * @param {INTEGER} botId 
+ * @param {OBJECT} cb 
+ */
+function getFollowerList(botId, cb) {
+    FollowHistoryModel.findAll({
+        where: {
+            bot_id: botId,
+            is_follow: 'Y'
+        }
+    }).then(function(results) {
+        var arrResult = [];
+        for(var obj of results) {
+            arrResult.push(obj.dataValues)
+        }
+
+        cb(arrResult);
+
+        arrResult = [];
+    }).catch(function(error) {
+        console.log('Get follower list error: ' + error);
+    });
+}
+
+/**
+ * @description
+ * update the followhistory table.
+ * 
+ * @param {INTEGER} id 
+ * @param {OBJECT} cb 
+ */
+function unFollowUserbyId(id, cb) {
+    var updateData = {
+        is_follow: 'N'
+    }
+
+    FollowHistoryModel.update(updateData, {
+        where: {
+            id: id
+        }
+    }).then(function(result) {
+        if(result[0] == 1) {
+            cb({
+                flag: true
+            });
+        } else {
+            cb({
+                flag: false
+            });
+        }
+    }).catch(function(error) {
+        console.log('Update follow history error: ' + error);
+        
+        cb({
+            flag: false
+        });
+    })
 }
 
 // Export BotService module.
