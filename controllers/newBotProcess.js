@@ -3,7 +3,6 @@
 
 var BotService = require('../services/botService');
 process.on('message', function(data) {
-    console.log(data);
     if(data.flag == true) {
         var botId = data.bot.id;
         var accountName = data.bot.account_name;
@@ -109,6 +108,7 @@ process.on('message', function(data) {
                     if(currDirectMessageTime - startDirectMessageTime > parseInt(messageDelay) * 1000){
                         // Get messages from database.
                         BotService.getInboxById(gSession, function(inbox) {
+
                             if(inbox.length > 0) {
                                 var countOfInbox = inbox.length;
 
@@ -209,7 +209,7 @@ process.on('message', function(data) {
                                         });
                                     });
         
-                                    if(countOfArrClientList >= 0) {
+                                    if(countOfArrClientList > 0) {
                                         asyncSendFUMByClientId();
                                     }
                                 }
@@ -247,7 +247,7 @@ process.on('message', function(data) {
                                 });
                             }
 
-                            if(countOfFollowerList >= 0) {
+                            if(countOfFollowerList > 0) {
                                 asyncUnFollow();
                             }
                         }

@@ -732,7 +732,7 @@ function getCountOfReplyHistoriesById(botId, clientId, cb) {
             client_id: clientId
         }
     }).then(function(result) {
-        console.log(result);
+        cb(result);
     }).catch(function(error) {
         console.log('Count bot history error: ' + error);
     });
@@ -882,7 +882,7 @@ function unFollowUserbyId(id, cb) {
         }
     }).catch(function(error) {
         console.log('Update follow history error: ' + error);
-        
+
         cb({
             flag: false
         });

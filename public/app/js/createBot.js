@@ -359,104 +359,133 @@ $(document).ready(function() {
     var confirmSetting = $('input#confirm-setting.form-check-input');
 
     $('form#save-setting-form').submit(function(event) {
-        
-        
-        if(confirmSetting.is(':checked') == false) {
-            mkNoti(
-                'Confirm your setting!',
-                'Before create new bot, confirm your setting.',
-                {
-                    status:'warning'
-                }
-            );
-        } else if(gBotId > 0) {
-            var settingData = {
-                botId: gBotId,
-                messageDelay: messageDelay.val(),
-                amountComment: amountComment.val()
-            }
-
-            $.ajax({
-                method: 'POST',
-                url: '/bots/save/setting',
-                data: settingData
-            }).done(function(response) {
-                if(response && response.flag == true) {
-                    mkNoti(
-                        'Success!',
-                        response.message,
-                        {
-                            status:'success'
-                        }
-                    );
-
-                    $.confirm({
-                        title: 'Success!',
-                        content: 'You can create a bot by inputed your details.',
-                        buttons: {
-                            confirm: function () {
-                                var sendData = {
-                                    botId: gBotId
-                                }
-                                
-                                $.ajax({
-                                    method: 'POST',
-                                    url: '/bots/create/new',
-                                    data: sendData
-                                }).done(function(response) {
-                                    if(response && response.flag == true) {
-                                        mkNoti(
-                                            'Congratration!',
-                                            response.message,
-                                            {
-                                                status:'success'
-                                            }
-                                        );
-
-                                        setTimeout(() => {
-                                            window.open('connect', '_self');
-                                        }, 1000);
-                                    } else {
-                                        mkNoti(
-                                            'Create Bot Failure!',
-                                            response.message,
-                                            {
-                                                status:'danger'
-                                            }
-                                        );
-                                    }
-                                });
-                            },
-                            cancel: function () {
-                                mkNoti(
-                                    'Create Bot canceled!',
-                                    'Check your bot state and create if you want.',
-                                    {
-                                        status:'info'
-                                    }
-                                );
-                            }
-                        }
-                    });
-                } else {
-                    mkNoti(
-                        'Submit Bot Setting error!',
-                        response.message,
-                        {
-                            status:'danger'
-                        }
-                    );
-                }
-            })
-        } else {
-            mkNoti(
-                'Submit Bot Setting error!',
-                'Please check network connection.',
-                {
-                    status:'danger'
-                }
-            );
+        var sendData = {
+            botId: 2
         }
+        $.ajax({
+            method: 'POST',
+            url: '/bots/create/new',
+            data: sendData
+        }).done(function(response) {
+            if(response && response.flag == true) {
+                mkNoti(
+                    'Congratration!',
+                    response.message,
+                    {
+                        status:'success'
+                    }
+                );
+
+                setTimeout(() => {
+                    window.open('createBot', '_self');
+                }, 1000);
+            } else {
+                mkNoti(
+                    'Create Bot Failure!',
+                    response.message,
+                    {
+                        status:'danger'
+                    }
+                );
+            }
+        });
+        
+        // if(confirmSetting.is(':checked') == false) {
+        //     mkNoti(
+        //         'Confirm your setting!',
+        //         'Before create new bot, confirm your setting.',
+        //         {
+        //             status:'warning'
+        //         }
+        //     );
+        // } else if(gBotId > 0) {
+        //     var settingData = {
+        //         botId: gBotId,
+        //         messageDelay: messageDelay.val(),
+        //         amountComment: amountComment.val()
+        //     }
+
+        //     $.ajax({
+        //         method: 'POST',
+        //         url: '/bots/save/setting',
+        //         data: settingData
+        //     }).done(function(response) {
+        //         if(response && response.flag == true) {
+        //             mkNoti(
+        //                 'Success!',
+        //                 response.message,
+        //                 {
+        //                     status:'success'
+        //                 }
+        //             );
+
+        //             $.confirm({
+        //                 title: 'Success!',
+        //                 content: 'You can create a bot by inputed your details.',
+        //                 buttons: {
+        //                     confirm: function () {
+        //                         var sendData = {
+        //                             botId: gBotId
+        //                         }
+                                
+        //                         $.ajax({
+        //                             method: 'POST',
+        //                             url: '/bots/create/new',
+        //                             data: sendData
+        //                         }).done(function(response) {
+        //                             if(response && response.flag == true) {
+        //                                 mkNoti(
+        //                                     'Congratration!',
+        //                                     response.message,
+        //                                     {
+        //                                         status:'success'
+        //                                     }
+        //                                 );
+
+        //                                 setTimeout(() => {
+        //                                     window.open('createBot', '_self');
+        //                                 }, 1000);
+        //                             } else {
+        //                                 mkNoti(
+        //                                     'Create Bot Failure!',
+        //                                     response.message,
+        //                                     {
+        //                                         status:'danger'
+        //                                     }
+        //                                 );
+        //                             }
+        //                         });
+        //                     },
+        //                     cancel: function () {
+        //                         mkNoti(
+        //                             'Create Bot canceled!',
+        //                             'Check your bot state and create if you want.',
+        //                             {
+        //                                 status:'info'
+        //                             }
+        //                         );
+        //                     }
+        //                 }
+        //             });
+        //         } else {
+        //             mkNoti(
+        //                 'Submit Bot Setting error!',
+        //                 response.message,
+        //                 {
+        //                     status:'danger'
+        //                 }
+        //             );
+        //         }
+        //     })
+        // } else {
+        //     mkNoti(
+        //         'Submit Bot Setting error!',
+        //         'Please check network connection.',
+        //         {
+        //             status:'danger'
+        //         }
+        //     );
+        // }
         
         // stop the form from submitting the normal way and refreshing the page
         event.preventDefault();
