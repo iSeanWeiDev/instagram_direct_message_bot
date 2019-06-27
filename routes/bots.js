@@ -25,5 +25,6 @@ router.post('/get/loadmore', BotController.getLoadMoreDetails);
 router.post('/get/message-history', BotController.getMessageHistory);
 router.post('/get/init', BotController.getDashboardInitData);
 router.post('/send/message', BotController.sendMessage);
+router.post('/change/status', BotController.changeBotStatus);
 
 module.exports = router;

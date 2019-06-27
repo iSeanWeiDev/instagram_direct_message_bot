@@ -70,7 +70,7 @@ BotController.validateBot = function(req, res) {
                                 bot_name: botName,
                                 account_name: accountName,
                                 account_password: accountPass,
-                                account_image_url: response.imageUrl,
+                                account_image_url: cb.imageUrl,
                                 state: 0
                             }
 
@@ -81,8 +81,8 @@ BotController.validateBot = function(req, res) {
                                 state: proxyState
                             }
 
-                            BotService.saveBotDetail(newBotData, proxyData, function(response) {
-                                 res.json(response);
+                            BotService.saveBotDetail(newBotData, proxyData, function(saveCB) {
+                                 res.json(saveCB);
                             });
                         } else {
                             
@@ -338,6 +338,41 @@ BotController.sendMessage = function(req, res) {
             }
         });
     });
+}
+
+// change bot status
+BotController.changeBotStatus = function(req, res) {
+    if(req.body.status == 0) {
+        if(req.body.botId) {
+            for(var i = 0; i < arrBotProcessName.length; i++) {    
+                if(arrBotProcessName[i] == req.body.botId) {
+                    arrBotProcess[i].send({
+                        flag: false
+                    });
+
+                    res.json({
+                        flag: true,
+                        message: 'Successfully paused your bot!'
+                    });
+                }
+            }
+        }
+    } else {
+        if(req.body.botId) {
+            console.log(arrBotProcessName);
+            BotService.getBotProperties(req.body.botId, function(response) {
+                for(var i = 0; i < arrBotProcessName.length; i++) {    
+                    if(arrBotProcessName[i] == req.body.botId) {
+                        arrBotProcess[i].send(response);
+                        res.json({
+                            flag: true,
+                            message: 'Successfully started your bot!'
+                        });
+                    }
+                }
+            });
+        }
+    }
 }
 
 // Export module with UserController.

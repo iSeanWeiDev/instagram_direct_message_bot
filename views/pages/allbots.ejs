@@ -12,7 +12,6 @@
 
             <div class="main-panel">
                 <div class="content-wrapper"> 
-                <% console.log(data) %>
                     <% if(data.length == 0) { %>
                         <div class="container">
                             <div class="col-md-6 offset-xl-3">
@@ -84,12 +83,12 @@
                                             class="btn btn-lg btn-primary btn-rounded pl-3 pt-2 pr-3 pb-2 mb-2"
                                             id="change-status-<%=obj.id%>"
                                             onclick="changStatus(<%=obj.id%>)">
-                                            <h7 class="m-0 p-0">
-                                                <i class="fa fa-play"></i>
-                                                Play
+                                            <h7 id="pause<%=obj.id%>" class="m-0 p-0">
+                                                <i class="fa fa-pause"></i>
+                                                Pause
                                             </h7>
                                         </button>
-                                
+
                                         <button type="button" 
                                             class="btn btn-lg btn-warning btn-rounded pl-3 pt-2 pr-3 pb-2 mb-2"
                                             data-toggle="modal" 

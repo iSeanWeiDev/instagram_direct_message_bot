@@ -6,22 +6,26 @@ var BotService = require('../services/botService');
 
 // Receive data using "message" method from parent process.
 process.on('message', function(data) {
-    if(data.flag == true) {
-        // Initialize data for put to functions.
-        var botId = data.bot.id;
-        var accountName = data.bot.account_name;
-        var accountPass = data.bot.account_password;
-        var messageDelay = data.bot.message_delay;
-        var maxComment = data.bot.max_comment;
-        var proxyUrl = data.proxy.proxy_url;
-        var arrFilter = data.filters;
-        var arrComment = data.comments;
-        var arrReply = data.replies;
-        var arrFUM = data.fums;
+    var initializeData = JSON.parse(JSON.stringify(data));
+    var flag = data.flag;
 
+    if(flag == true) {
+        var botId = initializeData.bot.id;
+        var accountName = initializeData.bot.account_name;
+        var accountPass = initializeData.bot.account_password;
+        var messageDelay = initializeData.bot.message_delay;
+        var maxComment = initializeData.bot.max_comment;
+        var proxyUrl = initializeData.proxy.proxy_url;
+        var arrFilter = initializeData.filters;
+        var arrComment = initializeData.comments;
+        var arrReply = initializeData.replies;
+        var arrFUM = initializeData.fums;
         // Validate user info for create bot.
         BotService.validateBot(accountName, accountPass, proxyUrl, function(result) {
-            if(result.flag == true) {
+            if(result.flag == true && flag == true) {
+                // send data to parent process.
+                process.send(1);
+                
                 var gSession = result.session;
                 var gMediaIdList = [];
                 
@@ -38,19 +42,19 @@ process.on('message', function(data) {
                 setInterval(() => {
                     var crrCommentServerTime = (new Date()).getTime(); // milisecond
 
-                    if(gMediaIdList.length > 0 && arrComment.length > 0) {
+                    if(gMediaIdList.length > 0 && arrComment.length > 0 && flag == true) {
                         var countOfMediaList = gMediaIdList.length;
                         
-                        if(crrCommentServerTime - startCommentTime > deltaCommentTime) {
+                        if(crrCommentServerTime - startCommentTime > deltaCommentTime && flag == true) {
                             countOfMediaList --;
                             var mediaId = gMediaIdList[countOfMediaList].mediaId;
                             var followClientId = gMediaIdList[countOfMediaList].clientId;
-                            var indexOfComment = getRandomInt(arrComment.length); 
+                            var indexOfComment = getRandomInt(arrComment.length - 1); 
                             var commentText = arrComment[indexOfComment].text;
                             var commentId = arrComment[indexOfComment].id;
                             
                             BotService.followUserById(gSession, followClientId, function(followCB) {
-                                if(followCB.data == true) {
+                                if(followCB.data == true && flag == true) {
                                     var followHistoryData = {
                                         bot_id: botId,
                                         client_id: followClientId,
@@ -85,9 +89,9 @@ process.on('message', function(data) {
                             startCommentTime = crrCommentServerTime;
                         } 
                     } else {
-                        if(countOfFilters >= 0) {
+                        if(countOfFilters >= 0 && flag == true) {
                             BotService.getMediaIdByHashTag(gSession, hashtag, function(mediaData) {
-                                if(mediaData.flag == false) {
+                                if(mediaData.flag == false && flag == true) {
                                     countOfFilters--;
 
                                     hashtag = arrFilter[countOfFilters].hashtag;
@@ -109,11 +113,11 @@ process.on('message', function(data) {
                 setInterval(() => {
                     var currDirectMessageTime = (new Date()).getTime(); // milisecond
 
-                    if(currDirectMessageTime - startDirectMessageTime > parseInt(messageDelay) * 1000){
+                    if(currDirectMessageTime - startDirectMessageTime > parseInt(messageDelay) * 1000 && flag == true) {
                         // Get messages from database.
                         BotService.getInboxById(gSession, function(inbox) {
 
-                            if(inbox.length > 0) {
+                            if(inbox.length > 0 && flag == true) {
                                 var countOfInbox = inbox.length;
 
                                 async function asyncDMToClientById() {
@@ -131,7 +135,7 @@ process.on('message', function(data) {
                                          * 1. Get count of reply text from history.
                                          * 2. Current reply list and count.
                                          */
-                                        if(countReplyHistories > 0) {
+                                        if(countReplyHistories > 0 && flag == true) {
                                             var replyIndex = countReplyHistories;
                                             var replyText = arrReply[replyIndex].text;
                                             var replyId = arrReply[replyIndex].id;
@@ -141,8 +145,8 @@ process.on('message', function(data) {
                                             var replyId =  arrReply[replyIndex].id;
                                         }
 
-                                        if( arrReply.length >= countReplyHistories) { // if already send all messages
-                                            if(parseInt(clientId) > 0 && clientText) {
+                                        if( arrReply.length >= countReplyHistories && flag == true) { // if already send all messages
+                                            if(parseInt(clientId) > 0 && clientText && flag == true) {
                                                 // Direct message to client with client id using reply messages.
                                                 BotService.directMessageToClient(gSession, clientId, replyText, function(resultOfDM) {
                                                     var replyHistoryData = {
@@ -180,8 +184,7 @@ process.on('message', function(data) {
                     }
                 }, 1000);
 
-                // send data to parent process.
-                process.send(1);
+                
                 /**
                  * @description
                  * follow up message logic
@@ -193,11 +196,11 @@ process.on('message', function(data) {
                     var currFUMTime = (new Date()).getTime(); // milisecond.
                     var fumStartTime = (new Date(arrFUM[IndexOfFUM].start_date)).getTime();
 
-                    if(currFUMTime > fumStartTime && IndexOfFUM < countOfFUM) {
+                    if(currFUMTime > fumStartTime && IndexOfFUM < countOfFUM && flag == true) {
                         BotService.getClientIdList(botId, function(arrClientList) {
                             var countOfArrClientList = arrClientList.length;
 
-                            if(countOfArrClientList > 0) {
+                            if(countOfArrClientList > 0 && flag == true) {
                                 async function asyncSendFUMByClientId() {
                                     countOfArrClientList --;
                                     var fumClientId = arrClientList[countOfArrClientList];
@@ -234,28 +237,30 @@ process.on('message', function(data) {
                  * un-follow logic per day
                  */
                 setInterval(() => {
-                    BotService.getFollowerList(botId, function(arrFollowerList) {
-                        var countOfFollowerList = arrFollowerList.length;
-
-                        async function asyncUnFollow() {
-                            countOfFollowerList--;
-                            var currFollowerTime = (new Date()).getTime();
-                            var updateTime = (new Date(arrFollowerList[countOfFollowerList].createdAt)).getTime() + 172800000;
-
-                            if(currFollowerTime >= updateTime) {
-                                var followHistoryId = arrFollowerList[countOfFollowerList].id;
-                                BotService.unFollowUserbyId(followHistoryId, function(unFollowCB) {
-
-                                });
+                    if(flag == true) {
+                        BotService.getFollowerList(botId, function(arrFollowerList) {
+                            var countOfFollowerList = arrFollowerList.length;
+    
+                            async function asyncUnFollow() {
+                                countOfFollowerList--;
+                                var currFollowerTime = (new Date()).getTime();
+                                var updateTime = (new Date(arrFollowerList[countOfFollowerList].createdAt)).getTime() + 172800000;
+    
+                                if(currFollowerTime >= updateTime) {
+                                    var followHistoryId = arrFollowerList[countOfFollowerList].id;
+                                    BotService.unFollowUserbyId(followHistoryId, function(unFollowCB) {
+    
+                                    });
+                                }
+    
+                                if(countOfFollowerList > 0) {
+                                    asyncUnFollow();
+                                }
                             }
-
-                            if(countOfFollowerList > 0) {
-                                asyncUnFollow();
-                            }
-                        }
-
-                        asyncUnFollow();
-                    });
+    
+                            asyncUnFollow();
+                        });
+                    }
                 }, 86400000);
 
                  /**
@@ -269,6 +274,8 @@ process.on('message', function(data) {
 
             }
         });
+    } else {
+        initializeData = {};
     }
 
     /**

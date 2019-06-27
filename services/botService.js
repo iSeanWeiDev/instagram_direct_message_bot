@@ -521,7 +521,7 @@ function getBotProperties(botId, cb) {
  */
 function updateBotState(botId, cb) {
     var updateData = {
-        status: 1
+        state: 1
     }
 
     BotModel.update(updateData, {
@@ -743,7 +743,8 @@ function getCountOfReplyHistoriesById(botId, clientId, cb) {
     ReplyHistoryModel.count({
         where: {
             bot_id: botId,
-            client_id: clientId
+            client_id: clientId,
+            is_manual: 'N'
         }
     }).then(function(result) {
         cb(result);
