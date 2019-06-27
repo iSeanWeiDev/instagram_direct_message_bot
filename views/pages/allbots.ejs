@@ -12,55 +12,51 @@
 
             <div class="main-panel">
                 <div class="content-wrapper"> 
-                    <div class="row">
-                        <div class="col-md-2 mt-3 mb-3 card-bots">
-                            <div class="card">
-                                <img src="assets/images/bot.jpg" class="card-img bot-img" alt="header-image">
-                                <div class="card-img-overlay p-2">
-                                    <div class="text-right text-white">
-                                        <i class="material-icons outlined">
-                                            cancel
-                                        </i>
-                                    </div>
-                                </div>
-
-                                <div class="card-body p-1 mb-3">
-                                    <div class="card-title text-center m-0">
-                                        <h4 class="text-primary">
-                                            <b>RangoBotTest</b>
-                                        </h4>
-                                    </div>
-                                    <div class="text-center card-btn-group">
-                                        <button class="btn btn-lg btn-primary btn-rounded pl-3 pt-2 pr-3 pb-2 mb-2">
-                                            <h7 class="m-0 p-0">
-                                                <i class="fa fa-edit"></i>
-                                                Edit
-                                            </h7>
-                                        </button>
-
-                                        <button class="btn btn-lg btn-primary btn-rounded pl-3 pt-2 pr-3 pb-2 mb-2">
-                                            <h7 class="m-0 p-0">
-                                                <i class="fa fa-pause"></i>
-                                                Pause
-                                            </h7>
-                                        </button>
-                                
-                                        <button class="btn btn-lg btn-warning btn-rounded pl-3 pt-2 pr-3 pb-2 mb-2">
-                                            <h7 class="m-0 p-0">
-                                                <i class="fa fa-cogs"></i>
-                                                Challenge
-                                            </h7>
-                                        </button>
+                <% console.log(data) %>
+                    <% if(data.length == 0) { %>
+                        <div class="container">
+                            <div class="col-md-6 offset-xl-3">
+                                <div class="card p-3">
+                                    <div class="card-body">
+                                        <div class="text-center">
+                                            <h3 class="text-danger">
+                                                <strong>
+                                                    There is no BOTs to display.
+                                                </strong>
+                                            </h3>
+                                        </div><hr>
+                                        
+                                        <div class="text-center pt-3">
+                                            <h5 class="text-primary">
+                                                <b>
+                                                    If you want to create new bot, click
+                                                    <a href="/createBot" class="text-success">
+                                                        here
+                                                    </a>
+                                                </b>
+                                            </h5>
+                                            
+                                        </div>
+            
+                                        <div class="pt-3 text-center">
+                                            <a href="/createBot" class="btn btn-outline-success font-weight-bold">
+                                                create new bot
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    <% } %>
+                    <div class="row">
+                    <% for(var obj of data) { %>
                         <div class="col-md-2 mt-3 mb-3 card-bots">
                             <div class="card">
                                 <img src="assets/images/bot.jpg" class="card-img bot-img" alt="header-image">
                                 <div class="card-img-overlay p-2">
                                     <div class="text-right text-white">
-                                        <i class="material-icons outlined">
+                                        <i onclick="deleteBot(<%= obj.id %>)"
+                                            class="material-icons outlined">
                                             cancel
                                         </i>
                                     </div>
@@ -69,14 +65,14 @@
                                 <div class="card-body p-1 mb-3">
                                     <div class="card-title text-center m-0">
                                         <h4 class="text-primary">
-                                            <b>RangoBotTest</b>
+                                            <b><%= obj.bot_name %></b>
                                         </h4>
                                     </div>
                                     <div class="text-center">
                                         <button type="button"
                                             class="btn btn-lg btn-primary btn-rounded pl-3 pt-2 pr-3 pb-2 mb-2"
                                             data-toggle="modal" 
-                                            data-target="#editModal">
+                                            data-target="#editModal<%= obj.id %>">
 
                                             <h7 class="m-0 p-0">
                                                 <i class="fa fa-edit"></i>
@@ -86,8 +82,8 @@
 
                                         <button type="button" 
                                             class="btn btn-lg btn-primary btn-rounded pl-3 pt-2 pr-3 pb-2 mb-2"
-                                            data-toggle="modal" 
-                                            data-target="#stateModal">
+                                            id="change-status-<%=obj.id%>"
+                                            onclick="changStatus(<%=obj.id%>)">
                                             <h7 class="m-0 p-0">
                                                 <i class="fa fa-play"></i>
                                                 Play
@@ -105,25 +101,144 @@
                                         </button>
                                     </div>
                                 </div>
-
                                 <!-- Begin Modal -->
 
                                  <!-- Begin edit modal -->
-                                <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+                                <div class="modal fade" id="editModal<%= obj.id %>" tabindex="-1" role="dialog" aria-labelledby="editModal<%= obj.id %>Label" aria-hidden="true">
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="editModalLabel">Edit bot modal</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            ...
-                                        </div>
+                                            <div class="modal-body">
+                                                <div class="form-group">
+                                                    <h4 class="text-success">
+                                                        <strong>
+                                                            Edit Bot -- <%= obj.bot_name %>
+                                                        </strong>
+                                                    </h4>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group p-2">
+                                                            <img src="<%= obj.account_image_url%>" 
+                                                                class="rounded-circle border-success"
+                                                                style="width: 100%; border: 5px solid;" alt="">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <div class="input-group">
+                                                                <div class="input-group-prepend bg-primary">
+                                                                <span class="input-group-text bg-transparent" style="font-size: 18px">
+                                                                    <i class="mdi mdi-account text-white"></i>
+                                                                </span>
+                                                                </div>
+                                                                <input type="text" value="<%= obj.account_name %>"
+                                                                    class="form-control form-control-lg" 
+                                                                    style="font-size: 14px" 
+                                                                    placeholder="Account name" 
+                                                                    aria-label="Account name" 
+                                                                    aria-describedby="Account name"
+                                                                    disabled />
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <div class="input-group">
+                                                                <div class="input-group-prepend bg-primary">
+                                                                <span class="input-group-text bg-transparent" style="font-size: 18px">
+                                                                    <i class="mdi mdi-lock text-white"></i>
+                                                                </span>
+                                                                </div>
+                                                                <input type="text" value="<%= obj.account_password %>"
+                                                                    class="form-control form-control-lg" 
+                                                                    style="font-size: 14px" 
+                                                                    placeholder="Account password" 
+                                                                    aria-label="Account password" 
+                                                                    aria-describedby="Account password"
+                                                                    disabled />
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div class="form-group">
+                                                            <div class="input-group">
+                                                                <div class="input-group-prepend bg-primary">
+                                                                <span class="input-group-text bg-transparent" style="font-size: 18px">
+                                                                    <i class="mdi mdi-clock text-white"></i>
+                                                                </span>
+                                                                </div>
+                                                                <input type="text" id="message-delay-<%= obj.id%>" 
+                                                                    value="<%= obj.message_delay %>"
+                                                                    class="form-control form-control-lg" 
+                                                                    style="font-size: 14px" 
+                                                                    placeholder="Message delay" 
+                                                                    aria-label="Message delay" 
+                                                                    aria-describedby="Message delay"/>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <div class="input-group">
+                                                                <div class="input-group-prepend bg-primary">
+                                                                <span class="input-group-text bg-transparent" style="font-size: 18px">
+                                                                    <i class="mdi mdi-counter text-white"></i>
+                                                                </span>
+                                                                </div>
+                                                                <input type="text" id="max-comment-<%= obj.id %>"
+                                                                    value="<%= obj.max_comment %>"
+                                                                    class="form-control form-control-lg" 
+                                                                    style="font-size: 14px" 
+                                                                    placeholder="Max comment daily" 
+                                                                    aria-label="Max comment daily" 
+                                                                    aria-describedby="Max comment daily" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                 <!-- Begin Load more -->
+                                                <div class="text-center mb-2">
+                                                    <a class="btn btn-primary" onclick="loadMore(<%= obj.id%>)" data-toggle="collapse" href="#loadMore<%= obj.id %>" role="button" aria-expanded="false" aria-controls="loadMore<%= obj.id %>">
+                                                        load more
+                                                    </a>
+                                                </div>
+
+                                                <div class="collapse" id="loadMore<%= obj.id %>">
+                                                    <div class="card card-body">
+                                                        <div class="form-group">
+                                                            <label for="filters">
+                                                                Filters (hashtags)
+                                                            </label>
+                                                            <textarea class="form-control" rows="3" id="filters<%= obj.id %>" aria-describedby="filters-small" placeholder="Enter filters"></textarea>
+                                                            <small id="filters-small" class="form-text text-muted">You need to put the filters with <strong> comma(,) </strong>.</small>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="comments">Comments to commit</label>
+                                                            <textarea class="form-control" rows="3" id="comments<%= obj.id %>" aria-describedby="comments-small" placeholder="Enter comments"></textarea>
+                                                            <small id="comments-small" class="form-text text-muted">You need to put the comments with <strong> comma(,) </strong>.</small>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="replies">Direct Messages to reply</label>
+                                                            <textarea class="form-control" rows="3" id="replies<%= obj.id%>" aria-describedby="replies-small" placeholder="Enter replies"></textarea>
+                                                            <small id="replies-small" class="form-text text-muted">You need to put the messages with <strong> comma(,) </strong>.</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- End Load more -->
+
+                                            </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                            <button type="button" class="btn btn-primary">Save changes</button>
+                                            <button type="button" 
+                                                class="btn btn-outline-info" 
+                                                data-dismiss="modal">
+                                            
+                                                Close
+                                            </button>
+                                            
+                                            <button type="button"
+                                                onclick="updateBot(<%= obj.id %>)" 
+                                                class="btn btn-primary">
+                                                
+                                                Save changes
+                                            </button>
                                         </div>
                                         </div>
                                     </div>
@@ -175,9 +290,9 @@
                                 <!-- Begin challenge modal -->
 
                                 <!-- End Modal -->
-
                             </div>
                         </div>
+                    <% } %>
                     </div>
                 </div>
             <!-- content-wrapper ends -->
@@ -194,4 +309,6 @@
     <!-- container-scroller -->
 
     <% include ../partials/_scripts %>
+
+    <script src="app/js/allBots.js"></script>
 </body>

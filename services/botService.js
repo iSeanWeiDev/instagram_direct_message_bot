@@ -1,7 +1,7 @@
 /**
  * @description Bot Service library.
  * @name botService.js
- * @version 1.1.2
+ * @version 2.1.2
  * @author Super-Sean1995
  */
 
@@ -42,6 +42,14 @@ BotService.getClientIdList = getClientIdList;
 BotService.saveFUMHistory = saveFUMHistory;
 BotService.getFollowerList = getFollowerList;
 BotService.unFollowUserbyId = unFollowUserbyId;
+BotService.getAllBotsDetail = getAllBotsDetail;
+BotService.deleteBotById = deleteBotById;
+// ==> bot management part functions
+BotService.getLoadMore = getLoadMore;
+BotService.getBotHistoryData = getBotHistoryData;
+BotService.getMessageHistoryById = getMessageHistoryById;
+BotService.getDashboardHistory = getDashboardHistory;
+BotService.getBotGeneralDetail = getBotGeneralDetail;
 
 // Import Data Models
 var ProxyModel = require('../models').Proxy;
@@ -203,6 +211,7 @@ function getProxy(cb) {
                             WHERE
                                 A.state < 4
                                 AND A."expire_date" > DATE(now())
+                                AND A."is_deleted" = 'N'
                         ) AA
                         LIMIT 1 `;
 
@@ -610,6 +619,11 @@ function saveFollowUserHistory(data, cb) {
         })
         .catch(function(error) {
             console.log('Save follow client history error: ' + error);
+
+            cb({
+                flag: true,
+                message: 'Save follow client history error'
+            })
         })
 }
 
@@ -887,6 +901,553 @@ function unFollowUserbyId(id, cb) {
             flag: false
         });
     })
+}
+
+/**
+ * @description
+ * Get all bots details for initialize the allbots page.
+ * 
+ * @param {INTEGER} id 
+ * @param {OBJECT} cb 
+ */
+function getAllBotsDetail(id, cb) {
+    var selectQuery =  `SELECT
+                            B.id, B.bot_name, 
+                            B.account_name, 
+                            B.account_password, 
+                            B.account_image_url, 
+                            B.message_delay, 
+                            B.max_comment
+                        FROM
+                            "public"."Users" AS A,
+                            "public"."Bots" AS B
+                        WHERE
+                            A.id = B.user_id
+                            AND B.state = 1
+                            AND A.id = '?'
+                        ORDER BY 
+                            B."createdAt"`;
+    sequelize.query(selectQuery, {
+        replacements: [id],
+        type: sequelize.QueryTypes.SELECT
+    }).then(function(result) {
+        cb(result);
+    }).catch(function(error) {
+        console.log('Get all bots detail error:' + error);
+    })
+}
+
+/**
+ * @description
+ * delete by botid
+ * 
+ * @param {OBJECT} data 
+ * @param {OBJECT} cb 
+ */
+function deleteBotById(data, cb) {
+    var updateBotData = {
+        state: 0
+    }
+    BotModel.update(updateBotData, {
+        where: {
+            id: data.botId,
+            user_id: data.userId
+        }
+    }).then(function(response) {
+        if(response[0] == 1) {
+            cb({
+                flag: true,
+                message:'Successfully deleted'
+            });
+        }
+    }).catch(function(error) {
+        console.log('Delete Bot Error: ' + error);
+
+        cb({
+            flag: false,
+            message:'Failed deleting'
+        })
+    });
+}
+
+/**
+ * @description
+ * get loadmore details
+ * 
+ * @param {INTEGER} userId 
+ * @param {INTEGER} botId 
+ * @param {OBJECT} cb 
+ */
+function getLoadMore(userId, botId, cb) {
+    var selectQuery =  `(SELECT 'filters' AS type,
+                            B.hashtag AS data
+                        FROM
+                            "public"."Bots" AS A,
+                            "public"."Filters" AS B
+                        WHERE
+                            A.id = B.bot_id
+                            AND A.id = ?
+                            AND A.user_id = ?
+                        ORDER BY
+                            B."createdAt")
+
+                        UNION ALL
+
+                        (SELECT 'comment' AS type,
+                            B.text AS data
+                        FROM
+                            "public"."Bots" AS A,
+                            "public"."Comments" AS B
+                        WHERE
+                            A.id = B.bot_id
+                            AND A.id = ?
+                            AND A.user_id = ?
+                        ORDER BY
+                            B."createdAt")
+
+                        UNION ALL
+
+                        (SELECT 'reply' as type,
+                            B.text AS data
+                        FROM
+                            "public"."Bots" AS A,
+                            "public"."Replies" AS B
+                        WHERE
+                            A.id = B.bot_id
+                            AND A.id = ?
+                            AND A.user_id = ?
+                        ORDER BY
+                            B."createdAt")`;
+
+    sequelize.query(selectQuery, {
+        replacements: [
+            botId,
+            userId,
+            botId,
+            userId,
+            botId,
+            userId
+        ],
+        type: sequelize.QueryTypes.SELECT
+    }).then(function(result) {
+        cb(result);
+    }).catch(function(error) {
+        console.log('Get all bots detail error:' + error);
+    })
+}
+
+/**
+ * @description
+ * get all bot activity history
+ * 
+ * @param {INTEGER} userId 
+ * @param {OBJECT} cb 
+ */
+function getBotHistoryData(userId, cb) {
+    var selectQuery = ` SELECT
+                            B.id, 
+                            B.bot_name, 
+                            C.client_id, 
+                            C.client_name, 
+                            C.client_image_url,
+                            MAX(C."createdAt") AS max,
+                            COUNT(C.client_text) AS count
+                        FROM
+                            "public"."Users" AS A,
+                            "public"."Bots" AS B,
+                            "public"."ReplyHistories" AS C	
+                        WHERE
+                            A.id = B.user_id
+                            AND B.id = C.bot_id
+                            AND A.id = 1
+                        GROUP BY
+                            B.id, 
+                            B.bot_name, 
+                            C.client_id, 
+                            C.client_name, 
+                            C.client_image_url `;
+    sequelize.query(selectQuery, { 
+        replacements: [userId], 
+        type: sequelize.QueryTypes.SELECT 
+    }).then(function(result) {
+        var arrSendData = [];
+
+        for(var obj of result) {
+            convertTime(obj.max, function(cb) {
+                var last = cb;
+
+                arrSendData.push({
+                    botId: obj.id,
+                    botName: obj.bot_name,
+                    clientId: obj.client_id,
+                    clientName: obj.client_name,
+                    imageUrl: obj.client_image_url,
+                    last: last,
+                    count: obj.count
+                })
+            });
+        }
+
+        cb(arrSendData);
+
+        arrSendData = [];
+    }).catch(function(error) {
+        console.log('Get Bot History Data error: ' + error);
+    });
+
+}
+
+/**
+ * @description
+ * Get Bot Message history by botid
+ * 
+ * @param {INTEGER} userId
+ * @param {INTEGER} botId
+ * @param {INTEGER} clientId 
+ * @param {OBJECT} cb 
+ */
+function getMessageHistoryById(userId, botId, clientId, cb) {
+    var selectQuery = ` SELECT
+                            B.id,
+                            B.bot_name,
+                            C.text,
+                            D.client_id,
+                            D.client_name,
+                            D."createdAt",
+                            D.client_text
+                        FROM
+                            "public"."Users" AS A,
+                            "public"."Bots" AS B,
+                            "public"."Replies" AS C,
+                            "public"."ReplyHistories" AS D
+                        WHERE
+                            A.id = B.user_id
+                            AND B.id = C.bot_id
+                            AND B.id = D.bot_id
+                            AND C.id = D.reply_id
+                            AND A.id = ?
+                            AND B.id = ?
+                            AND D.client_id = ?
+                        ORDER BY
+                            D."createdAt" `;
+    sequelize.query(selectQuery, {
+        replacements: [
+            userId,
+            botId,
+            clientId
+        ]
+    }).then(function(result) {
+        cb(result[0]);
+    }).catch(function(error) {
+        console.log('Get History count data error: ' + error);
+    });
+}
+
+/**
+ * @description
+ * get dashboard history data by state
+ * 
+ * @param {INTEGER} state 
+ * @param {INTEGER} userId 
+ * @param {OBJECT} cb 
+ */
+function getDashboardHistory(state, userId, cb) {
+    var selectQuery = '';
+    switch (state) {
+        case 1: // tody
+            selectQuery = ` (SELECT  'reply' AS type,
+                                aa.bot_id,
+                                aa.bot_name ,
+                                count(aa.client_id) 
+                            FROM (
+                            SELECT 
+                                B.id AS bot_id,
+                                B.bot_name AS bot_name,
+                                C.client_id
+                            FROM
+                                    "public"."Users" AS A,
+                                    "public"."Bots" AS B,
+                                    "public"."ReplyHistories" AS C
+                            WHERE
+                                    A.id = B.user_id
+                                    AND B.id = C.bot_id
+                                    AND A.id = ?
+                                    AND DATE(C."createdAt") = DATE(now())
+                            GROUP BY B.id, B.bot_name, C.client_id ) aa
+                            GROUP BY aa.bot_id,
+                                aa.bot_name) 
+                            
+                            UNION ALL
+                            
+                            (SELECT 'comment' AS type,
+                                B.id,
+                                B.bot_name,
+                                COUNT(B.id)
+                            FROM
+                                "public"."Users" AS A,
+                                "public"."Bots" AS B,
+                                "public"."CommentHistories" AS C
+                            WHERE
+                                A.id = B.user_id
+                                AND B.id = C.bot_id
+                                AND A.id = ?
+                                AND DATE(C."createdAt") = DATE(now())
+                            GROUP BY
+                                B.id,
+                                B.bot_name
+                            ORDER BY
+                                B.id) `;
+            break;
+        case 2: // Yesterday
+            selectQuery = ` (SELECT  'reply' AS type,
+                                aa.bot_id,
+                                aa.bot_name ,
+                                count(aa.client_id) 
+                            FROM (
+                            SELECT 
+                                B.id AS bot_id,
+                                B.bot_name AS bot_name,
+                                C.client_id
+                            FROM
+                                    "public"."Users" AS A,
+                                    "public"."Bots" AS B,
+                                    "public"."ReplyHistories" AS C
+                            WHERE
+                                    A.id = B.user_id
+                                    AND B.id = C.bot_id
+                                    AND A.id = ?
+                                    AND DATE(C."createdAt") BETWEEN DATE(NOW())-1 AND DATE(NOW())
+                            GROUP BY B.id, B.bot_name, C.client_id ) aa
+                            GROUP BY aa.bot_id,
+                                aa.bot_name) 
+                            
+                            UNION ALL
+                            
+                            (SELECT 'comment' AS type,
+                                B.id,
+                                B.bot_name,
+                                COUNT(B.id)
+                            FROM
+                                "public"."Users" AS A,
+                                "public"."Bots" AS B,
+                                "public"."CommentHistories" AS C
+                            WHERE
+                                A.id = B.user_id
+                                AND B.id = C.bot_id
+                                AND A.id = ?
+                                AND DATE(C."createdAt") BETWEEN DATE(NOW())-1 AND DATE(NOW())
+                            GROUP BY
+                                B.id,
+                                B.bot_name
+                            ORDER BY
+                                B.id) `;
+            break;
+        case 3: // Week
+            selectQuery = ` (SELECT  'reply' AS type,
+                                aa.bot_id,
+                                aa.bot_name ,
+                                count(aa.client_id) 
+                            FROM (
+                            SELECT 
+                                B.id AS bot_id,
+                                B.bot_name AS bot_name,
+                                C.client_id
+                            FROM
+                                    "public"."Users" AS A,
+                                    "public"."Bots" AS B,
+                                    "public"."ReplyHistories" AS C
+                            WHERE
+                                    A.id = B.user_id
+                                    AND B.id = C.bot_id
+                                    AND A.id = ?
+                                    AND DATE(C."createdAt") BETWEEN DATE(now()) - 7 AND DATE(now())
+                            GROUP BY B.id, B.bot_name, C.client_id ) aa
+                            GROUP BY aa.bot_id,
+                                aa.bot_name) 
+                            
+                            UNION ALL
+                            
+                            (SELECT 'comment' AS type,
+                                B.id,
+                                B.bot_name,
+                                COUNT(B.id)
+                            FROM
+                                "public"."Users" AS A,
+                                "public"."Bots" AS B,
+                                "public"."CommentHistories" AS C
+                            WHERE
+                                A.id = B.user_id
+                                AND B.id = C.bot_id
+                                AND A.id = ?
+                                AND DATE(C."createdAt") BETWEEN DATE(now()) - 7 AND DATE(now())
+                            GROUP BY
+                                B.id,
+                                B.bot_name
+                            ORDER BY
+                                B.id) `;
+                break;
+            case 4: // Month
+                selectQuery = ` (SELECT  'reply' AS type,
+                                    aa.bot_id,
+                                    aa.bot_name ,
+                                    count(aa.client_id) 
+                                FROM (
+                                SELECT 
+                                    B.id AS bot_id,
+                                    B.bot_name AS bot_name,
+                                    C.client_id
+                                FROM
+                                        "public"."Users" AS A,
+                                        "public"."Bots" AS B,
+                                        "public"."ReplyHistories" AS C
+                                WHERE
+                                        A.id = B.user_id
+                                        AND B.id = C.bot_id
+                                        AND A.id = ?
+                                        AND DATE(C."createdAt") BETWEEN DATE(DATE(NOW()) - interval '1 month') AND DATE(NOW())
+                                GROUP BY B.id, B.bot_name, C.client_id ) aa
+                                GROUP BY aa.bot_id,
+                                    aa.bot_name) 
+                                
+                                UNION ALL
+                                
+                                (SELECT 'comment' AS type,
+                                    B.id,
+                                    B.bot_name,
+                                    COUNT(B.id)
+                                FROM
+                                    "public"."Users" AS A,
+                                    "public"."Bots" AS B,
+                                    "public"."CommentHistories" AS C
+                                WHERE
+                                    A.id = B.user_id
+                                    AND B.id = C.bot_id
+                                    AND A.id = ?
+                                    AND DATE(C."createdAt") BETWEEN DATE(DATE(NOW()) - interval '1 month') AND DATE(NOW())
+                                GROUP BY
+                                    B.id,
+                                    B.bot_name
+                                ORDER BY
+                                    B.id) `;
+                break;
+            case 5: // year
+                selectQuery = ` (SELECT  'reply' AS type,
+                                    aa.bot_id,
+                                    aa.bot_name ,
+                                    count(aa.client_id) 
+                                FROM (
+                                SELECT 
+                                    B.id AS bot_id,
+                                    B.bot_name AS bot_name,
+                                    C.client_id
+                                FROM
+                                        "public"."Users" AS A,
+                                        "public"."Bots" AS B,
+                                        "public"."ReplyHistories" AS C
+                                WHERE
+                                        A.id = B.user_id
+                                        AND B.id = C.bot_id
+                                        AND A.id = ?
+                                        AND DATE(C."createdAt") BETWEEN DATE(DATE(NOW()) - interval '1 year') AND DATE(NOW())
+                                GROUP BY B.id, B.bot_name, C.client_id ) aa
+                                GROUP BY aa.bot_id,
+                                    aa.bot_name) 
+                                
+                                UNION ALL
+                                
+                                (SELECT 'comment' AS type,
+                                    B.id,
+                                    B.bot_name,
+                                    COUNT(B.id)
+                                FROM
+                                    "public"."Users" AS A,
+                                    "public"."Bots" AS B,
+                                    "public"."CommentHistories" AS C
+                                WHERE
+                                    A.id = B.user_id
+                                    AND B.id = C.bot_id
+                                    AND A.id = ?
+                                    AND DATE(C."createdAt") BETWEEN DATE(DATE(NOW()) - interval '1 year') AND DATE(NOW())
+                                GROUP BY
+                                    B.id,
+                                    B.bot_name
+                                ORDER BY
+                                    B.id) `;
+
+                break;
+
+            default:
+                break;
+    }
+
+    sequelize.query(selectQuery, {
+        replacements: [
+            userId,
+            userId
+        ]
+    }).then(function(result) {
+        cb(result[0]);
+    }).catch(function(error) {
+        console.log('Get History count data error: ' + error);
+    });
+}
+
+
+/**
+ * @description
+ * send message manually by botid and clientid
+ * 
+ * @param {OBJECT} data 
+ * @param {OBJECT} cb 
+ */
+function getBotGeneralDetail(data, cb) {
+    BotModel.findOne({
+        attributes: [
+            'account_name',
+            'account_password'
+        ],
+        where: {
+            id: data.botId
+        }
+    }).then(function(bot) {
+        ProxyUsageHistoryModel.findOne({
+            attributes: ['proxy_url'],
+            where: {
+                bot_id: data.botId
+            }
+        }).then(function(proxy) {
+            cb({
+                accountName: bot.dataValues.account_name,
+                accountPass: bot.dataValues.account_password,
+                proxyUrl: proxy.dataValues.proxy_url
+            })
+        }).catch(function(error) {
+            console.log('Get current proxy error: ' + error);
+        });
+    }).catch(function(error) {
+        console.log('Get current bot error: ' + error);
+    });
+}
+
+/**
+ * @description
+ * Convert time to 
+ * 
+ * @param {INTEGER} mili 
+ * @param {OBJECT} callback 
+ */
+function convertTime(mili, callback) {
+    var delta = parseInt((parseInt(new Date().getTime()) - parseInt(new Date(mili).getTime())) / ( 1000 * 60 ));
+
+    if( delta < 60 ) {
+        callback(delta + ' minutes ago'); 
+    } else if( 60 < delta < 3600) {
+        delta = parseInt(delta / 60)
+        callback(delta + ' hours ago');
+    } else if( 3600 < delta < 86400 ) {
+        delta = parseInt(delta /  86400);
+        callback(delta + ' days ago');
+    }
 }
 
 // Export BotService module.

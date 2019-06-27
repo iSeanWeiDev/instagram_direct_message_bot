@@ -17,6 +17,9 @@ module.exports = {
       state: {
         type: Sequelize.INTEGER
       },
+      is_deleted: {
+        type: Sequelize.STRING(1)
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

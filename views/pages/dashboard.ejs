@@ -9,7 +9,6 @@
         <!-- partial:../../partials/_sidebar.html -->
         <% include ../partials/_sidebar %>
         <!-- partial -->
-
             <div class="main-panel">
                 <div class="content-wrapper"> 
                     <div class="row">
@@ -49,85 +48,88 @@
                                             </tr>
                                         </thead>
                                         <tbody style="cursor: pointer;">
-                                            <tr class="text-center align-middle"  data-toggle="modal" data-target="#messageHistory" style="cursor: pointer;">
+                                            <%console.log(data)%>
+                                            <% for(var obj of data) { %>
+                                            <tr class="text-center align-middle" 
+                                                onclick="getMessageHistory(<%=obj.botId%>, <%=obj.clientId%>)"
+                                                data-toggle="modal" 
+                                                data-target="#messageHistory<%=obj.botId%><%=obj.clientId%>" 
+                                                style="height: 55px; cursor: pointer;">
                                                 <th scope="row">
-                                                    test
+                                                    <%= obj.botName%>
                                                 </th>
                                                 <td class="float-left">
-                                                    <img src="" class="rounded-circle border-info" style="width: 35px; border: 2px solid;" alt="">
+                                                    <img src="<%= obj.imageUrl %>" class="rounded-circle border-info" style="width: 35px; border: 2px solid;" alt="">
                                                     <strong>
-                                                    &nbsp;test
+                                                    &nbsp;<%= obj.clientName%>
                                                     </strong>
                                                 </td>
                                                 <td>
                                                     <strong>
-                                                    test
+                                                    <%= obj.last%>
                                                     </strong>
                                                 </td>
                                                 <td>
                                                     <strong>
-                                                    test
+                                                    <%= obj.count %>
                                                     </strong>
                                                 </td>
                                             </tr>
-                                      
+                                            <!-- Begin Modal -->
+                                            <div class="modal fade" id="messageHistory<%=obj.botId%><%=obj.clientId%>" tabindex="-1" role="dialog" ria-labelledby="messageHistory<%=obj.botId%><%=obj.clientId%>Label" aria-hidden="true">
+                                                    <div class="modal-dialog modal-full-right" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header pb-0 mb-0">
+                                                                <img src="<%= obj.imageUrl %>" class="rounded-circle border-primary" style="border: 5px solid; width: 90px;" alt="">
+                                                                <div class="form-group p-1 pl-3">
+                                                                    <h4 class="modal-title" id="messageHistory<%=obj.botId%><%=obj.clientId%>Label">
+                                                                        <strong class="text-primary">
+                                                                            <%= obj.clientName %>
+                                                                        </strong>
+                                                                    </h4>
+                                                                    <span class="pb-0 font-italic font-weight-bold">
+                                                                        <%= obj.botName %>
+                                                                    </span><br>
+                                                                    <span class="pb-0 font-italic font-weight-bold">
+                                                                        <%= obj.last %>
+                                                                    </span>
+                                                                </div>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">×</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body" style="min-height: 380px; max-height: 750px; overflow: auto !important;" id="result">
+                                                                <div class="row p-3">
+                                                                    <div class="content" id="chatContent" style="width: 100% !important;">
+                                                                        
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <div class="input-group pr-3 pl-3">
+                                                                    <input id="input-direct-message-<%= obj.clientId %>" 
+                                                                        type="text" 
+                                                                        class="form-control form-control-lg" 
+                                                                        placeholder="&nbsp; Add your direct message here." 
+                                                                        aria-label="Add your direct message here." 
+                                                                        aria-describedby="basic-addon2" 
+                                                                        autofocus required>
+                                                                    <div class="input-group-append">
+                                                                        <button type="button" 
+                                                                            onclick="sendMessage(<%= obj.botId %>, <%= obj.clientId %>)"
+                                                                            class="ml-auto p-2 pl-3 pr-3 btn btn-raised btn-success">
+                                                                        Submit
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- End Modal -->
+                                            <% } %>
                                         </tbody>
                                     </table>
- 
-                                    <!-- Begin Modal -->
-                                    <div class="modal fade" id="messageHistory" tabindex="-1" role="dialog" ria-labelledby="messageHistoryLabel" aria-hidden="true">
-                                        <div class="modal-dialog modal-full-right" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <img src="" class="rounded-circle border-primary" style="border: 5px solid; width: 90px;" alt="">
-                                                    <div class="form-group p-1 pl-3">
-                                                        <h4 class="modal-title" id="messageHistoryLabel">
-                                                            <strong class="text-primary">
-                                                                
-                                                            </strong>
-                                                        </h4>
-                                                        <span class="pb-0 font-italic font-weight-bold"></span><br>
-                                                        <span class="pb-0 font-italic font-weight-bold"></span>
-                                                    </div>
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">×</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body" style="min-height: 380px; max-height: 750px; overflow: auto !important;" id="result">
-                                                    <div class="row p-3">
-                                                        <div class="content" id="chatContent" style="width: 100% !important;">
-                                                            
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                    <div class="input-group mb-3 pl-5 pr-5">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text" id="basic-addon1">
-                                                                <a href="#" style="font-size: 20px;">
-                                                                    <i class="fa fa-smile"></i>
-                                                                </a>
-                                                            </span>
-                                                        </div>
-                                                        <input 
-                                                            id="input-direct-message"
-                                                            type="text" 
-                                                            class="form-control pl-3" 
-                                                            placeholder="&nbsp; Type a message here" 
-                                                            aria-label="Type a message here" 
-                                                            aria-describedby="basic-addon1"
-                                                            required />
-                                                        <button 
-                                                            class="btn btn-primary">
-                                                            send
-                                                        </button>
-                                                    </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- End Modal -->
                                 </div>
                             </div>
                         </div>
@@ -219,4 +221,6 @@
     <!-- container-scroller -->
 
     <% include ../partials/_scripts %>
+
+    <script src="app/js/dashboard.js"></script>
 </body>

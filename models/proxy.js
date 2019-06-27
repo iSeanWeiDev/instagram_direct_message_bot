@@ -3,7 +3,8 @@ module.exports = (sequelize, DataTypes) => {
   const Proxy = sequelize.define('Proxy', {
     url: DataTypes.STRING,
     expire_date: DataTypes.DATE,
-    state: DataTypes.INTEGER
+    state: DataTypes.INTEGER,
+    is_deleted: DataTypes.STRING
   }, {});
   Proxy.associate = function(models) {
     // associations can be defined here

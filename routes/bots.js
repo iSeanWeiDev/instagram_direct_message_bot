@@ -20,5 +20,10 @@ router.post('/save/reply', BotController.saveReply);
 router.post('/save/fum', BotController.saveFUMessage);
 router.post('/save/setting', BotController.saveSettings);
 router.post('/create/new', BotController.createNewBot);
+router.post('/delete', BotController.deleteBot);
+router.post('/get/loadmore', BotController.getLoadMoreDetails);
+router.post('/get/message-history', BotController.getMessageHistory);
+router.post('/get/init', BotController.getDashboardInitData);
+router.post('/send/message', BotController.sendMessage);
 
 module.exports = router;

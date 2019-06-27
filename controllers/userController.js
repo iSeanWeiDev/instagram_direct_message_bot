@@ -1,9 +1,8 @@
 /**
- * user controller.
- * userController.js
- * 
- * created by super-sean
- * version 2.1.1
+ * @description User Controller library.
+ * @name userController.js
+ * @version 2.1.2
+ * @author Super-Sean1995
  */
 'use strict';
 

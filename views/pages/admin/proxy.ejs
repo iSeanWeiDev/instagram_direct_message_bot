@@ -1,0 +1,194 @@
+<body data-gr-c-s-loaded="true">
+    <div class="container-scroller">
+        <!-- partial:../../partials/_navbar.html -->
+        <% include ../../partials/_navbar %>
+        <!-- partial -->
+
+        <div class="container-fluid page-body-wrapper">
+            <!-- partial:../../partials/_sidebar.html -->
+            <% include ../../partials/_sidebar %>
+            <!-- partial -->
+
+            <div class="main-panel">
+                <div class="content-wrapper">
+                    <div class="col-md-10 offset-xl-1 mt-5">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-group pl-3">
+                                    <h4 class="text-primary float-left">
+                                        <strong>
+                                            Proxy management
+                                        </strong>
+                                    </h4>
+                                    <div class="float-right">
+                                        <button type="button"
+                                            data-toggle="modal" 
+                                            data-target="#createNewProxy" 
+                                            class="btn btn-primary font-weight-bolder">
+                                            <i class="mdi mdi-plus font-weight-bolder"></i>
+                                            Input new proxy
+                                        </button>
+
+                                        <div class="modal fade" id="createNewProxy" tabindex="-1" role="dialog" aria-labelledby="createNewProxyLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-body p-3">
+                                                        <div class="form-group">
+                                                            <h4 class="modal-title" id="createNewProxyLabel">
+                                                                <strong>
+                                                                    Input new proxy
+                                                                </strong>
+                                                            </h4>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="new-proxy-url">
+                                                                <i class="mdi mdi-link"></i>
+                                                                New proxy url
+                                                            </label>
+                                                            <input type="text" id="new-proxy-url" class="form-control form-control-lg">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="new-expire-date">
+                                                                <i class="mdi mdi-timer"></i>
+                                                                Expire Date
+                                                            </label>
+                                                            <input id="new-expire-date" type="text" class="datetimepicker form-control form-control-lg" placeholder=" &nbsp;Schedule date/time" />
+                                                        </div>
+                                                        <div class="form-group float-lg-right">
+                                                            <button type="button" class="btn btn-secondary btn-rounded" data-dismiss="modal">
+                                                                <i class="mdi mdi-close"></i>
+                                                                Close
+                                                            </button>
+                                                            <button type="button" onclick="insertNewProxy()" class="btn btn-primary btn-rounded">
+                                                                <i class="mdi mdi-content-save-all"></i>
+                                                                Save
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <table class="table table-hover">
+                                    <thead class="bg-primary">
+                                        <tr class="text-center ">
+                                            <th class="text-white" scope="col">
+                                                <strong>
+                                                ID
+                                                </strong>
+                                            </th>
+                                            <th class="text-white" scope="col">
+                                                <strong>
+                                                    URL
+                                                </strong>
+                                            </th>
+                                            <th class="text-white" scope="col">
+                                                <strong>
+                                                Expire Date
+                                                </strong>
+                                            </th>
+                                            <th class="text-white" scope="col">
+                                                <strong>
+                                                Usage
+                                                </strong>    
+                                            </th>
+                                            <th class="text-white" scope="col">
+                                                <strong>
+                                                Edit
+                                                </strong>    
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody style="cursor: pointer;">
+                                        <% var index = 0;
+                                        for(var obj of data) { 
+                                            index++; %>
+                                        <tr class="text-center align-middle"  data-toggle="modal" data-target="#messageHistory" style="cursor: pointer;">
+                                            <th scope="row">
+                                                <%= index %>
+                                            </th>
+                                            <td>
+                                                <%= obj.url %>
+                                            </td>
+                                            <td>
+                                                <strong>
+                                                <%= obj.expireDate %>
+                                                </strong>
+                                            </td>
+                                            <td>
+                                                <strong>
+                                                <%= obj.usage %>
+                                                </strong>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-outline-success" data-toggle="modal" data-target="#editProxyModal<%= obj.id %>">
+                                                    <i class="mdi mdi-content-save-edit"></i>
+                                                    Edit
+                                                </button>
+                                                <button onclick="deleteProxy(<%= obj.id%>)" class="btn btn-outline-danger">
+                                                    <i class="mdi mdi-delete"></i>
+                                                    Delete
+                                                </button>
+                                            </td>
+
+                                            <div class="modal fade" id="editProxyModal<%= obj.id %>" tabindex="-1" role="dialog" aria-labelledby="editProxyModal<%= obj.id %>Label" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-body p-3">
+                                                            <div class="form-group">
+                                                                <h4 class="modal-title" id="editProxyModal<%= obj.id %>Label">
+                                                                    <strong>
+                                                                        Edit proxy setting
+                                                                    </strong>
+                                                                </h4>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="proxy-url-<%= obj.id %>">
+                                                                    <i class="mdi mdi-link"></i>
+                                                                    Proxy url
+                                                                </label>
+                                                                <input type="text" name="" id="proxy-url-<%= obj.id%>" value="<%= obj.url.replace('http://', '')%>" class="form-control form-control-lg">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="expire-date-<%= obj.id %>">
+                                                                    <i class="mdi mdi-timer"></i>
+                                                                    Expire Date
+                                                                </label>
+                                                                <input id="expire-date-<%= obj.id %>" type="text" class="datetimepicker form-control form-control-lg" placeholder=" &nbsp;Schedule date/time" />
+                                                            </div>
+                                                            <div class="form-group float-lg-right">
+                                                                <button type="button" class="btn btn-secondary btn-rounded" data-dismiss="modal">
+                                                                    Close
+                                                                </button>
+                                                                <button type="button" onclick="saveProxy(<%= obj.id%>)" class="btn btn-primary btn-rounded">
+                                                                    Save changes
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </tr>
+                                        <% } %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+            <!-- partial:../../partials/_footer.html -->
+            <% include ../../partials/_footer %>
+            <!-- partial -->
+            </div>
+        <!-- main-panel ends -->
+        </div>
+        <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+
+    <% include ../../partials/_scripts %>
+
+    <script src="app/js/admin/proxy.js"></script>
+</body>

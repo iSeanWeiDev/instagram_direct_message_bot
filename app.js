@@ -23,6 +23,7 @@ var config = require('./config/env');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var botsRouter = require('./routes/bots');
+var adminRouter = require('./routes/admin');
 
 // Initialize application.
 var app = express();
@@ -52,6 +53,7 @@ app.use(session(config.session));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/bots', botsRouter);
+app.use('/admin', adminRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

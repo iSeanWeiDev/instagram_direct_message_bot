@@ -1,9 +1,13 @@
 // new instagram bot.
 'use strict';
 
+// Import service for manage bot.
 var BotService = require('../services/botService');
+
+// Receive data using "message" method from parent process.
 process.on('message', function(data) {
     if(data.flag == true) {
+        // Initialize data for put to functions.
         var botId = data.bot.id;
         var accountName = data.bot.account_name;
         var accountPass = data.bot.account_password;
@@ -25,7 +29,7 @@ process.on('message', function(data) {
                  * @description
                  * Comment by filter logic
                  */
-                var startCommentTime = 0;
+                var startCommentTime = 0; // initialize the start time for filter
                 var countOfFilters = arrFilter.length - 1;
                 var miliDay = 1000 * 60 * 60 * 24;// milisecond
                 var deltaCommentTime = parseInt(miliDay/maxComment);
@@ -137,7 +141,7 @@ process.on('message', function(data) {
                                             var replyId =  arrReply[replyIndex].id;
                                         }
 
-                                        if(countReplyHistories < arrReply.length) { // if already send all messages
+                                        if( arrReply.length >= countReplyHistories) { // if already send all messages
                                             if(parseInt(clientId) > 0 && clientText) {
                                                 // Direct message to client with client id using reply messages.
                                                 BotService.directMessageToClient(gSession, clientId, replyText, function(resultOfDM) {
@@ -176,6 +180,8 @@ process.on('message', function(data) {
                     }
                 }, 1000);
 
+                // send data to parent process.
+                process.send(1);
                 /**
                  * @description
                  * follow up message logic
@@ -222,10 +228,6 @@ process.on('message', function(data) {
                     }
                     
                 }, 1000);
-
-                // send data to parent process.
-                process.send(1);
-
 
                  /**
                  * @description

@@ -38,8 +38,8 @@ BotController.validateBot = function(req, res) {
                 var autoProxyUrl = 'http://' + response.data.url;
                 var proxyState = response.data.state;
                 
-                BotService.validateBot(accountName, accountPass, autoProxyUrl, function(response) {
-                    if(response.flag == false) {
+                BotService.validateBot(accountName, accountPass, autoProxyUrl, function(cb) {
+                    if(cb.flag == false) {
                         switch(cb.type) {
                             case 'CheckpointError':
                                 res.json({
@@ -209,7 +209,6 @@ BotController.saveSettings = function(req, res) {
 // Create bot by bot details
 BotController.createNewBot = function(req, res) {
     BotService.getBotProperties(req.body.botId, function(response) {
-        // console.log(response);
         arrBotProcess.push(fork(path.join(__dirname, 'newBotProcess.js')));
         arrBotProcessName.push(req.body.botId);
 
@@ -227,6 +226,117 @@ BotController.createNewBot = function(req, res) {
         });
 
         arrBotProcess[botNum].send(response);
+    });
+}
+
+// Delete bot by id
+BotController.deleteBot = function(req, res) {
+    if(req.body.botId) {
+        for(var i = 0; i < arrBotProcessName.length; i++) {    
+            if(arrBotProcessName[i] == req.body.botId) {
+                arrBotProcess[i].kill();
+                arrBotProcessName[i] = "###";
+            }
+        }
+
+        /**
+         * 1. loop for bot list and pop empty bot
+         * 
+         */
+        arrBotProcessBackup = [];
+        arrBotProcessNameBackup = [];
+
+        for(var kk = 0; kk < arrBotProcessName.length; kk++)
+        {
+            if(arrBotProcessName[kk] != "###")
+            {
+                arrBotProcessBackup.push(arrBotProcess[kk]);
+                arrBotProcessNameBackup.push(arrBotProcessName[kk]);
+            }                            
+        }
+        
+        /**
+         * initialize and copy original thread array for bots with backup arraylist
+         */
+        arrBotProcess = [];
+        arrBotProcessName = [];
+
+        arrBotProcess = arrBotProcessBackup.slice(0);
+        arrBotProcessName = arrBotProcessNameBackup.slice(0);
+
+        BotService.deleteBotById(req.body, function(cb) {
+            res.json(cb);
+        });
+    }
+}
+
+// get load more details for bot.
+BotController.getLoadMoreDetails = function(req, res) {
+    var userId = req.body.userId,
+        botId = req.body.botId;
+        
+    BotService.getLoadMore(userId, botId, function(cb) {
+        res.json(cb);
+    });
+}
+
+// get message history by id
+BotController.getMessageHistory = function(req, res) {
+    var userId = req.session.user.userId;
+    var botId = req.body.botId;
+    var clientId = req.body.clientId;
+
+    BotService.getMessageHistoryById(userId, botId, clientId, function(result) {
+        res.json({
+            flag: true,
+            data: result
+        });
+    });
+}
+
+// Get dashboard init data
+BotController.getDashboardInitData = function(req, res) {
+    var state = parseInt(req.body.state);
+    var userId = req.session.user.userId;
+
+    BotService.getDashboardHistory(state, userId, function(result) {
+        res.json({
+            flag: true,
+            data: result
+        });
+    });
+}
+
+// Send message to client with client id.
+BotController.sendMessage = function(req, res) {
+    BotService.getBotGeneralDetail(req.body, function(cb) {
+        var name = cb.accountName;
+        var password = cb.accountPass;
+        var proxy = cb.proxyUrl;
+        
+        BotService.validateBot(name, password, proxy, function(validateCB) {
+            if(validateCB.flag == true) {
+                BotService.directMessageToClient(validateCB.session, req.body.clientId, req.body.message, function(dmCB) {
+                    var saveData = {
+                        bot_id: req.body.botId,
+                        client_id: req.body.clientId,
+                        client_name: dmCB.name,
+                        client_image_url: dmCB.imgUrl,
+                        client_text:  null,
+                        is_manual: 'Y',
+                        manual_reply_text: req.body.message,
+                        reply_id: null
+                    }
+
+                    BotService.saveReplyHistory(saveData, function(response) {
+                         res.json({
+                             flag: true,
+                             data: req.body.message
+                         });
+                    })
+                });
+            }
+        });
     });
 }
 

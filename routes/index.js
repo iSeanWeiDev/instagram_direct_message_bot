@@ -1,15 +1,18 @@
-/**
- * index Route management file.
- * index.js
- * 
- * created by super-sean
- * version 2.1.1
+ /**
+ * @description index Route management file.
+ * @name index.js
+ * @version 2.1.2
+ * @author Super-Sean1995
  */
 
 'use strict';
 
 var express = require('express');
 var router = express.Router();
+
+// import service files.
+var ProxyService = require('../services/proxyService');
+var BotService = require('../services/botService');
 
 /* GET login page. */
 router.get('/', function(req, res) {
@@ -37,12 +40,18 @@ router.get('/logout',function (req, res) {
 
 /* GET dashboard page. */
 router.get('/dashboard', isAuthenicated, function(req, res) {
-  res.render('pages/dashboard', {user: req.session.user});
+  BotService.getBotHistoryData(req.session.user.userId, function(cb) {
+    res.render('pages/dashboard', {user: req.session.user, data: cb});
+  });
+
+  
 });
 
 /* GET allbots page. */
 router.get('/allbots', isAuthenicated, function(req, res) {
-  res.render('pages/allbots', {user: req.session.user});
+  BotService.getAllBotsDetail(req.session.user.userId, function(cb) {
+    res.render('pages/allbots', {user: req.session.user, data: cb});
+  });
 });
 
 /* GET createbot page. */
@@ -54,6 +63,18 @@ router.get('/createbot', isAuthenicated, function(req, res) {
 router.get('/schedule', isAuthenicated, function(req, res) {
   res.render('pages/schedule', {user: req.session.user});
 });
+
+/* Admin route */
+router.get('/proxy', isAuthenicated, function(req, res) {
+  ProxyService.getAllProxies(function(cb) {
+    if(req.session.user.role == 4) {
+      res.render('pages/admin/proxy', {user: req.session.user, data: cb});
+    }
+  
+    res.redirect('dashboard');
+  });
+  
+})
 
 /* Validate authenticated user. */
 function isAuthenicated(req, res, next) {

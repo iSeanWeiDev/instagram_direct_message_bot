@@ -1,9 +1,8 @@
 /**
- * User Route management file.
- * users.js
- * 
- * created by super-sean
- * version 2.1.1
+ * @description User router.
+ * @name users.js
+ * @version 2.1.2
+ * @author Super-Sean1995
  */
 'use strict';
 
