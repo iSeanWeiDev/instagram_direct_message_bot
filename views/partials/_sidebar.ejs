@@ -9,9 +9,6 @@
         <div class="text-wrapper">
           <p class="profile-name"><%= user.userName%></p>
           <% switch(parseInt(user.role)) {
-            case 0: %>
-          <p class="designation">Ultimate user</p>
-          <%  break;
               case 1: %> 
           <p class="designation">TIER 1 user</p>
           <%  break;
@@ -22,9 +19,11 @@
           <p class="designation">TIER 3 user</p>   
           <%  break;
               case 4: %>
-          <p class="designation">Super Admin</p>
-          <%  break; 
-          } %>
+          <p class="designation">Ultimate user</p>
+          <%  break;
+              case 5: %>
+          <p class="designation">Super-admin</p>
+          <% break; } %>
         </div>
       </a>
     </li>
@@ -58,7 +57,7 @@
       </a>
     </li>
 
-    <% if(parseInt(user.role) == 4) { %>
+    <% if(parseInt(user.role) == 5) { %>
     <li class="nav-item">
       <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
         <i class="menu-icon typcn typcn-document-add"></i>

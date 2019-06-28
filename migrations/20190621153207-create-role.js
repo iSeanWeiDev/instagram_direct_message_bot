@@ -17,6 +17,12 @@ module.exports = {
       count_dialog: {
         type: Sequelize.INTEGER
       },
+      is_upload_earning: {
+        type: Sequelize.STRING(1)
+      },
+      is_admin: {
+        type: Sequelize.STRING(1)
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

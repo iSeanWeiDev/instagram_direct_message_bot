@@ -89,9 +89,14 @@ UserController.login = function(req, res) {
 
                 req.session.authenticated = true;
 
-                res.status(200).json({
+                res.json({
                     flag: true,
                     message: 'Welcome to Metamedias.co!'
+                })
+            } else {
+                res.json({
+                    flag: false,
+                    message: 'Invalid credential!'
                 })
             }
         });

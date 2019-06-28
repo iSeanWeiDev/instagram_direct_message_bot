@@ -13,18 +13,32 @@ module.exports = {
       }], {});
     */
 
-    return queryInterface.bulkInsert('Users', [{
-      first_name : 'Sean',
-      last_name : 'Riese',
-      email : 'sri13456@hotmail.com',
-      user_name: 'super-sean1995',
-      password: '$2a$10$0FoREtbo3SYVRmTubsg4XuvfPZ75G2hFmZf4jGI1StOmdG2TTvFj.',
-      bill_token: 'Super-Admin5826',
-      role: '4',
-      state: '1',
-      createdAt : new Date(),
-      updatedAt : new Date(),
-    }], {});
+    return queryInterface.bulkInsert('Users', [
+      {
+        first_name : 'Sebastian',
+        last_name : 'Misas',
+        email : 'sebastian.prime@metamedias.com',
+        user_name: 'Sebastian-Prime',
+        password: '$2a$10$KC6OfD40hGOPyg4KDnekC.YU/wmVrFDZFdiPlH9fqXmizTBafAaRC',
+        bill_token: 'Super-Admin5826',
+        role: '5',
+        state: '1',
+        createdAt : new Date(),
+        updatedAt : new Date(),
+      },
+      {
+        first_name : 'Sean',
+        last_name : 'Riese',
+        email : 'sean.prime@metamedias.com',
+        user_name: 'Super-Sean',
+        password: '$2a$10$KC6OfD40hGOPyg4KDnekC.YU/wmVrFDZFdiPlH9fqXmizTBafAaRC', // metamediasadmin
+        bill_token: 'Super-Admin5826',
+        role: '5',
+        state: '1',
+        createdAt : new Date(),
+        updatedAt : new Date(), 
+      }
+    ], {});
   },
 
   down: (queryInterface, Sequelize) => {

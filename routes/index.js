@@ -67,7 +67,7 @@ router.get('/schedule', isAuthenicated, function(req, res) {
 /* Admin route */
 router.get('/proxy', isAuthenicated, function(req, res) {
   ProxyService.getAllProxies(function(cb) {
-    if(req.session.user.role == 4) {
+    if(req.session.user.role == 5) {
       res.render('pages/admin/proxy', {user: req.session.user, data: cb});
     }
   
