@@ -53,20 +53,6 @@ process.on('message', function(data) {
                             var commentText = arrComment[indexOfComment].text;
                             var commentId = arrComment[indexOfComment].id;
                             
-                            BotService.followUserById(gSession, followClientId, function(followCB) {
-                                if(followCB.data == true && flag == true) {
-                                    var followHistoryData = {
-                                        bot_id: botId,
-                                        client_id: followClientId,
-                                        is_follow: 'Y'
-                                    }
-
-                                    BotService.saveFollowUserHistory(followHistoryData, function(historyCB) {
-                                        console.log(historyCB);
-                                    });
-                                }
-                            });
-
                             BotService.commitByMediaId(gSession, mediaId, commentText, function(resultOfCommit) {
                                 if(resultOfCommit.flag == true) {
                                     var commitHistoryData = {
@@ -75,6 +61,20 @@ process.on('message', function(data) {
                                         media_id: mediaId,
                                         comment_id: commentId
                                     }
+
+                                    BotService.followUserById(gSession, followClientId, function(followCB) {
+                                        if(followCB.data == true && flag == true) {
+                                            var followHistoryData = {
+                                                bot_id: botId,
+                                                client_id: followClientId,
+                                                is_follow: 'Y'
+                                            }
+        
+                                            BotService.saveFollowUserHistory(followHistoryData, function(historyCB) {
+                                                console.log(historyCB);
+                                            });
+                                        }
+                                    });
 
                                     BotService.saveCommitHistory(commitHistoryData, function(saveCommitHistoryData) {
                                         console.log("comment successed " + commitHistoryData);

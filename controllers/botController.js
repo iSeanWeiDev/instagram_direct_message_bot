@@ -375,5 +375,41 @@ BotController.changeBotStatus = function(req, res) {
     }
 }
 
+// Update current bot by bot id.
+BotController.updateBot = function(req, res) {
+    var botId = req.body.botId,
+        messageDelay = req.body.messageDelay,
+        maxComment = req.body.maxComment,
+        arrFilter = JSON.parse(JSON.stringify(req.body.filters)),
+        arrComment = JSON.parse(JSON.stringify(req.body.comments)),
+        arrReply = JSON.parse(JSON.stringify(req.body.replies)),
+        arrFUM = JSON.parse(JSON.stringify(req.body.fums));
+
+    var updateBotData = {
+        message_delay: messageDelay,
+        max_comment: maxComment
+    }
+
+    BotService.updateBotSettingbyId(botId, updateBotData, function(botCB) {
+        BotService.updateFiltersByBotid(botId, arrFilter, function(filterCB) {
+            BotService.updateCommentsByBotid(botId, arrComment, function(commentCB) {
+                BotService.updateRepliesByBotid(botId, arrReply, function(replyCB) {
+                    BotService.updateFUMsByBotid(botId, arrFUM, function(fumCB) {
+
+                    });
+                });
+            });
+        });
+    });
+
+    
+    
+    
+
+    
+
+    
+}
+
 // Export module with UserController.
 module.exports = BotController;

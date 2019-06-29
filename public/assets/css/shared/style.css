@@ -4978,7 +4978,7 @@ a.close.disabled {
 
 @media (min-width: 576px) {
   .modal-dialog {
-    max-width: 500px;
+    max-width: 1000px; /* rango modified*/
     margin: 30px auto; }
   .modal-dialog-scrollable {
     max-height: calc(100% - 60px); }

@@ -50,6 +50,12 @@ BotService.getBotHistoryData = getBotHistoryData;
 BotService.getMessageHistoryById = getMessageHistoryById;
 BotService.getDashboardHistory = getDashboardHistory;
 BotService.getBotGeneralDetail = getBotGeneralDetail;
+// update bot by bot id => allbots page
+BotService.updateBotSettingbyId = updateBotSettingbyId
+BotService.updateFiltersByBotid = updateFiltersByBotid;
+BotService.updateCommentsByBotid = updateCommentsByBotid;
+BotService.updateRepliesByBotid = updateRepliesByBotid;
+BotService.updateFUMsByBotid = updateFUMsByBotid;
 
 // Import Data Models
 var ProxyModel = require('../models').Proxy;
@@ -912,29 +918,115 @@ function unFollowUserbyId(id, cb) {
  * @param {OBJECT} cb 
  */
 function getAllBotsDetail(id, cb) {
-    var selectQuery =  `SELECT
-                            B.id, B.bot_name, 
-                            B.account_name, 
-                            B.account_password, 
-                            B.account_image_url, 
-                            B.message_delay, 
-                            B.max_comment
-                        FROM
-                            "public"."Users" AS A,
-                            "public"."Bots" AS B
-                        WHERE
-                            A.id = B.user_id
-                            AND B.state = 1
-                            AND A.id = '?'
-                        ORDER BY 
-                            B."createdAt"`;
-    sequelize.query(selectQuery, {
-        replacements: [id],
-        type: sequelize.QueryTypes.SELECT
-    }).then(function(result) {
+    var getData = new Promise(function(resolve) {
+        BotModel.findAll({
+            attributes: [
+                'id', 
+                'bot_name', 
+                'account_name', 
+                'account_password', 
+                'account_image_url', 
+                'message_delay', 
+                'max_comment'
+            ],
+            where: {
+                state: 1,
+                user_id: id
+            }
+        }).then(function(bots) {
+            var arrBotDetails = [];
+            var countOfBot = bots.length - 1;
+    
+            async function asyncGetBotsDetails() {
+                var objBotDetail = {
+                    bot: [],
+                    filters: [],
+                    comments: [],
+                    replies: [],
+                    fums: []
+                }
+
+                console.log(countOfBot);
+    
+                var botId = bots[countOfBot].dataValues.id;
+                
+                objBotDetail.bot.push(bots[countOfBot].dataValues);
+    
+                FilterModel.findAll({
+                    attributes: [
+                        'id', 'hashtag'
+                    ],
+                    where: {
+                        bot_id: botId,
+                        state: 1  
+                    }
+                }).then(function(filters) {
+                    filters.forEach(filter => {
+                        objBotDetail.filters.push(filter.dataValues);
+                    });
+    
+                    CommentModel.findAll({
+                        attributes: [
+                            'id', 'text'
+                        ],
+                        where: {
+                            bot_id: botId,
+                            state: 1
+                        }
+                    }).then(function(comments) {
+                        comments.forEach(comment => {
+                            objBotDetail.comments.push(comment.dataValues);
+                        });
+    
+    
+                        ReplyModel.findAll({
+                            attributes: [
+                                'id', 'text'
+                            ],
+                            where: {
+                                bot_id: botId,
+                                state: 1
+                            }
+                        }).then(function(replies) {
+                            replies.forEach(reply => {
+                                objBotDetail.replies.push(reply.dataValues);
+                            });
+    
+                            FUMModel.findAll({
+                                attributes: [
+                                    'id', 'start_date', 'text'
+                                ],
+                                where: {
+                                    bot_id: botId,
+                                    state: 1
+                                }
+                            }).then(function(fums) {
+                                fums.forEach(fum => {
+                                    objBotDetail.fums.push(fum.dataValues);
+                                });
+
+                                arrBotDetails.push(objBotDetail);
+
+                                countOfBot--;
+
+                                if(countOfBot >= 0) {
+                                    asyncGetBotsDetails();
+                                } else {
+                                    resolve(arrBotDetails);
+                                    arrBotDetails = [];
+                                }
+                            });
+                        });
+                    });
+                });
+            }
+    
+            asyncGetBotsDetails(); 
+        });
+    });
+
+    getData.then(function(result) {
         cb(result);
-    }).catch(function(error) {
-        console.log('Get all bots detail error:' + error);
     })
 }
 
@@ -1060,7 +1152,7 @@ function getBotHistoryData(userId, cb) {
                         WHERE
                             A.id = B.user_id
                             AND B.id = C.bot_id
-                            AND A.id = 1
+                            AND A.id = ?
                         GROUP BY
                             B.id, 
                             B.bot_name, 
@@ -1427,6 +1519,244 @@ function getBotGeneralDetail(data, cb) {
         });
     }).catch(function(error) {
         console.log('Get current bot error: ' + error);
+    });
+}
+
+// Update the bot by bot id.
+
+/**
+ * @description
+ * update the stored bot setting
+ * 
+ * @param {INTEGER} botId 
+ * @param {OBJECT} data 
+ * @param {OBJECT} cb 
+ */
+function updateBotSettingbyId(botId, data, cb) {
+    BotModel.update(data, {
+        where: {
+            id:  botId
+        }
+    }).then(function(result) {
+        if(result[0] == 1) {
+            cb(1);
+        }
+    }).catch(function(error) {
+        console.log('Update bot setting error:' + error);
+        cb(0);
+    })
+}
+
+/**
+ * @description
+ * update the stored hashtags
+ * before update the bot hashtags, might delete last hashtags
+ * 
+ * @param {INTEGER} botId 
+ * @param {OBJECT} data 
+ * @param {OBJECT} cb 
+ */
+function updateFiltersByBotid(botId, data, cb) {
+    var updateSQL = `UPDATE "public"."Filters"	
+                        SET  state = 0
+                        WHERE 	bot_id = ?`;
+
+    sequelize.query(updateSQL, {
+        replacements: [
+            botId
+        ]
+    }).then(function(result) {
+        var countOfData = data.length - 1;
+
+        async function asyncInsertFilter() {
+            var hashTag = data[countOfData];
+            if(hashTag != '') {
+                var  createData = {
+                    bot_id: botId,
+                    hashtag: hashTag,
+                    state: 1
+                }
+    
+                FilterModel.create(createData)
+                    .then(function(result) {
+                        if(result) {
+                            cb(1);
+                            countOfData --;
+                        }
+
+                        if(countOfData >= 0) {
+                            asyncInsertFilter();
+                        }
+                    })
+                    .catch(function(error) {
+                        console.lo('Insert new hashtag error: ' + error);
+                        cb(2)
+                    })
+            }
+        }
+
+        asyncInsertFilter();
+    });
+}
+
+/**
+ * @description
+ * update comments by bot id
+ * before update the bot comments, might delete last comments
+ * 
+ * @param {INTEGER} botId 
+ * @param {OBJECT} data 
+ * @param {OBJECT} cb 
+ */
+function updateCommentsByBotid(botId, data, cb) {
+    var updateSql = ` update "public"."Comments"
+                        SET state = 0
+                        WHERE bot_id = ?`;
+    sequelize.query(updateSql, {
+        replacements: [
+            botId
+        ]
+    }).then(function(result) {
+        console.log(result);
+        var countOfData = data.length - 1;
+
+        async function asyncInsertComment() {
+            var text = data[countOfData];
+
+            if(text != '') {
+                var createData = {
+                    bot_id: botId,
+                    text: text,
+                    state: 1
+                }
+                
+                CommentModel.create(createData)
+                    .then(function(comment) {
+                        if(comment) {
+                            cb(1);
+
+                            countOfData--;
+                        }
+
+                        
+                        if(countOfData >= 0) {
+                            asyncInsertComment();
+                        }
+                    })
+                    .catch(function(error) {
+                        console.lo('Save new Comment error: ' + error );
+                        cb(2)
+                    })
+            }
+        }
+
+        asyncInsertComment()
+    });
+}
+
+/**
+ * @description
+ * update replies by bot id
+ * before update the bot direct messages, might delete direct messages
+ * 
+ * @param {INTEGER} botId 
+ * @param {OBJECT} data 
+ * @param {OBJECT} cb 
+ */
+function updateRepliesByBotid(botId, data, cb) {
+    var updateSql = `UPDATE "public"."Replies"
+    SET state = 0
+    WHERE bot_id = ?`;
+
+    sequelize.query(updateSql, {
+        replacements: [
+            botId
+        ]
+    }).then(function(result) {
+        console.log(result);
+
+       async function asyncInsertReply() {
+            var countOfData = data.length - 1;
+            var text = data[countOfData];
+            if(text != '') {
+                var createData = {
+                    bot_id: botId,
+                    text: text,
+                    state: 1
+                }
+
+                ReplyModel.create(createData)
+                    .then(function(reply) {
+                        if(reply) {
+                            cb(1);
+                            countOfData --;
+                        }
+
+                        if(countOfData >= 0) {
+                            asyncInsertReply();
+                        }
+                    })
+                    .catch(function(error) {
+                        console.log('Create new reply error:' + error);
+                        cb(2);
+                    });
+            }
+       }
+
+       asyncInsertReply();
+    }).catch(function(error) {
+        console.log('Update Replies error:' + error);
+    })
+}
+
+/**
+ * @description
+ * update follow up messages by bot id
+ * before update the bot follow up messages, might delete follow up messages
+ * 
+ * @param {INTEGER} botId 
+ * @param {OBJECT} data 
+ * @param {OBJECT} cb 
+ */
+function updateFUMsByBotid(botId, data, cb) {
+    FUMModel.findAll({
+        attributes: [
+            'id', 'start_date'
+        ],
+        where: {
+            bot_id: botId
+        }
+    }).then(function(result) {
+        var countOfRow = 8;
+        
+        async function asyncUpdateFUM() {
+            var updateData = {
+                bot_id: botId,
+                start_date: result[countOfRow - 1].dataValues.start_date,
+                text: data[countOfRow - 1],
+                state: 1
+            }
+
+            FUMModel.update(updateData, {
+                where: {
+                    id: result[countOfRow - 1].dataValues.id
+                }
+            }).then(function(result) {
+                if(result[0] == 1) {
+                    countOfRow--;
+                }
+
+                if(countOfRow > 0) {
+                    asyncUpdateFUM();
+                }
+            }).catch(function(error) {
+                console.log('Update follow up message error: ' + error);
+            });
+        }
+
+        asyncUpdateFUM();
+    }).catch(function(error) {
+        console.lo('Get FUMs error:' + error);
     });
 }
 

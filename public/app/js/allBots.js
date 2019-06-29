@@ -55,51 +55,55 @@ $(document).ready(function() {
         });
     }
 /* ================================================ */
-    this.loadMore = function(id) {
-        if(userId.val() && id > 0) {
-            var sendData = {
-                botId: id,
-                userId: userId.val()
-            }
-
-            $.ajax({
-                method: 'POST',
-                url: '/bots/get/loadmore',
-                data: sendData
-            }).done(function(response) {
-                var tmpFilters = '';
-                var tmpComments = '';
-                var tmpReplies = '';
-
-                for(var obj of response) {
-                    if(obj.type == 'filters') {
-                        tmpFilters = tmpFilters + obj.data + ',\n';
-                    }
-
-                    if(obj.type == 'comment') {
-                        tmpComments = tmpComments + obj.data + ',\n';
-                    }
-
-                    if(obj.type == 'reply') {
-                        tmpReplies = tmpReplies + obj.data + ',\n';
-                    }
-                }
-
-                $('textarea#filters'+id+'.form-control').val(tmpFilters);
-                $('textarea#comments'+id+'.form-control').val(tmpComments);
-                $('textarea#replies'+id+'.form-control').val(tmpReplies);
-
-                tmpFilters = '';
-                tmpComments = '';
-                tmpReplies = '';
-            });
-        }
-    }
-
-/* ================================================ */
 
     this.updateBot = function(id) {
-        console.log(id);
+        var messageDelay = $('input#message-delay-'+id),
+            maxComment = $('input#max-comment-'+id),
+            filters = $('textarea#filters-'+id).val().replace(/\n/g, '').replace(/ /g, '').replace(/#/g, '').split(','),
+            comments = $('textarea#comments-'+id).val().replace(/\n/g, '').replace(/ /g, '').replace(/#/g, '').split(','),
+            replies = $('textarea#replies-'+id).val().replace(/\n/g, '').replace(/ /g, '').replace(/#/g, '').split(','),
+            fum1 = $('textarea#fum-'+id+'-2th'),
+            fum2 = $('textarea#fum-'+id+'-6th'),
+            fum3 = $('textarea#fum-'+id+'-12th'),
+            fum4 = $('textarea#fum-'+id+'-21th'),
+            fum5 = $('textarea#fum-'+id+'-1month'),
+            fum6 = $('textarea#fum-'+id+'-2month'),
+            fum7 = $('textarea#fum-'+id+'-3month'),
+            fum8 = $('textarea#fum-'+id+'-4month');
+
+        var sendData = {
+            botId: id,
+            messageDelay: messageDelay.val(),
+            maxComment: maxComment.val(),
+            filters: filters,
+            comments: comments,
+            replies: replies,
+            fums: [
+                fum1.val(), 
+                fum2.val(), 
+                fum3.val(), 
+                fum4.val(), 
+                fum5.val(), 
+                fum6.val(), 
+                fum7.val(), 
+                fum8.val()
+            ]
+        }
+
+        $.ajax({
+            method: 'POST',
+            url: '/bots/update',
+            data: sendData
+        }).done(function(response) {
+            if(response && response.flag == true) {
+
+            } else {
+
+            }
+        });
+
+        console.log(sendData);
+
     }
 /* ================================================ */
     this.changStatus = function(id) {
