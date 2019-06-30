@@ -389,26 +389,22 @@ BotController.updateBot = function(req, res) {
         message_delay: messageDelay,
         max_comment: maxComment
     }
-
-    BotService.updateBotSettingbyId(botId, updateBotData, function(botCB) {
-        BotService.updateFiltersByBotid(botId, arrFilter, function(filterCB) {
-            BotService.updateCommentsByBotid(botId, arrComment, function(commentCB) {
-                BotService.updateRepliesByBotid(botId, arrReply, function(replyCB) {
-                    BotService.updateFUMsByBotid(botId, arrFUM, function(fumCB) {
-
-                    });
-                });
-            });
-        });
-    });
-
-    
-    
-    
-
-    
-
-    
+    // console.log(req.body);
+    // console.log(updateBotData, arrFUM,arrReply,arrComment,arrFilter);
+    // BotService.updateBotSettingbyId(botId, updateBotData, function(botCB) {
+    //     BotService.updateFiltersByBotid(botId, arrFilter, function(filterCB) {
+    //         BotService.updateCommentsByBotid(botId, arrComment, function(commentCB) {
+    //             BotService.updateRepliesByBotid(botId, arrReply, function(replyCB) {
+    //                 BotService.updateFUMsByBotid(botId, arrFUM, function(fumCB) {
+                        res.json({
+                            flag: true,
+                            message: 'Updated your bot'
+                        })
+    //                 });
+    //             });
+    //         });
+    //     });
+    // });
 }
 
 // Export module with UserController.

@@ -96,14 +96,27 @@ $(document).ready(function() {
             data: sendData
         }).done(function(response) {
             if(response && response.flag == true) {
+                mkNoti(
+                    'Your Bot Paused!',
+                    response.message,
+                    {
+                        status:'success'
+                    }
+                );
 
+                setTimeout(() => {
+                    window.open('allbots', '_self');
+                }, 1000);
             } else {
-
+                mkNoti(
+                    'Pause Bot Failure!',
+                    response.message,
+                    {
+                        status:'danger'
+                    }
+                );
             }
         });
-
-        console.log(sendData);
-
     }
 /* ================================================ */
     this.changStatus = function(id) {
