@@ -101,75 +101,85 @@
                                         </tr>
                                     </thead>
                                     <tbody style="cursor: pointer;">
-                                        <% var index = 0;
-                                        for(var obj of data) { 
-                                            index++; %>
-                                        <tr class="text-center align-middle"  data-toggle="modal" data-target="#messageHistory" style="cursor: pointer;">
-                                            <th scope="row">
-                                                <%= index %>
-                                            </th>
-                                            <td>
-                                                <%= obj.url %>
-                                            </td>
-                                            <td>
-                                                <strong>
-                                                <%= obj.expireDate %>
-                                                </strong>
-                                            </td>
-                                            <td>
-                                                <strong>
-                                                <%= obj.usage %>
-                                                </strong>
-                                            </td>
-                                            <td>
-                                                <button class="btn btn-outline-success" data-toggle="modal" data-target="#editProxyModal<%= obj.id %>">
-                                                    <i class="mdi mdi-content-save-edit"></i>
-                                                    Edit
-                                                </button>
-                                                <button onclick="deleteProxy(<%= obj.id%>)" class="btn btn-outline-danger">
-                                                    <i class="mdi mdi-delete"></i>
-                                                    Delete
-                                                </button>
-                                            </td>
-
-                                            <div class="modal fade" id="editProxyModal<%= obj.id %>" tabindex="-1" role="dialog" aria-labelledby="editProxyModal<%= obj.id %>Label" aria-hidden="true">
-                                                <div class="modal-dialog" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-body p-3">
-                                                            <div class="form-group">
-                                                                <h4 class="modal-title" id="editProxyModal<%= obj.id %>Label">
-                                                                    <strong>
-                                                                        Edit proxy setting
-                                                                    </strong>
-                                                                </h4>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label for="proxy-url-<%= obj.id %>">
-                                                                    <i class="mdi mdi-link"></i>
-                                                                    Proxy url
-                                                                </label>
-                                                                <input type="text" name="" id="proxy-url-<%= obj.id%>" value="<%= obj.url.replace('http://', '')%>" class="form-control form-control-lg">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label for="expire-date-<%= obj.id %>">
-                                                                    <i class="mdi mdi-timer"></i>
-                                                                    Expire Date
-                                                                </label>
-                                                                <input id="expire-date-<%= obj.id %>" type="text" class="datetimepicker form-control form-control-lg" placeholder=" &nbsp;Schedule date/time" />
-                                                            </div>
-                                                            <div class="form-group float-lg-right">
-                                                                <button type="button" class="btn btn-secondary btn-rounded" data-dismiss="modal">
-                                                                    Close
-                                                                </button>
-                                                                <button type="button" onclick="saveProxy(<%= obj.id%>)" class="btn btn-primary btn-rounded">
-                                                                    Save changes
-                                                                </button>
+                                        <% if(data.length > 0) { 
+                                            var index = 0;
+                                            for(var obj of data) { 
+                                                index++; %>
+                                            <tr class="text-center align-middle"  data-toggle="modal" data-target="#messageHistory" style="cursor: pointer;">
+                                                <th scope="row">
+                                                    <%= index %>
+                                                </th>
+                                                <td>
+                                                    <%= obj.url %>
+                                                </td>
+                                                <td>
+                                                    <strong>
+                                                    <%= obj.expireDate %>
+                                                    </strong>
+                                                </td>
+                                                <td>
+                                                    <strong>
+                                                    <%= obj.usage %>
+                                                    </strong>
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-outline-success" data-toggle="modal" data-target="#editProxyModal<%= obj.id %>">
+                                                        <i class="mdi mdi-content-save-edit"></i>
+                                                        Edit
+                                                    </button>
+                                                    <button onclick="deleteProxy(<%= obj.id%>)" class="btn btn-outline-danger">
+                                                        <i class="mdi mdi-delete"></i>
+                                                        Delete
+                                                    </button>
+                                                </td>
+    
+                                                <div class="modal fade" id="editProxyModal<%= obj.id %>" tabindex="-1" role="dialog" aria-labelledby="editProxyModal<%= obj.id %>Label" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-body p-3">
+                                                                <div class="form-group">
+                                                                    <h4 class="modal-title" id="editProxyModal<%= obj.id %>Label">
+                                                                        <strong>
+                                                                            Edit proxy setting
+                                                                        </strong>
+                                                                    </h4>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="proxy-url-<%= obj.id %>">
+                                                                        <i class="mdi mdi-link"></i>
+                                                                        Proxy url
+                                                                    </label>
+                                                                    <input type="text" name="" id="proxy-url-<%= obj.id%>" value="<%= obj.url.replace('http://', '')%>" class="form-control form-control-lg">
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="expire-date-<%= obj.id %>">
+                                                                        <i class="mdi mdi-timer"></i>
+                                                                        Expire Date
+                                                                    </label>
+                                                                    <input id="expire-date-<%= obj.id %>" type="text" class="datetimepicker form-control form-control-lg" placeholder=" &nbsp;Schedule date/time" />
+                                                                </div>
+                                                                <div class="form-group float-lg-right">
+                                                                    <button type="button" class="btn btn-secondary btn-rounded" data-dismiss="modal">
+                                                                        Close
+                                                                    </button>
+                                                                    <button type="button" onclick="saveProxy(<%= obj.id%>)" class="btn btn-primary btn-rounded">
+                                                                        Save changes
+                                                                    </button>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </tr>
+                                            </tr>
+                                            <% } 
+                                        }  else { %>
+                                            <tr>
+                                                <td class="col-12 text-center pt-3 text-danger font-weight-bold"> 
+                                                    <label class="pl-3 pt-2 pr-3 pb-2 border-danger" style="border: 3px solid;"> 
+                                                    No data to display 
+                                                    </label> 
+                                                </td>
+                                            </tr>
                                         <% } %>
                                     </tbody>
                                 </table>

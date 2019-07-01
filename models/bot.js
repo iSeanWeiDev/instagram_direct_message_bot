@@ -8,6 +8,7 @@ module.exports = (sequelize, DataTypes) => {
     account_image_url: DataTypes.STRING,
     message_delay: DataTypes.INTEGER,
     max_comment: DataTypes.INTEGER,
+    is_activated: DataTypes.STRING,
     state: DataTypes.INTEGER
   }, {});
   Bot.associate = function(models) {

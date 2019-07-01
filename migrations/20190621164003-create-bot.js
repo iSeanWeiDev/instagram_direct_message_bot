@@ -29,6 +29,9 @@ module.exports = {
       max_comment: {
         type: Sequelize.INTEGER
       },
+      is_activated: {
+        type: Sequelize.STRING(1)
+      },
       state: {
         type: Sequelize.INTEGER
       },

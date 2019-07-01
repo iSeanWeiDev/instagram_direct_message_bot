@@ -48,7 +48,6 @@
                     </div>
                 <% } %>
                     <div class="row">
-
                     <% for(var obj of data) { %> 
                         <div class="col-md-2 mt-3 mb-3 card-bots">
                             <div class="card">
@@ -82,16 +81,27 @@
                                             </h7>
                                         </button>
 
+                                    <% if(obj.bot[0].is_activated == 'Y') { %>
                                         <button type="button" 
                                             class="btn btn-lg btn-primary btn-rounded pl-3 pt-2 pr-3 pb-2 mb-2"
-                                            id="change-status-"
-                                            onclick="changStatus()">
-                                            <h7 id="pause" class="m-0 p-0">
+                                            id="change-status-<%= obj.bot[0].id %>"
+                                            onclick="changStatus(<%= obj.bot[0].id %>)">
+                                            <h7 id="pause<%= obj.bot[0].id %>" class="m-0 p-0">
                                                 <i class="fa fa-pause"></i>
                                                 Pause
                                             </h7>
                                         </button>
-
+                                    <% } else { %>
+                                        <button type="button" 
+                                            class="btn btn-lg btn-primary btn-rounded pl-3 pt-2 pr-3 pb-2 mb-2"
+                                            id="change-status-<%= obj.bot[0].id %>"
+                                            onclick="changStatus(<%= obj.bot[0].id %>)">
+                                            <h7 id="play<%= obj.bot[0].id %>" class="m-0 p-0">
+                                                <i class="fa fa-play"></i>
+                                                Play
+                                            </h7>
+                                        </button>
+                                    <% } %>
                                         <button type="button" 
                                             class="btn btn-lg btn-warning btn-rounded pl-3 pt-2 pr-3 pb-2 mb-2"
                                             data-toggle="modal" 

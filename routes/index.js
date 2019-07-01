@@ -69,9 +69,9 @@ router.get('/proxy', isAuthenicated, function(req, res) {
   ProxyService.getAllProxies(function(cb) {
     if(req.session.user.role == 5) {
       res.render('pages/admin/proxy', {user: req.session.user, data: cb});
+    } else {
+      res.redirect('dashboard');
     }
-  
-    res.redirect('dashboard');
   });
   
 })

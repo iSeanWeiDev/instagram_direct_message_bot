@@ -121,7 +121,6 @@ $(document).ready(function() {
 /* ================================================ */
     this.changStatus = function(id) {
         var getBotStatus = $('button#change-status-'+id).children().attr('id');
-
         if(getBotStatus == 'pause'+id) {
             $.confirm({
                 title: '<span class="text-danger"><strong><i class="mdi mdi-robot-industrial"></i> &nbsp; Wait! (~_^)</strong><span>',
@@ -130,7 +129,7 @@ $(document).ready(function() {
                     confirm: function () {
                         var sendData = {
                             botId: id,
-                            status: 0 // 0: paused, 1: played
+                            is_activated: 'Y' // N: paused, Y: started
                         }
                         
                         $.ajax({
@@ -162,8 +161,6 @@ $(document).ready(function() {
                                 );
                             }
                         });
-
-                        
                     },
                     cancel: function () {
                         mkNoti(
@@ -185,7 +182,7 @@ $(document).ready(function() {
                     confirm: function () {
                         var sendData = {
                             botId: id,
-                            status: 1 // 0: paused, 1: played
+                            is_activated: 'N' // N: paused, Y: started
                         }
                         
                         $.ajax({

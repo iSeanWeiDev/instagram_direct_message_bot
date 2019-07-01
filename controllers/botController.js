@@ -23,6 +23,7 @@ var arrBotProcessBackup = [];
 var arrBotProcessNameBackup = [];
 
 var botNum = 0;
+var indexOfBot = 0;
 
 // Validate bot by IG account detail and proxy.
 BotController.validateBot = function(req, res) {
@@ -209,19 +210,24 @@ BotController.saveSettings = function(req, res) {
 // Create bot by bot details
 BotController.createNewBot = function(req, res) {
     BotService.getBotProperties(req.body.botId, function(response) {
+        
+        indexOfBot++;
+        console.log('Bot count' + indexOfBot);
         arrBotProcess.push(fork(path.join(__dirname, 'newBotProcess.js')));
         arrBotProcessName.push(req.body.botId);
 
         arrBotProcess[botNum].on('message', function(data) {
             if(data == 1) {
-                BotService.updateBotState(req.body.botId, function(cb) {
-                    if(cb.flag == true) {
-                        botNum = botNum + 1;
-                        res.json(cb);
-                    } else {
-                        res.json(cb);
-                    };
-                });
+                // if(req.body.botId > 0) {
+                    // BotService.updateBotState(req.body.botId, function(cb) {
+                    //     if(cb.flag == true) {
+                    //         botNum = botNum + 1;
+                    //         res.json(cb);
+                    //     } else {
+                    //         res.json(cb);
+                    //     };
+                    // });
+                // }
             }
         });
 
@@ -342,34 +348,72 @@ BotController.sendMessage = function(req, res) {
 
 // change bot status
 BotController.changeBotStatus = function(req, res) {
-    if(req.body.status == 0) {
+    if(req.body.is_activated == 'Y') {
         if(req.body.botId) {
-            for(var i = 0; i < arrBotProcessName.length; i++) {    
-                if(arrBotProcessName[i] == req.body.botId) {
-                    arrBotProcess[i].send({
-                        flag: false
-                    });
-
-                    res.json({
-                        flag: true,
-                        message: 'Successfully paused your bot!'
-                    });
-                }
+            var sendData = {
+                botId: req.body.botId,
+                is_activated: 'N'
             }
-        }
-    } else {
-        if(req.body.botId) {
-            console.log(arrBotProcessName);
-            BotService.getBotProperties(req.body.botId, function(response) {
-                for(var i = 0; i < arrBotProcessName.length; i++) {    
-                    if(arrBotProcessName[i] == req.body.botId) {
-                        arrBotProcess[i].send(response);
-                        res.json({
-                            flag: true,
-                            message: 'Successfully started your bot!'
-                        });
+            
+            BotService.changeBotStatusById(sendData, function(cb) {
+                if(cb.flag == true) {
+                    for(var i = 0; i < arrBotProcessName.length; i++) {    
+                        if(arrBotProcessName[i] == req.body.botId) {
+                            arrBotProcess[i].send('changeState', {
+                                is_activated: 'N',
+                                bot_id: i
+                            });
+
+                            arrBotProcess[i].on('changeState', function(data) {
+                                if(data == 1) {
+                                    console.log(arrBotProcess);
+                                    res.json({
+                                        flag: true,
+                                        message: 'Successfully paused your bot!'
+                                    });
+                                }
+                            });
+        
+                           
+                        }
                     }
                 }
+            });
+        }
+    } else {
+        if(req.body.botId > 0) {
+            var sendData = {
+                botId: req.body.botId,
+                is_activated: 'Y'
+            }
+
+            BotService.changeBotStatusById(sendData, function(cb) {
+                if(cb.flag == true) {
+                    BotService.getBotProperties(req.body.botId, function(response) {
+                        for(var i = 0; i < arrBotProcessName.length; i++) {    
+                            if(arrBotProcessName[i] == req.body.botId) {
+                                arrBotProcess[i].send('changeState', {
+                                    is_activated: 'Y',
+                                    bot_id: i
+                                });
+
+                                arrBotProcess[i].on('changeState', function(data) {
+                                    if(data == 1) {
+                                        console.log(arrBotProcess);
+                                        
+                                        res.json({
+                                            flag: true,
+                                            message: 'Successfully started your bot!'
+                                        });
+                                    }
+                                });
+
+                                
+                            }
+                        }
+                    });
+                }
+                
             });
         }
     }

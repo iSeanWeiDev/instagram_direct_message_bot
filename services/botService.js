@@ -50,6 +50,7 @@ BotService.getBotHistoryData = getBotHistoryData;
 BotService.getMessageHistoryById = getMessageHistoryById;
 BotService.getDashboardHistory = getDashboardHistory;
 BotService.getBotGeneralDetail = getBotGeneralDetail;
+BotService.changeBotStatusById = changeBotStatusById;
 // update bot by bot id => allbots page
 BotService.updateBotSettingbyId = updateBotSettingbyId
 BotService.updateFiltersByBotid = updateFiltersByBotid;
@@ -388,7 +389,7 @@ function saveSetting(data, cb) {
 
     var updateBotData = {
         message_delay:  messageDelay,
-        max_comment: maxComment
+        max_comment: maxComment,
     }
 
     BotModel.update(updateBotData, {
@@ -483,7 +484,7 @@ function getBotProperties(botId, cb) {
                                 }
         
                                 var botData = {
-                                    flag: true,
+                                    is_activated: 'Y',
                                     bot: bot.dataValues,
                                     proxy: proxy.dataValues,
                                     filters: arrFilter,
@@ -527,6 +528,7 @@ function getBotProperties(botId, cb) {
  */
 function updateBotState(botId, cb) {
     var updateData = {
+        is_activated: 'Y',
         state: 1
     }
 
@@ -547,7 +549,7 @@ function updateBotState(botId, cb) {
         cb({
             flag: false,
             message: 'Update bot state error'
-        })
+        });
     });
 }
 
@@ -927,59 +929,47 @@ function getAllBotsDetail(id, cb) {
                 'account_password', 
                 'account_image_url', 
                 'message_delay', 
-                'max_comment'
+                'max_comment',
+                'is_activated'
             ],
             where: {
                 state: 1,
                 user_id: id
             }
         }).then(function(bots) {
-            var arrBotDetails = [];
-            var countOfBot = bots.length - 1;
-    
-            async function asyncGetBotsDetails() {
-                var objBotDetail = {
-                    bot: [],
-                    filters: [],
-                    comments: [],
-                    replies: [],
-                    fums: []
-                }
-
-                console.log(countOfBot);
-    
-                var botId = bots[countOfBot].dataValues.id;
-                
-                objBotDetail.bot.push(bots[countOfBot].dataValues);
-    
-                FilterModel.findAll({
-                    attributes: [
-                        'id', 'hashtag'
-                    ],
-                    where: {
-                        bot_id: botId,
-                        state: 1  
+            if(bots.length > 0) {
+                var arrBotDetails = [];
+                var countOfBot = bots.length - 1;
+        
+                async function asyncGetBotsDetails() {
+                    var objBotDetail = {
+                        bot: [],
+                        filters: [],
+                        comments: [],
+                        replies: [],
+                        fums: []
                     }
-                }).then(function(filters) {
-                    filters.forEach(filter => {
-                        objBotDetail.filters.push(filter.dataValues);
-                    });
     
-                    CommentModel.findAll({
+                    console.log(countOfBot);
+        
+                    var botId = bots[countOfBot].dataValues.id;
+                    
+                    objBotDetail.bot.push(bots[countOfBot].dataValues);
+        
+                    FilterModel.findAll({
                         attributes: [
-                            'id', 'text'
+                            'id', 'hashtag'
                         ],
                         where: {
                             bot_id: botId,
-                            state: 1
+                            state: 1  
                         }
-                    }).then(function(comments) {
-                        comments.forEach(comment => {
-                            objBotDetail.comments.push(comment.dataValues);
+                    }).then(function(filters) {
+                        filters.forEach(filter => {
+                            objBotDetail.filters.push(filter.dataValues);
                         });
-    
-    
-                        ReplyModel.findAll({
+        
+                        CommentModel.findAll({
                             attributes: [
                                 'id', 'text'
                             ],
@@ -987,47 +977,64 @@ function getAllBotsDetail(id, cb) {
                                 bot_id: botId,
                                 state: 1
                             }
-                        }).then(function(replies) {
-                            replies.forEach(reply => {
-                                objBotDetail.replies.push(reply.dataValues);
+                        }).then(function(comments) {
+                            comments.forEach(comment => {
+                                objBotDetail.comments.push(comment.dataValues);
                             });
-    
-                            FUMModel.findAll({
+        
+        
+                            ReplyModel.findAll({
                                 attributes: [
-                                    'id', 'start_date', 'text'
+                                    'id', 'text'
                                 ],
                                 where: {
                                     bot_id: botId,
                                     state: 1
                                 }
-                            }).then(function(fums) {
-                                fums.forEach(fum => {
-                                    objBotDetail.fums.push(fum.dataValues);
+                            }).then(function(replies) {
+                                replies.forEach(reply => {
+                                    objBotDetail.replies.push(reply.dataValues);
                                 });
-
-                                arrBotDetails.push(objBotDetail);
-
-                                countOfBot--;
-
-                                if(countOfBot >= 0) {
-                                    asyncGetBotsDetails();
-                                } else {
-                                    resolve(arrBotDetails);
-                                    arrBotDetails = [];
-                                }
+        
+                                FUMModel.findAll({
+                                    attributes: [
+                                        'id', 'start_date', 'text'
+                                    ],
+                                    where: {
+                                        bot_id: botId,
+                                        state: 1
+                                    }
+                                }).then(function(fums) {
+                                    fums.forEach(fum => {
+                                        objBotDetail.fums.push(fum.dataValues);
+                                    });
+    
+                                    arrBotDetails.push(objBotDetail);
+    
+                                    countOfBot--;
+    
+                                    if(countOfBot >= 0) {
+                                        asyncGetBotsDetails();
+                                    } else {
+                                        resolve(arrBotDetails);
+                                        arrBotDetails = [];
+                                    }
+                                });
                             });
                         });
                     });
-                });
+                }
+        
+                asyncGetBotsDetails();  
+            } else {
+                resolve([]);
             }
-    
-            asyncGetBotsDetails(); 
         });
     });
 
     getData.then(function(result) {
         cb(result);
-    })
+    });
 }
 
 /**
@@ -1522,6 +1529,37 @@ function getBotGeneralDetail(data, cb) {
     });
 }
 
+/**
+ * @description
+ * pause the bot status
+ * 
+ * @param {OBJECT} data 
+ * @param {OBJECT} cb 
+ */
+function changeBotStatusById(data, cb) {
+    console.log(data.is_activated);
+    var updateData = {
+        is_activated: data.is_activated
+    }
+
+    BotModel.update(updateData, {
+        where: {
+            id: data.botId
+        }
+    }).then(function(result) {
+        if(result[0] == 1) {
+            cb({
+                flag: true
+            });
+        }
+    }).catch(function(error) {
+        console.log('Update bot status error: ' + error);
+        cb({
+            flag: false
+        });
+    });
+}
+
 // Update the bot by bot id.
 
 /**
@@ -1772,12 +1810,21 @@ function convertTime(mili, callback) {
 
     if( delta < 60 ) {
         callback(delta + ' minutes ago'); 
-    } else if( 60 < delta < 3600) {
-        delta = parseInt(delta / 60)
-        callback(delta + ' hours ago');
-    } else if( 3600 < delta < 86400 ) {
-        delta = parseInt(delta /  86400);
-        callback(delta + ' days ago');
+    } else if( delta < 1440) {
+        var time = parseInt(delta / 60)
+        callback(time + ' hours ago');
+    } else if( delta < 43200 ) {
+        var time = parseInt(delta /  1440);
+        callback(time + ' days ago');
+    } else if( delta < 10080 ) {
+        var time = parseInt(delta /  1440);
+        callback(time + ' weeks ago');
+    } else if(delta < 525600) {
+        var time = parseInt(delta /  43200);
+        callback(time + ' months ago');
+    } else if(525600 < delta) {
+        var time = parseInt(delta /  525600);
+        callback(time + ' years ago');
     }
 }
 

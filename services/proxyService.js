@@ -32,20 +32,28 @@ function getAllProxies(cb) {
     }).then(function(result) {
         var arrSendData = [];
 
-        for(var obj of result) {
-            var date = new Date(obj.dataValues.expire_date);
-            arrSendData.push({
-                id: obj.dataValues.id,
-                url: 'http://' + obj.dataValues.url,
-                expireDate: (date.getMonth()+1) + '/'+date.getDate() +'/' + date.getFullYear(),
-                usage: obj.dataValues.state
-            });
-        }
+        if(result.length > 0) {
+            for(var obj of result) {
+                var date = new Date(obj.dataValues.expire_date);
+                arrSendData.push({
+                    id: obj.dataValues.id,
+                    url: 'http://' + obj.dataValues.url,
+                    expireDate: (date.getMonth()+1) + '/'+date.getDate() +'/' + date.getFullYear(),
+                    usage: obj.dataValues.state
+                });
+            }
 
-        cb(arrSendData);
-        arrSendData = [];
+            cb(arrSendData);
+            arrSendData = [];
+        } else {
+            cb(arrSendData);
+        }
+        
+
+        
     }).catch(function(error) {
         console.log('Get all proxy error: ' + error);
+        console.log(error);
     });
 }
 
