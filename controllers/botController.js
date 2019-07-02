@@ -214,20 +214,23 @@ BotController.createNewBot = function(req, res) {
         arrBotProcessName.push(req.body.botId);
 
         arrBotProcess[botNum].on('message', function(data) {
-            if(data.type == 1 && data.flag == true) {
-                BotService.updateBotState(req.body.botId, function(cb) {
-                    if(cb.flag == true) {
-                        botNum = botNum + 1;
-                        res.json(cb);
-                    } else {
-                        res.json(cb);
-                    };
-                });
-            } else {
-                res.json({
-                    flag: false,
-                    message: data.error
-                });
+            if(data.type == 1 ) {
+                if(data.flag == true) {
+                    BotService.updateBotState(req.body.botId, function(cb) {
+                        if(cb.flag == true) {
+                            botNum = botNum + 1;
+                            res.json(cb);
+                        } else {
+                            res.json(cb);
+                        };
+                    });
+                } else {
+                    res.json({
+                        flag: false,
+                        message: 'Challenge required'
+                    });
+                }
+                
             }
         });
 
@@ -363,11 +366,18 @@ BotController.changeBotStatus = function(req, res) {
                     for(var i = 0; i < arrBotProcessName.length; i++) {    
                         if(arrBotProcessName[i] == req.body.botId) {
                             arrBotProcess[i].on('message', function(data) {
-                                if(data.type == 4 && data.flag == true) {
-                                    res.json({
-                                        flag: true,
-                                        message: 'Successfully paused your bot!'
-                                    });
+                                if(data.type == 4 ) {
+                                    if(data.flag == true) {
+                                        res.json({
+                                            flag: true,
+                                            message: 'Successfully paused your bot!'
+                                        });
+                                    } else {
+                                        res.json({
+                                            flag: false,
+                                            message: 'Challenge required!'
+                                        });
+                                    }
                                 }
                             });
 
@@ -398,11 +408,18 @@ BotController.changeBotStatus = function(req, res) {
                         for(var i = 0; i < arrBotProcessName.length; i++) {    
                             if(arrBotProcessName[i] == req.body.botId) {
                                 arrBotProcess[i].on('message', function(data) {
-                                    if(data.type == 3 && data.flag == true) {
-                                        res.json({
-                                            flag: true,
-                                            message: 'Successfully started your bot!'
-                                        });
+                                    if(data.type == 3) {
+                                        if(data.flag == true) {
+                                            res.json({
+                                                flag: true,
+                                                message: 'Successfully started your bot!'
+                                            });
+                                        } else {
+                                            res.json({
+                                                flag: false,
+                                                message: 'Challenge required!'
+                                            });
+                                        }
                                     }
                                 });
 

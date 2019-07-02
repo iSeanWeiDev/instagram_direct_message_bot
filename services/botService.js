@@ -19,7 +19,7 @@ var sequelize = new Sequelize('postgres://postgres:Rango941001top@@@@localhost:5
 var BotService = {};
 
 // Define BotService Sub Functions.
-BotService.validateBot = validateBot;
+BotService.validateBot = validateBot; //
 BotService.saveBotDetail = saveBotDetail;
 BotService.getProxy = getProxy;
 BotService.saveFilters = saveFilters;
@@ -30,18 +30,18 @@ BotService.saveSetting = saveSetting;
 BotService.getBotProperties = getBotProperties;
 BotService.updateBotState = updateBotState;
 BotService.getMediaIdByHashTag= getMediaIdByHashTag;
-BotService.followUserById = followUserById;
+BotService.followUserById = followUserById; //
 BotService.saveFollowUserHistory = saveFollowUserHistory;
-BotService.commitByMediaId = commitByMediaId;
+BotService.commitByMediaId = commitByMediaId; //
 BotService.saveCommitHistory = saveCommitHistory;
-BotService.getInboxById = getInboxById;
+BotService.getInboxById = getInboxById; //
 BotService.getCountOfReplyHistoriesById = getCountOfReplyHistoriesById;
-BotService.directMessageToClient = directMessageToClient;
+BotService.directMessageToClient = directMessageToClient; //  
 BotService.saveReplyHistory = saveReplyHistory;
-BotService.getClientIdList = getClientIdList;
+BotService.getClientIdList = getClientIdList; //
 BotService.saveFUMHistory = saveFUMHistory;
 BotService.getFollowerList = getFollowerList;
-BotService.unFollowUserbyId = unFollowUserbyId;
+BotService.unFollowUserbyId = unFollowUserbyId; //
 BotService.getAllBotsDetail = getAllBotsDetail;
 BotService.deleteBotById = deleteBotById;
 // ==> bot management part functions
@@ -57,6 +57,9 @@ BotService.updateFiltersByBotid = updateFiltersByBotid;
 BotService.updateCommentsByBotid = updateCommentsByBotid;
 BotService.updateRepliesByBotid = updateRepliesByBotid;
 BotService.updateFUMsByBotid = updateFUMsByBotid;
+
+// challenge
+BotService.getChallengeById = getChallengeById; 
 
 // Import Data Models
 var ProxyModel = require('../models').Proxy;
@@ -108,6 +111,10 @@ function validateBot(name, password, proxy, cb) {
             }
         })
         .catch(function(reject) {
+            // getChallengeById(reject, response => {
+            //     console.log(response);
+            // });
+
             cb({
                 flag: false,
                 type: reject.name
@@ -611,9 +618,25 @@ function getMediaIdByHashTag(session, hashtag, cb) {
 function followUserById(session, clientId, cb) {
     Client.Relationship.approvePending(session, clientId)
         .then(function(result) {
-            cb({
-                data: result.friendship_status.following
-            });
+            if(result.friendship_status.following == false) {
+                Client.Relationship.create(session, clientId)
+                    .then(function(follow) {
+                        cb({
+                            data: follow.params
+                        });
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                    })
+            } 
+            
+        })
+        .catch(function(error) {
+            // getChallengeById(error, response => {
+            //     console.log(response);
+            // });
+
+            console.log(error);
         })
 }
 
@@ -661,6 +684,11 @@ function commitByMediaId(session, mediaId, commentText, cb) {
         })
         .catch(function(error) {
             console.log('Commit to post by media id error: ' + error);
+            // getChallengeById(error, response => {
+            //     console.log(response);
+            // });
+
+            
             cb({
                 flag: false
             })
@@ -741,6 +769,12 @@ function getInboxById(session, cb) {
 
         arrSendData = [];
     });
+
+    // pFeed.catch(function(error) {
+    //     getChallengeById(error, response => {
+    //         console.log(response);
+    //     });
+    // })
 }
 
 /**
@@ -789,6 +823,12 @@ function directMessageToClient(session, clientId, replyText, cb) {
             cb(sendData);
         })
         .catch(function(error) {
+
+            // getChallengeById(error, response => {
+            //     console.log(response);
+            // });
+
+
             console.log('Direct Message Error: ' + error);
         });
 }
@@ -841,6 +881,10 @@ function getClientIdList(botId, cb) {
         }
         
     }).catch(function(error) {
+
+        // getChallengeById(error, response => {
+        //     console.log(response);
+        // });
         console.log('Get Client ID list error: ' + error);
     });
 }
@@ -917,7 +961,9 @@ function unFollowUserbyId(id, cb) {
         }
     }).catch(function(error) {
         console.log('Update follow history error: ' + error);
-
+        // getChallengeById(error, response => {
+        //     console.log(response);
+        // });
         cb({
             flag: false
         });
@@ -1810,6 +1856,24 @@ function updateFUMsByBotid(botId, data, cb) {
     });
 }
 
+
+/**
+ * 
+ * @param {*} error 
+ */
+function getChallengeById(error, cb) {
+    Client.Web.Challenge.resolve(error)
+    .then(function(challenge) {
+        console.log("---------------------------");
+        console.log(challenge.json);
+        console.log("---------------------------");
+        // if(challenge.json.step_data.form_type == "email") {
+        //     console.log('Email verification')
+        // }
+
+        cb(challenge);
+    });
+}
 /**
  * @description
  * Convert time to 

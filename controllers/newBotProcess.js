@@ -8,7 +8,7 @@ var gSession = {};
 var gMediaIdList = [];
 var gStartCommentTime = 0; // initialize the start time for comment
 var gStartDirectMessageTime = 0; // initialize the start time for direct message
-var gStartUnFollowTime = 0; // initialize the start time for un-folow.
+var gStartUnFollowTime = (new Date()).getTime(); // initialize the start time for un-folow.
 var gIndexOfFUM = 0;
 
 
@@ -65,7 +65,7 @@ process.on('message', function(data) {
                 gSession = result.session;
             } else {
                 process.send({
-                    type: 2,
+                    type: 3,
                     flag: false,
                     error: result.type
                 });
@@ -134,8 +134,7 @@ setInterval(() => {
 
                             // follow users by client id.
                             BotService.followUserById(gSession, followClientId, function(followCB) {
-                                console.log(followCB);
-                                if(followCB.data == true) {
+                                if(followCB.data.outgoing_request == true) {
                                     var followHistoryData = {
                                         bot_id: botId,
                                         client_id: followClientId,
@@ -260,39 +259,41 @@ setInterval(() => {
              */
             var countOfFUM = arrFUM.length;
             var currFUMTime = (new Date()).getTime(); // milisecond.
-            var fumStartTime = (new Date(arrFUM[gIndexOfFUM].start_date)).getTime();
-            if(currFUMTime < fumStartTime && gIndexOfFUM < countOfFUM) {
-                BotService.getClientIdList(botId, function(arrClientList) {
-                    var countOfArrClientList = arrClientList.length;
-
-                    if(countOfArrClientList > 0) {
-                        async function asyncSendFUMByClientId() {
-                            countOfArrClientList --;
-                            var fumClientId = arrClientList[countOfArrClientList];
-                            var fumText = arrFUM[gIndexOfFUM].text;
-
-                            BotService.directMessageToClient(gSession, fumClientId, fumText, function(response) {
-                                var fumHistoryData = {
-                                    bot_id: botId,
-                                    fum_id: arrFUM[gIndexOfFUM].id,
-                                    client_id: response.id
-                                }
-
-                                BotService.saveFUMHistory(fumHistoryData, function(cb) {
-                                    console.log(cb);
+            if(gIndexOfFUM < countOfFUM) {
+                var fumStartTime = (new Date(arrFUM[gIndexOfFUM].start_date)).getTime();
+                if(currFUMTime > fumStartTime ) {
+                    BotService.getClientIdList(botId, function(arrClientList) {
+                        var countOfArrClientList = arrClientList.length;
+    
+                        if(countOfArrClientList > 0) {
+                            async function asyncSendFUMByClientId() {
+                                countOfArrClientList --;
+                                var fumClientId = arrClientList[countOfArrClientList];
+                                var fumText = arrFUM[gIndexOfFUM].text;
+    
+                                BotService.directMessageToClient(gSession, fumClientId, fumText, function(response) {
+                                    var fumHistoryData = {
+                                        bot_id: botId,
+                                        fum_id: arrFUM[gIndexOfFUM].id,
+                                        client_id: response.id
+                                    }
+    
+                                    BotService.saveFUMHistory(fumHistoryData, function(cb) {
+                                        console.log(cb);
+                                    });
                                 });
-                            });
-
-                            if(countOfArrClientList > 0) {
-                                asyncSendFUMByClientId();
+    
+                                if(countOfArrClientList > 0) {
+                                    asyncSendFUMByClientId();
+                                }
                             }
+    
+                            asyncSendFUMByClientId();
                         }
-
-                        asyncSendFUMByClientId();
-                    }
-                });
-                // increase the follow up messager
-                gIndexOfFUM =  gIndexOfFUM + 1;
+                    });
+                    // increase the follow up messager
+                    gIndexOfFUM =  gIndexOfFUM + 1;
+                }
             }
 
             /**
@@ -514,39 +515,41 @@ setInterval(() => {
              */
             var countOfFUM = arrFUM.length;
             var currFUMTime = (new Date()).getTime(); // milisecond.
-            var fumStartTime = (new Date(arrFUM[gIndexOfFUM].start_date)).getTime();
-            if(currFUMTime < fumStartTime && gIndexOfFUM < countOfFUM) {
-                BotService.getClientIdList(botId, function(arrClientList) {
-                    var countOfArrClientList = arrClientList.length;
-
-                    if(countOfArrClientList > 0) {
-                        async function asyncSendFUMByClientId() {
-                            countOfArrClientList --;
-                            var fumClientId = arrClientList[countOfArrClientList];
-                            var fumText = arrFUM[IndexOfFUM].text;
-
-                            BotService.directMessageToClient(gSession, fumClientId, fumText, function(response) {
-                                var fumHistoryData = {
-                                    bot_id: botId,
-                                    fum_id: arrFUM[IndexOfFUM].id,
-                                    client_id: response.id
-                                }
-
-                                BotService.saveFUMHistory(fumHistoryData, function(cb) {
-                                    console.log(cb);
+            if(gIndexOfFUM < countOfFUM) {
+                var fumStartTime = (new Date(arrFUM[gIndexOfFUM].start_date)).getTime();
+                if(currFUMTime > fumStartTime) {
+                    BotService.getClientIdList(botId, function(arrClientList) {
+                        var countOfArrClientList = arrClientList.length;
+    
+                        if(countOfArrClientList > 0) {
+                            async function asyncSendFUMByClientId() {
+                                countOfArrClientList --;
+                                var fumClientId = arrClientList[countOfArrClientList];
+                                var fumText = arrFUM[IndexOfFUM].text;
+    
+                                BotService.directMessageToClient(gSession, fumClientId, fumText, function(response) {
+                                    var fumHistoryData = {
+                                        bot_id: botId,
+                                        fum_id: arrFUM[IndexOfFUM].id,
+                                        client_id: response.id
+                                    }
+    
+                                    BotService.saveFUMHistory(fumHistoryData, function(cb) {
+                                        console.log(cb);
+                                    });
                                 });
-                            });
-
-                            if(countOfArrClientList > 0) {
-                                asyncSendFUMByClientId();
+    
+                                if(countOfArrClientList > 0) {
+                                    asyncSendFUMByClientId();
+                                }
                             }
+    
+                            asyncSendFUMByClientId();
                         }
-
-                        asyncSendFUMByClientId();
-                    }
-                });
-                // increase the follow up messager
-                gIndexOfFUM =  gIndexOfFUM + 1;
+                    });
+                    // increase the follow up messager
+                    gIndexOfFUM =  gIndexOfFUM + 1;
+                }
             }
 
             /**
@@ -772,41 +775,46 @@ setInterval(() => {
              */
             var countOfFUM = arrFUM.length;
             var currFUMTime = (new Date()).getTime(); // milisecond.
-            var fumStartTime = (new Date(arrFUM[gIndexOfFUM].start_date)).getTime();
-            if(currFUMTime < fumStartTime && gIndexOfFUM < countOfFUM) {
-                BotService.getClientIdList(botId, function(arrClientList) {
-                    var countOfArrClientList = arrClientList.length;
+            if(gIndexOfFUM < countOfFUM) {
 
-                    if(countOfArrClientList > 0) {
-                        async function asyncSendFUMByClientId() {
-                            countOfArrClientList --;
-                            var fumClientId = arrClientList[countOfArrClientList];
-                            var fumText = arrFUM[IndexOfFUM].text;
+                var fumStartTime = (new Date(arrFUM[gIndexOfFUM].start_date)).getTime();
 
-                            BotService.directMessageToClient(gSession, fumClientId, fumText, function(response) {
-                                var fumHistoryData = {
-                                    bot_id: botId,
-                                    fum_id: arrFUM[IndexOfFUM].id,
-                                    client_id: response.id
-                                }
-
-                                BotService.saveFUMHistory(fumHistoryData, function(cb) {
-                                    console.log(cb);
+                if(currFUMTime > fumStartTime ) {
+                    BotService.getClientIdList(botId, function(arrClientList) {
+                        var countOfArrClientList = arrClientList.length;
+    
+                        if(countOfArrClientList > 0) {
+                            async function asyncSendFUMByClientId() {
+                                countOfArrClientList --;
+                                var fumClientId = arrClientList[countOfArrClientList];
+                                var fumText = arrFUM[IndexOfFUM].text;
+    
+                                BotService.directMessageToClient(gSession, fumClientId, fumText, function(response) {
+                                    var fumHistoryData = {
+                                        bot_id: botId,
+                                        fum_id: arrFUM[IndexOfFUM].id,
+                                        client_id: response.id
+                                    }
+    
+                                    BotService.saveFUMHistory(fumHistoryData, function(cb) {
+                                        console.log(cb);
+                                    });
                                 });
-                            });
-
-                            if(countOfArrClientList > 0) {
-                                asyncSendFUMByClientId();
+    
+                                if(countOfArrClientList > 0) {
+                                    asyncSendFUMByClientId();
+                                }
                             }
+    
+                            asyncSendFUMByClientId();
                         }
-
-                        asyncSendFUMByClientId();
-                    }
-                });
-                // increase the follow up messager
-                gIndexOfFUM =  gIndexOfFUM + 1;
+                    });
+                    // increase the follow up messager
+                    gIndexOfFUM =  gIndexOfFUM + 1;
+                }
+    
             }
-
+            
             /**
              * @description
              * un-follow logic per day
@@ -852,7 +860,7 @@ setInterval(() => {
             if(flagOfIsActivated == false) {
                 process.send({
                     type: 4,
-                    flag: false
+                    flag: true
                 });
                 flagOfIsActivated = true;
             }
