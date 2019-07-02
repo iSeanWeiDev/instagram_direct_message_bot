@@ -121,113 +121,126 @@ $(document).ready(function() {
 /* ================================================ */
     this.changStatus = function(id) {
         var getBotStatus = $('button#change-status-'+id).children().attr('id');
-        if(getBotStatus == 'pause'+id) {
-            $.confirm({
-                title: '<span class="text-danger"><strong><i class="mdi mdi-robot-industrial"></i> &nbsp; Wait! (~_^)</strong><span>',
-                content: '<span class="text-primary">Are you sure you want to pause the bot?</span>',
-                buttons: {
-                    confirm: function () {
-                        var sendData = {
-                            botId: id,
-                            is_activated: 'Y' // N: paused, Y: started
+
+        if(id > 0) {
+            if(getBotStatus == 'pause'+id) {
+                $.confirm({
+                    title: '<span class="text-danger"><strong><i class="mdi mdi-robot-industrial"></i> &nbsp; Wait! (~_^)</strong><span>',
+                    content: '<span class="text-primary">Are you sure you want to pause the bot?</span>',
+                    buttons: {
+                        confirm: function () {
+                            var sendData = {
+                                botId: id,
+                                is_activated: 'Y' // N: paused, Y: started
+                            }
+                            
+                            $('button#change-status-'+id).children().remove();
+
+                            $('button#change-status-'+id).append(`<h7 id="play`+ id + `" class="m-0 p-0">
+                                                                                    <i class="fa fa-play"></i>
+                                                                                    Play
+                                                                                </h7>`);
+                            $.ajax({
+                                method: 'POST',
+                                url: '/bots/change/status',
+                                data: sendData
+                            }).done(function(response) {
+                                console.log(response);
+                                if(response && response.flag == true) {
+                                    mkNoti(
+                                        'Your Bot Paused!',
+                                        response.message,
+                                        {
+                                            status:'success'
+                                        }
+                                    );
+    
+                                    setTimeout(() => {
+                                        window.open('allbots', '_self');
+                                    }, 500);
+                                } else {
+                                    mkNoti(
+                                        'Pause Bot Failure!',
+                                        response.message,
+                                        {
+                                            status:'danger'
+                                        }
+                                    );
+                                }
+                            });
+                        },
+                        cancel: function () {
+                            mkNoti(
+                                'Pause Bot canceled!',
+                                'Check your bot state and Make sure why you want pause the bot.',
+                                {
+                                    status:'info'
+                                }
+                            );
                         }
-                        
-                        $.ajax({
-                            method: 'POST',
-                            url: '/bots/change/status',
-                            data: sendData
-                        }).done(function(response) {
-                            if(response && response.flag == true) {
-                                $('button#change-status-'+id).children().remove();
-
-                                $('button#change-status-'+id).append(`<h7 id="play`+ id + `" class="m-0 p-0">
-                                                                                        <i class="fa fa-play"></i>
-                                                                                        Play
-                                                                                    </h7>`);
-                                mkNoti(
-                                    'Your Bot Paused!',
-                                    response.message,
-                                    {
-                                        status:'success'
-                                    }
-                                );
-                            } else {
-                                mkNoti(
-                                    'Pause Bot Failure!',
-                                    response.message,
-                                    {
-                                        status:'danger'
-                                    }
-                                );
-                            }
-                        });
-                    },
-                    cancel: function () {
-                        mkNoti(
-                            'Pause Bot canceled!',
-                            'Check your bot state and Make sure why you want pause the bot.',
-                            {
-                                status:'info'
-                            }
-                        );
                     }
-                }
-            });
-        } else {
+                });
+            } else {
+                $.confirm({
+                    title: '<span class="text-success"><strong><i class="mdi mdi-robot-industrial"></i> &nbsp; Wait! (^_^)</strong><span>',
+                    content: '<span class="text-primary">Are you sure you want to play the bot?</span>',
+                    buttons: {
+                        confirm: function () {
+                            $('button#change-status-'+id).children().remove();
 
-            $.confirm({
-                title: '<span class="text-success"><strong><i class="mdi mdi-robot-industrial"></i> &nbsp; Wait! (^_^)</strong><span>',
-                content: '<span class="text-primary">Are you sure you want to play the bot?</span>',
-                buttons: {
-                    confirm: function () {
-                        var sendData = {
-                            botId: id,
-                            is_activated: 'N' // N: paused, Y: started
+                            $('button#change-status-'+id).append(`<h7 id="pause`+ id + `" class="m-0 p-0">
+                                                                                    <i class="fa fa-pause"></i>
+                                                                                    Pause
+                                                                                </h7>`);
+                            var sendData = {
+                                botId: id,
+                                is_activated: 'N' // N: paused, Y: started
+                            }
+                            
+                            $.ajax({
+                                method: 'POST',
+                                url: '/bots/change/status',
+                                data: sendData
+                            }).done(function(response) {
+                                console.log(response);
+
+                                if(response && response.flag == true) {
+                                    mkNoti(
+                                        'Your Bot Activity Started!',
+                                        response.message,
+                                        {
+                                            status:'success'
+                                        }
+                                    );
+    
+                                    setTimeout(() => {
+                                        window.open('allbots', '_self');
+                                    }, 500);
+                                } else {
+                                    mkNoti(
+                                        'Start Bot Failure!',
+                                        response.message,
+                                        {
+                                            status:'danger'
+                                        }
+                                    );
+                                }
+                            });
+    
+                            
+                        },
+                        cancel: function () {
+                            mkNoti(
+                                'Start Bot canceled!',
+                                'Check your bot state and Make sure why you want pause the bot.',
+                                {
+                                    status:'info'
+                                }
+                            );
                         }
-                        
-                        $.ajax({
-                            method: 'POST',
-                            url: '/bots/change/status',
-                            data: sendData
-                        }).done(function(response) {
-                            if(response && response.flag == true) {
-                                $('button#change-status-'+id).children().remove();
-
-                                $('button#change-status-'+id).append(`<h7 id="pause`+ id + `" class="m-0 p-0">
-                                                                                        <i class="fa fa-pause"></i>
-                                                                                        Pause
-                                                                                    </h7>`);
-                                mkNoti(
-                                    'Your Bot Activity Started!',
-                                    response.message,
-                                    {
-                                        status:'success'
-                                    }
-                                );
-                            } else {
-                                mkNoti(
-                                    'Start Bot Failure!',
-                                    response.message,
-                                    {
-                                        status:'danger'
-                                    }
-                                );
-                            }
-                        });
-
-                        
-                    },
-                    cancel: function () {
-                        mkNoti(
-                            'Start Bot canceled!',
-                            'Check your bot state and Make sure why you want pause the bot.',
-                            {
-                                status:'info'
-                            }
-                        );
                     }
-                }
-            });
+                });
+            }
         }
     }
 });

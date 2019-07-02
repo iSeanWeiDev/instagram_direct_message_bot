@@ -196,7 +196,7 @@ function saveBotDetail(data, proxyData, cb) {
         .catch(function(error) {
             console.log('Create new bot error: ' + error);
 
-            res.json({
+            cb({
                 flag: false,
                 message: 'Server connection error!'
             });
@@ -216,7 +216,7 @@ function getProxy(cb) {
                             FROM
                                 "public"."Proxies" AS A
                             WHERE
-                                A.state < 4
+                                A.state < 3
                                 AND A."expire_date" > DATE(now())
                                 AND A."is_deleted" = 'N'
                         ) AA
@@ -571,19 +571,26 @@ function getMediaIdByHashTag(session, hashtag, cb) {
     pFeed.then(function(results) {
         var arrMediaIdList = [];
 
-        for(var obj of results) {
-            arrMediaIdList.push({
-                clientId: obj.caption.user_id,
-                mediaId: obj.caption.media_id
+        if(results.length > 0) {
+            for(var obj of results) {
+                arrMediaIdList.push({
+                    clientId: obj.caption.user_id,
+                    mediaId: obj.caption.media_id
+                });
+            }
+    
+            cb({
+                flag: true,
+                data: arrMediaIdList
+            });
+    
+            arrMediaIdList = [];
+        } else {
+            cb({
+                flag: false,
+                data: arrMediaIdList
             });
         }
-
-        cb({
-            flag: true,
-            data: arrMediaIdList
-        });
-
-        arrMediaIdList = [];
     }).catch(function(error) {
         console.log('Get Media Id by hashTag error: ' + error);
 
@@ -818,16 +825,21 @@ function getClientIdList(botId, cb) {
         where: {
             bot_id: botId
         }
-    }).then(function(result) { 
+    }).then(function(result) {
         var arrClientId = [];
 
-        for(var obj of result) {
-            arrClientId.push(obj.dataValues.client_id);
+        if(result.length > 0) {
+            for(var obj of result) {
+                arrClientId.push(obj.dataValues.client_id);
+            }
+    
+            cb(arrClientId);
+    
+            arrClientId = [];
+        } else {
+            cb(arrClientId);
         }
-
-        cb(arrClientId);
-
-        arrClientId = [];
+        
     }).catch(function(error) {
         console.log('Get Client ID list error: ' + error);
     });

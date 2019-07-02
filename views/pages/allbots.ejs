@@ -105,7 +105,7 @@
                                         <button type="button" 
                                             class="btn btn-lg btn-warning btn-rounded pl-3 pt-2 pr-3 pb-2 mb-2"
                                             data-toggle="modal" 
-                                            data-target="#challengeModal">
+                                            data-target="#challengeModal<%= obj.bot[0].id %>">
                                             <h7 class="m-0 p-0">
                                                 <i class="fa fa-cogs"></i>
                                                 Challenge
@@ -435,11 +435,11 @@
                                 <!-- Begin state modal -->
 
                                 <!-- Begin challenge modal -->
-                                <div class="modal fade" id="challengeModal" tabindex="-1" role="dialog" aria-labelledby="challengeModalLabel" aria-hidden="true">
+                                <div class="modal fade" id="challengeModal<%= obj.bot[0].id %>" tabindex="-1" role="dialog" aria-labelledby="challengeModal<%= obj.bot[0].id %>Label" aria-hidden="true">
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="challengeModalLabel">Callenge bot modal</h5>
+                                            <h5 class="modal-title" id="challengeModal<%= obj.bot[0].id %>Label">Callenge bot modal</h5>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                             </button>
