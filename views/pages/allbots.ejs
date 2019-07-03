@@ -438,19 +438,100 @@
                                 <div class="modal fade" id="challengeModal<%= obj.bot[0].id %>" tabindex="-1" role="dialog" aria-labelledby="challengeModal<%= obj.bot[0].id %>Label" aria-hidden="true">
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="challengeModal<%= obj.bot[0].id %>Label">Callenge bot modal</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            ...
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                            <button type="button" class="btn btn-primary">Save changes</button>
-                                        </div>
+                                            <div class="modal-body">
+                                                <div class="form-group">
+                                                    <h3 class="modal-title" id="challengeModal<%= obj.bot[0].id %>Label">
+                                                        <b class="text-primary">
+                                                            Callenge bot modal
+                                                        </b>
+                                                    </h3>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="card card-body p-3">
+                                                            <div class="text-center">
+                                                                <h4 class="text-danger">
+                                                                    <strong>
+                                                                        Add Your Phone Number
+                                                                    </strong>
+                                                                </h4>
+                                                                <label for="">
+                                                                    Help us keep the Instagram community safe by entering phone number. 
+                                                                    We will text you a security code
+                                                                </label>
+                                                            </div>
+                                                            <div class="input-group">
+                                                                <input id="challenge-phone-<%= obj.bot[0].id %>" type="number" class="form-control form-control-lg" placeholder="&nbsp; Input your phone number." aria-label="Please input your phone number." aria-describedby="basic-addon2" autofocus required>
+                                                                <div class="input-group-append">
+                                                                    <button 
+                                                                        onclick="challengePhone(<%= obj.bot[0].id %>)" 
+                                                                        type="button" 
+                                                                        class="btn btn-raised btn-success" 
+                                                                        data-toggle="collapse" 
+                                                                        href="#challenge" 
+                                                                        role="button" 
+                                                                        aria-expanded="false"
+                                                                        aria-controls="challenge">
+                                                                        Send
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                            <div class="collapse" id="challenge">
+                                                                <div class="form-group text-center">
+                                                                    <div class="form-group pt-3">
+                                                                        <h5>
+                                                                            Input your verification code.
+                                                                        </h5>
+                                                                    </div>
+                                                                    <div class="input-group">
+                                                                        <input id="verify-phone-<%= obj.bot[0].id %>" type="number" class="form-control form-control-lg" placeholder="&nbsp; Input your challenge code." aria-label="Input your challenge code." aria-describedby="basic-addon3" autofocus required>
+                                                                        <div class="input-group-append">
+                                                                            <botton
+                                                                                onclick="verifyPhone(<%= obj.bot[0].id %>)" 
+                                                                                class="btn btn-raised btn-success"
+                                                                                aria-expanded="false"
+                                                                                aria-controls="challenge">
+                                                                                Challenge
+                                                                            </botton>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="card card-body p-3">
+                                                            <div class="text-center">
+                                                                <h4 class="text-facebook">
+                                                                    <strong>
+                                                                        Verify your email
+                                                                    </strong>
+                                                                </h4>
+                                                                <label for="">
+                                                                    To secure your account, we'll send you a security code to verify your identity. 
+                                                                    How do you want to receive your code?
+                                                                </label>
+                                                            </div>
+                                                            <div class="input-group">
+                                                                <input id="challenge-email-<%= obj.bot[0].id %>" type="number" 
+                                                                    class="form-control form-control-lg" 
+                                                                    placeholder="&nbsp; Input your verification code." 
+                                                                    aria-label="Please input your verification code." 
+                                                                    aria-describedby="basic-addon2" 
+                                                                    autofocus required>
+                                                                <div class="input-group-append">
+                                                                    <button 
+                                                                        onclick="challengeEmail(<%= obj.bot[0].id %>)" 
+                                                                        type="button" 
+                                                                        class="btn btn-raised btn-success" >
+                                                                        Send
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

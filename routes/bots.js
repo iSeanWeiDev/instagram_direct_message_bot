@@ -27,5 +27,8 @@ router.post('/get/init', BotController.getDashboardInitData);
 router.post('/send/message', BotController.sendMessage);
 router.post('/change/status', BotController.changeBotStatus);
 router.post('/update', BotController.updateBot);
+router.post('/challenge/send/phone', BotController.challengeInputPhone);
+router.post('/challenge/verify/phone', BotController.challengePhoneVerify);
+router.post('/challenge/verify/email', BotController.challengeEmailVerify);
 
 module.exports = router;

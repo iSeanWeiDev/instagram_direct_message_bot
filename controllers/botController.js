@@ -471,5 +471,32 @@ BotController.updateBot = function(req, res) {
     // });
 }
 
+// challenge using phone number.
+BotController.challengeInputPhone = function(req, res) {
+    console.log(req.body);
+     res.json({
+         flag: true,
+         message: 'Inputed your phone number'
+     });
+}
+
+// challenge verify phone number with verify code.
+BotController.challengePhoneVerify = function(req, res) {
+    console.log(req.body);
+    res.json({
+        flag: true,
+        message: 'Verified your bot by phone'
+    });
+}
+
+// challenge verify email with verify code.
+BotController.challengeEmailVerify = function(req, res) {
+    console.log(req.body);
+    res.json({
+        flag: true,
+        message: 'Verified your bot by email'
+    });
+}
+
 // Export module with UserController.
 module.exports = BotController;

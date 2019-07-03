@@ -18,7 +18,6 @@ $(document).ready(function() {
     var userId = $('input#logedin-user-id');
 
 /* ================================================ */
-
     // Delete bot by id
     this.deleteBot = function(id) {
         var sendData = {
@@ -55,7 +54,7 @@ $(document).ready(function() {
         });
     }
 /* ================================================ */
-
+    // update the bot by id
     this.updateBot = function(id) {
         var messageDelay = $('input#message-delay-'+id),
             maxComment = $('input#max-comment-'+id),
@@ -119,6 +118,7 @@ $(document).ready(function() {
         });
     }
 /* ================================================ */
+    // change status by id
     this.changStatus = function(id) {
         var getBotStatus = $('button#change-status-'+id).children().attr('id');
 
@@ -243,4 +243,115 @@ $(document).ready(function() {
             }
         }
     }
+
+/* ================================================ */ 
+    // challenge phone by id
+    this.challengePhone = function(id) {
+        var challengePhoneNumber = $('input#challenge-phone-'+id+'.form-control').val();
+
+        if(id > 0 && challengePhoneNumber > 0) {
+            var sendData = {
+                botId: id,
+                phone_number: challengePhoneNumber
+            }
+
+            $.ajax({
+                method: 'POST',
+                url: '/bots/challenge/send/phone',
+                data: sendData
+            }).done(function(response) {
+                if(response && response.flag == true) {
+                    mkNoti(
+                        'Congratration!',
+                        response.message,
+                        {
+                            status:'success'
+                        }
+                    );
+                }
+            });
+        }
+        console.log(id, challengePhoneNumber);
+    }
+
+/* ================================================ */ 
+    // verify the phone by id
+    this.verifyPhone = function(id) {
+        var verifyPhoneCode = $('input#verify-phone-'+id+'.form-control').val();
+
+        if(id > 0) {
+            if(verifyPhoneCode.length == 6) {
+                var sendData = {
+                    botId: id,
+                    verifyCode: verifyPhoneCode
+                }
+    
+                $.ajax({
+                    method: 'POST',
+                    url: '/bots/challenge/verify/phone',
+                    data: sendData
+                }).done(function(response) {
+                    if(response && response.flag == true) {
+                        mkNoti(
+                            'Congratration!',
+                            response.message,
+                            {
+                                status:'success'
+                            }
+                        );
+                    } 
+                });
+            } else {
+                mkNoti(
+                    'Failure!',
+                    'Invalid verification code',
+                    {
+                        status:'danger'
+                    }
+                );
+            }
+            
+        }
+        console.log(id, verifyPhoneCode);
+    }
+
+/* ================================================ */ 
+    // challenge email by id
+    this.challengeEmail = function(id) {
+        var challengeEmailVerifyCode = $('input#challenge-email-'+id+'.form-control').val();
+        if(id > 0) {
+            if(challengeEmailVerifyCode.length == 6) {
+                var sendData = {
+                    botId: id,
+                    verifyCode: challengeEmailVerifyCode
+                }
+    
+                $.ajax({
+                    method: 'POST',
+                    url: '/bots/challenge/verify/email',
+                    data: sendData
+                }).done(function(response) {
+                    if(response && response.flag == true) {
+                        mkNoti(
+                            'Congratration!',
+                            response.message,
+                            {
+                                status:'success'
+                            }
+                        );
+                    }
+                });
+            } else {
+                mkNoti(
+                    'Failure!',
+                    'Invalid verification code',
+                    {
+                        status:'danger'
+                    }
+                );
+            }
+        }
+        console.log(id, challengeEmailVerifyCode);
+    }
+
 });
