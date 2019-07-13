@@ -114,7 +114,8 @@
                                     </div>
                                 </div>
                                 <!-- Begin Modal -->
-                                 <!-- Begin edit modal -->
+                            <% if(obj.fums.length > 0) { %>
+                                <!-- Begin edit modal -->
                                 <div class="modal  fade" id="editModal<%= obj.bot[0].id %>" tabindex="-1" role="dialog" aria-labelledby="editModal<%= obj.bot[0].id %>Label" aria-hidden="true">
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content allbot-edit-modal">
@@ -538,6 +539,7 @@
                                 <!-- Begin challenge modal -->
 
                                 <!-- End Modal -->
+                            <% } %>
                             </div>
                         </div>
                     <% } %>

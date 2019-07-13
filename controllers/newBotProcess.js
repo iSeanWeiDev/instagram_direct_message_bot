@@ -129,7 +129,7 @@ setInterval(() => {
                             
                             // save the comment history for next step.
                             BotService.saveCommitHistory(commitHistoryData, function(saveCommitHistoryData) {
-                                console.log("comment successed " + saveCommitHistoryData);
+                                //console.log("comment successed " + saveCommitHistoryData);
                             });
 
                             // follow users by client id.
@@ -143,7 +143,7 @@ setInterval(() => {
 
                                     // save follower history to database.
                                     BotService.saveFollowUserHistory(followHistoryData, function(historyCB) {
-                                        console.log(historyCB);
+                                        //console.log(historyCB);
                                     });
                                 }
                             });
