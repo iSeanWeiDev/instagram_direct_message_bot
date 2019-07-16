@@ -8,7 +8,8 @@
 'use strict';
 // Import npm modules.
 var fork = require('child_process').fork,
-    path = require('path');
+    path = require('path'),
+    Pusher = require('pusher');
 
 // Import project modules.
 var BotService = require('../services/botService');
@@ -40,29 +41,66 @@ BotController.validateBot = function(req, res) {
                 
                 BotService.validateBot(accountName, accountPass, autoProxyUrl, function(cb) {
                     if(cb.flag == false) {
-                        switch(cb.type) {
-                            case 'CheckpointError':
-                                res.json({
-                                    flag: false,
-                                    message: 'You need to login your user'
-                                });
-            
-                                break;
-                            case 'AuthenticationError':
-                                res.json({
-                                    flag: false,
-                                    message: 'Authentication Error, Please retype your user detail.'
-                                });
+                        BotService.getChallengeList(function (challengeList) {
+                            for(var obj of challengeList) {
+                                if(obj.dataValues.data == cb.type) {
+                                    var historyData = {
+                                        user_id: req.session.user.userId,
+                                        bot_id: -1,
+                                        bot_name: botName,
+                                        challenge_id: obj.dataValues.id,
+                                        state: 1
+                                    }
+                                    BotService.saveChallengeHistory(historyData, function (history) {
+                                        if(history == true) {
+                                            var pusher = new Pusher({
+                                                appId: process.env.PUSHER_APP_ID,
+                                                key: process.env.PUSHER_APP_KEY,
+                                                secret: process.env.PUSHER_APP_SECRET,
+                                                cluster: process.env.PUSHER_APP_CLUSTER
+                                            });
+                                            
+                                            var indexOfSendData = 'ToUser:'+req.session.user.userId;
+                    
+                                            var sendData = {
+                                                userId: req.session.user.userId,
+                                                botName: botName,
+                                                accountName: accountName,
+                                                type: cb.type
+                                            }
+                    
+                                            pusher.trigger('notifications', indexOfSendData, sendData, req.headers['x-socket-id']);
+
+                                            switch(cb.type) {
+                                                case 'CheckpointError':
+                                                    res.json({
+                                                        flag: false,
+                                                        message: 'You need to login your user'
+                                                    });
                                 
-                                break;
-                            case 'CreateError':
-                                res.json({
-                                    flag: false,
-                                    message: 'Creating Session Error.'
-                                });
-            
-                                break;
-                        }
+                                                    break;
+                                                case 'AuthenticationError':
+                                                    res.json({
+                                                        flag: false,
+                                                        message: 'Authentication Error, Please retype your user detail.'
+                                                    });
+                                                    
+                                                    break;
+                                                case 'CreateError':
+                                                    res.json({
+                                                        flag: false,
+                                                        message: 'Creating Session Error.'
+                                                    });
+                                
+                                                    break;
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                        
+                        
                     } else {
                         if(req.session.user.userId > 0) {
                             var newBotData = {
@@ -96,29 +134,65 @@ BotController.validateBot = function(req, res) {
     } else {
         BotService.validateBot(accountName, accountPass, proxyUrl, function(response) {
             if(response.flag == false) {
-                switch(cb.type) {
-                    case 'CheckpointError':
-                        res.json({
-                            flag: false,
-                            message: 'You need to login your user'
-                        });
-    
-                        break;
-                    case 'AuthenticationError':
-                        res.json({
-                            flag: false,
-                            message: 'Authentication Error, Please retype your user detail.'
-                        });
+                BotService.getChallengeList(function (challengeList) {
+                    for(var obj of challengeList) {
+                        if(obj.dataValues.data == cb.type) {
+                            var historyData = {
+                                user_id: req.session.user.userId,
+                                bot_id: -1,
+                                bot_name: botName,
+                                challenge_id: obj.dataValues.id,
+                                state: 1
+                            }
+
+                            BotService.saveChallengeHistory(historyData, function (history) {
+                                if(history == true) {
+                                    var pusher = new Pusher({
+                                        appId: process.env.PUSHER_APP_ID,
+                                        key: process.env.PUSHER_APP_KEY,
+                                        secret: process.env.PUSHER_APP_SECRET,
+                                        cluster: process.env.PUSHER_APP_CLUSTER
+                                    });
+                                    
+                                    var indexOfSendData = 'ToUser:'+req.session.user.userId;
+            
+                                    var sendData = {
+                                        userId: req.session.user.userId,
+                                        botName: botName,
+                                        accountName: accountName,
+                                        type: cb.type
+                                    }
+            
+                                    pusher.trigger('notifications', indexOfSendData, sendData, req.headers['x-socket-id']);
+
+                                    switch(cb.type) {
+                                        case 'CheckpointError':
+                                            res.json({
+                                                flag: false,
+                                                message: 'You need to login your user'
+                                            });
                         
-                        break;
-                    case 'CreateError':
-                        res.json({
-                            flag: false,
-                            message: 'Creating Session Error.'
-                        });
-    
-                        break;
-                }
+                                            break;
+                                        case 'AuthenticationError':
+                                            res.json({
+                                                flag: false,
+                                                message: 'Authentication Error, Please retype your user detail.'
+                                            });
+                                            
+                                            break;
+                                        case 'CreateError':
+                                            res.json({
+                                                flag: false,
+                                                message: 'Creating Session Error.'
+                                            });
+                        
+                                            break;
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
             } else {
                 if(req.session.user.userId > 0) {
                     var newBotData = {
@@ -138,6 +212,7 @@ BotController.validateBot = function(req, res) {
                     BotService.saveBotDetail(newBotData, proxyData, function(response) {
                          res.json(response);
                     });
+                    
                 } else {
                     res.json({
                         flag: false,
@@ -230,7 +305,40 @@ BotController.createNewBot = function(req, res) {
                         message: 'Challenge required'
                     });
                 }
-                
+            }
+
+            if(data.type == 5) {
+                if(data.flag == true) {
+                    console.log(data);
+                    // challenge part
+                    BotService.getChallengeList(function (challengeList) { 
+                        for(var obj of challengeList) {
+                            if(data.message == obj.message) {
+                                BotService.getBotPropertiesForChallenge(data.botId, function (cb) {
+                                    var pusher = new Pusher({
+                                        appId: process.env.PUSHER_APP_ID,
+                                        key: process.env.PUSHER_APP_KEY,
+                                        secret: process.env.PUSHER_APP_SECRET,
+                                        cluster: process.env.PUSHER_APP_CLUSTER
+                                    });
+                                    
+                                    var indexOfSendData = 'ToUser:'+req.session.user.userId;
+                                    
+                                    var sendData = {
+                                        userId: req.session.user.userId,
+                                        botId: data.botId,
+                                        botName: cb.bot_name,
+                                        accountName: cb.account_name,
+                                        accountImage: cb.account_image_url,
+                                        type: obj.type
+                                    }
+                              
+                                    pusher.trigger('notifications', indexOfSendData, sendData, req.headers['x-socket-id']);
+                                });
+                            }
+                        }
+                    });
+                }
             }
         });
 
@@ -354,6 +462,9 @@ BotController.sendMessage = function(req, res) {
 
 // change bot status
 BotController.changeBotStatus = function(req, res) {
+    var startFlag = true;
+    var pauseFlag = true;
+
     if(req.body.is_activated == 'Y') {
         if(req.body.botId) {
             var sendData = {
@@ -367,16 +478,21 @@ BotController.changeBotStatus = function(req, res) {
                         if(arrBotProcessName[i] == req.body.botId) {
                             arrBotProcess[i].on('message', function(data) {
                                 if(data.type == 4 ) {
-                                    if(data.flag == true) {
-                                        res.json({
-                                            flag: true,
-                                            message: 'Successfully paused your bot!'
-                                        });
-                                    } else {
-                                        res.json({
-                                            flag: false,
-                                            message: 'Challenge required!'
-                                        });
+                                    if(pauseFlag == true) {
+                                        if(data.flag == true) {
+                                            res.json({
+                                                flag: true,
+                                                message: 'Successfully paused your bot!'
+                                            });
+                                        } else {
+                                            res.json({
+                                                flag: false,
+                                                message: 'Challenge required!'
+                                            });
+                                        }
+
+                                        // initialize the flag for duplicated sending.
+                                        pauseFlag = false;
                                     }
                                 }
                             });
@@ -409,17 +525,21 @@ BotController.changeBotStatus = function(req, res) {
                             if(arrBotProcessName[i] == req.body.botId) {
                                 arrBotProcess[i].on('message', function(data) {
                                     if(data.type == 3) {
-                                        if(data.flag == true) {
-                                            res.json({
-                                                flag: true,
-                                                message: 'Successfully started your bot!'
-                                            });
-                                        } else {
-                                            res.json({
-                                                flag: false,
-                                                message: 'Challenge required!'
-                                            });
+                                        if(startFlag == true) {
+                                            if(data.flag == true) {
+                                                res.json({
+                                                    flag: true,
+                                                    message: 'Successfully started your bot!'
+                                                });
+                                            } else {
+                                                res.json({
+                                                    flag: false,
+                                                    message: 'Challenge required!'
+                                                });
+                                            }
                                         }
+                                        // initialize the flag for duplicated sending.
+                                        startFlag = false;
                                     }
                                 });
 

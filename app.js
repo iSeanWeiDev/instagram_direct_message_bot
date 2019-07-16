@@ -6,6 +6,7 @@
  * version 2.1.1
  */
 'use strict';
+require('dotenv').config();
 
 // Import npm modules.
 var createError = require('http-errors');

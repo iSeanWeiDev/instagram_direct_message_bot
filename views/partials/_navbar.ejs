@@ -52,43 +52,26 @@
       </div>
     </form>
     <ul class="navbar-nav ml-auto">
+      <!-- Begin Challenge notification -->
       <li class="nav-item dropdown">
         <a class="nav-link count-indicator" id="messageDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
           <i class="mdi mdi-bell-outline"></i>
-          <span class="count">7</span>
+          <span class="count" id="count-notification"></span>
         </a>
-        <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list pb-0" aria-labelledby="messageDropdown">
+        <div id="notification-dropdown-menu"
+          class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list pb-0" 
+          aria-labelledby="messageDropdown">
           <a class="dropdown-item py-3">
-            <p class="mb-0 font-weight-medium float-left">You have 7 unread mails </p>
-            <span class="badge badge-pill badge-primary float-right">View all</span>
+            <p id="notification-header-string"
+              class="mb-0 font-weight-medium float-left"> </p>
+            <span class="badge badge-pill badge-primary float-right p-2">View all</span>
           </a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item preview-item">
-            <div class="preview-thumbnail">
-              <img src="assets/images/faces/face10.jpg" alt="image" class="img-sm profile-pic"> </div>
-            <div class="preview-item-content flex-grow py-2">
-              <p class="preview-subject ellipsis font-weight-medium text-dark">Marian Garner </p>
-              <p class="font-weight-light small-text"> The meeting is cancelled </p>
-            </div>
-          </a>
-          <a class="dropdown-item preview-item">
-            <div class="preview-thumbnail">
-              <img src="assets/images/faces/face12.jpg" alt="image" class="img-sm profile-pic"> </div>
-            <div class="preview-item-content flex-grow py-2">
-              <p class="preview-subject ellipsis font-weight-medium text-dark">David Grey </p>
-              <p class="font-weight-light small-text"> The meeting is cancelled </p>
-            </div>
-          </a>
-          <a class="dropdown-item preview-item">
-            <div class="preview-thumbnail">
-              <img src="assets/images/faces/face1.jpg" alt="image" class="img-sm profile-pic"> </div>
-            <div class="preview-item-content flex-grow py-2">
-              <p class="preview-subject ellipsis font-weight-medium text-dark">Travis Jenkins </p>
-              <p class="font-weight-light small-text"> The meeting is cancelled </p>
-            </div>
-          </a>
         </div>
       </li>
+      <!-- End Challenge notification -->
+
+      <!-- Email notification -->
       <li class="nav-item dropdown">
         <a class="nav-link count-indicator" id="notificationDropdown" href="#" data-toggle="dropdown">
           <i class="mdi mdi-email-outline"></i>
@@ -150,3 +133,4 @@
     </button>
   </div>
 </nav>
+

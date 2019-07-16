@@ -42,6 +42,7 @@ BotService.getClientIdList = getClientIdList; //
 BotService.saveFUMHistory = saveFUMHistory;
 BotService.getFollowerList = getFollowerList;
 BotService.unFollowUserbyId = unFollowUserbyId; //
+BotService.updateFollowStatus = updateFollowStatus;
 BotService.getAllBotsDetail = getAllBotsDetail;
 BotService.deleteBotById = deleteBotById;
 // ==> bot management part functions
@@ -59,7 +60,9 @@ BotService.updateRepliesByBotid = updateRepliesByBotid;
 BotService.updateFUMsByBotid = updateFUMsByBotid;
 
 // challenge
-BotService.getChallengeById = getChallengeById; 
+BotService.getChallengeList = getChallengeList; 
+BotService.getBotPropertiesForChallenge = getBotPropertiesForChallenge;
+BotService.saveChallengeHistory = saveChallengeHistory;
 
 // Import Data Models
 var ProxyModel = require('../models').Proxy;
@@ -73,6 +76,8 @@ var CommentHistoryModel = require('../models').CommentHistory;
 var ReplyHistoryModel = require('../models').ReplyHistory;
 var FollowUpMessageHistoryModel = require('../models').FollowUpMessageHistory;
 var FollowHistoryModel = require('../models').FollowHistory;
+var ChallengeModel = require('../models').Challenge;
+var ChallengeHitoryModel = require('../models').ChallengeHistory;
 
 /**
  * @description
@@ -106,18 +111,18 @@ function validateBot(name, password, proxy, cb) {
                         });
                        
                     }).catch(function(error) {
+                        cb({
+                            flag: false,
+                            type: error.name,
+                        })
                         console.log('Fetch user picture error: ' + error);
                     });
             }
         })
-        .catch(function(reject) {
-            // getChallengeById(reject, response => {
-            //     console.log(response);
-            // });
-
+        .catch(function(error) {
             cb({
                 flag: false,
-                type: reject.name
+                type: error.name
             });
         });
 }
@@ -588,6 +593,7 @@ function getMediaIdByHashTag(session, hashtag, cb) {
     
             cb({
                 flag: true,
+                is_challenge: false,
                 data: arrMediaIdList
             });
     
@@ -595,6 +601,7 @@ function getMediaIdByHashTag(session, hashtag, cb) {
         } else {
             cb({
                 flag: false,
+                is_challenge: false,
                 data: arrMediaIdList
             });
         }
@@ -602,8 +609,10 @@ function getMediaIdByHashTag(session, hashtag, cb) {
         console.log('Get Media Id by hashTag error: ' + error);
 
         cb({
-            flag: false
-        })
+            flag: false,
+            is_challenge: true,
+            data: error.name
+        });
     });
 }
 
@@ -622,6 +631,7 @@ function followUserById(session, clientId, cb) {
                 Client.Relationship.create(session, clientId)
                     .then(function(follow) {
                         cb({
+                            flag: true,
                             data: follow.params
                         });
                     })
@@ -632,11 +642,12 @@ function followUserById(session, clientId, cb) {
             
         })
         .catch(function(error) {
-            // getChallengeById(error, response => {
-            //     console.log(response);
-            // });
+            cb({
+                flag: false,
+                data: error.name
+            })
 
-            console.log(error);
+            console.log('Follow user by id error: ' + error);
         })
 }
 
@@ -651,16 +662,14 @@ function saveFollowUserHistory(data, cb) {
     FollowHistoryModel.create(data)
         .then(function(history) {
             cb({
-                flag: true,
-                message: 'Save follow Client history id' + history.dataValues.id
+                flag: true
             })
         })
         .catch(function(error) {
             console.log('Save follow client history error: ' + error);
 
             cb({
-                flag: true,
-                message: 'Save follow client history error'
+                flag: false
             })
         })
 }
@@ -684,13 +693,10 @@ function commitByMediaId(session, mediaId, commentText, cb) {
         })
         .catch(function(error) {
             console.log('Commit to post by media id error: ' + error);
-            // getChallengeById(error, response => {
-            //     console.log(response);
-            // });
-
             
             cb({
-                flag: false
+                flag: false,
+                data: error.name
             })
         });
 }
@@ -765,16 +771,20 @@ function getInboxById(session, cb) {
         }
         getNewInbox();
 
-        cb(arrSendData);
+        cb({
+            flag: true,
+            data: arrSendData
+        });
 
         arrSendData = [];
     });
 
-    // pFeed.catch(function(error) {
-    //     getChallengeById(error, response => {
-    //         console.log(response);
-    //     });
-    // })
+    pFeed.catch(function(error) {
+        cb({
+            flag: false,
+            data: error
+        })
+    })
 }
 
 /**
@@ -820,14 +830,16 @@ function directMessageToClient(session, clientId, replyText, cb) {
                 imgUrl: result[0].accounts[0].profile_pic_url
             }
 
-            cb(sendData);
+            cb({
+                flag: true,
+                data: sendData
+            });
         })
         .catch(function(error) {
-
-            // getChallengeById(error, response => {
-            //     console.log(response);
-            // });
-
+            cb({
+                flag: false,
+                data: error.name
+            })
 
             console.log('Direct Message Error: ' + error);
         });
@@ -844,10 +856,15 @@ function saveReplyHistory(data, cb) {
     ReplyHistoryModel.create(data)
         .then(function(history) {
             cb({
-                id: history.dataValues.id
+                flag: true,
+                data: history.dataValues.id
             });
         })
         .catch(function(error) {
+            cb({
+                flag: false,
+                data: error
+            })
             console.log('Create new history error: ' + error);
         });
 }
@@ -881,10 +898,6 @@ function getClientIdList(botId, cb) {
         }
         
     }).catch(function(error) {
-
-        // getChallengeById(error, response => {
-        //     console.log(response);
-        // });
         console.log('Get Client ID list error: ' + error);
     });
 }
@@ -899,9 +912,17 @@ function getClientIdList(botId, cb) {
 function saveFUMHistory(data, cb) {
     FollowUpMessageHistoryModel.create(data)
         .then(function(history) {
-            cb(history.dataValues);
+            cb({
+                flag: true,
+                data: history.dataValues
+            });
         })
         .catch(function(error) {
+            cb({
+                flag: false,
+                data: error.name
+            });
+
             console.log('Save follow up message history error: ' + error);
         });
 }
@@ -936,12 +957,37 @@ function getFollowerList(botId, cb) {
 /**
  * @description
  * update the followhistory table.
- * 
- * @param {INTEGER} id 
+ * @param {OBJECT} session
+ * @param {INTEGER} clientId 
  * @param {OBJECT} cb 
  */
-function unFollowUserbyId(id, cb) {
-    var updateData = {
+function unFollowUserbyId(session, clientId, cb) {
+    Client.Relationship.removeFollower(session, clientId)
+        .then(function(result) {
+            cb({
+                flag: true,
+                data: result
+            })            
+        })
+        .catch(function(error) {
+            cb({
+                flag: false,
+                data: error.name
+            })
+
+            console.log('Follow user by id error: ' + error);
+        });
+}
+
+/**
+ * @description
+ * update follow status for unfollow user
+ * 
+ * @param {*} id 
+ * @param {*} cb 
+ */
+function updateFollowStatus(id, cb) {
+   var updateData = {
         is_follow: 'N'
     }
 
@@ -961,9 +1007,7 @@ function unFollowUserbyId(id, cb) {
         }
     }).catch(function(error) {
         console.log('Update follow history error: ' + error);
-        // getChallengeById(error, response => {
-        //     console.log(response);
-        // });
+ 
         cb({
             flag: false
         });
@@ -1595,7 +1639,6 @@ function getBotGeneralDetail(data, cb) {
  * @param {OBJECT} cb 
  */
 function changeBotStatusById(data, cb) {
-    console.log(data.is_activated);
     var updateData = {
         is_activated: data.is_activated
     }
@@ -1713,7 +1756,7 @@ function updateCommentsByBotid(botId, data, cb) {
             botId
         ]
     }).then(function(result) {
-        console.log(result);
+        // console.log(result);
         var countOfData = data.length - 1;
 
         async function asyncInsertComment() {
@@ -1761,15 +1804,15 @@ function updateCommentsByBotid(botId, data, cb) {
  */
 function updateRepliesByBotid(botId, data, cb) {
     var updateSql = `UPDATE "public"."Replies"
-    SET state = 0
-    WHERE bot_id = ?`;
+                        SET state = 0
+                        WHERE bot_id = ?`;
 
     sequelize.query(updateSql, {
         replacements: [
             botId
         ]
     }).then(function(result) {
-        console.log(result);
+        // console.log(result);
 
        async function asyncInsertReply() {
             var countOfData = data.length - 1;
@@ -1856,24 +1899,71 @@ function updateFUMsByBotid(botId, data, cb) {
     });
 }
 
-
 /**
+ * @description
+ * get challenge list to show the notification to user
  * 
- * @param {*} error 
+ * @param {OBJECT} cb 
  */
-function getChallengeById(error, cb) {
-    Client.Web.Challenge.resolve(error)
-    .then(function(challenge) {
-        console.log("---------------------------");
-        console.log(challenge.json);
-        console.log("---------------------------");
-        // if(challenge.json.step_data.form_type == "email") {
-        //     console.log('Email verification')
-        // }
-
-        cb(challenge);
+function getChallengeList(cb) {
+    ChallengeModel.findAll({
+        attributes: [
+            'id', 'type', 'data', 'message'
+        ],
+        where: {
+            state: 1
+        }
+    }).then(function(challenges) {
+        // return data using callback.
+        cb(challenges);
+    }).catch(function (error) {
+        if(error) {
+            console.log('Get challenge list error' + error);
+        }
     });
 }
+
+/**
+ * @description
+ * Get bot properties for challenge.
+ * 
+ * @param {INTEGER} botId 
+ * @param {OBJECT} cb 
+ */
+function getBotPropertiesForChallenge(botId, cb) { 
+    BotModel.findOne({
+        attributes: [
+            'id', 'bot_name', 'account_name', 'account_image_url'
+        ],
+        where: {
+            id: botId
+        }
+    }).then(function (bot) {
+        cb(bot);
+    }).catch(function(error) {
+        console.lo('Get bot properties for challenge error: ' + error);
+    });
+}
+
+/**
+ * @description
+ * save the challenge history to database.
+ * 
+ * @param {OBJECT} data 
+ * @param {FLAG} cb 
+ */
+function saveChallengeHistory(data, cb) {
+    ChallengeHitoryModel.create(data)
+        .then(function (res) {
+            cb(true)
+        })
+        .catch(function (error) {
+            cb(false);
+
+            console.log('Save challenge history error: ' + error);
+        });
+}
+
 /**
  * @description
  * Convert time to 

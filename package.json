@@ -12,6 +12,7 @@
     "child_process": "^1.0.2",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
+    "dotenv": "^8.0.0",
     "ejs": "^2.6.1",
     "express": "~4.16.1",
     "express-ejs-layouts": "^2.5.0",
@@ -26,6 +27,7 @@
     "path": "^0.12.7",
     "pg": "^7.11.0",
     "pg-hstore": "^2.3.2",
+    "pusher": "^2.2.1",
     "sequelize": "^5.8.6"
   }
 }

@@ -23,4 +23,6 @@ router.post('/signup', UserController.signup);
 /* POST users login listing. */
 router.post('/login', UserController.login);
 
+/* POST users login listing. */
+router.post('/notification', UserController.getNotificationByUserId);
 module.exports = router;

@@ -8,6 +8,8 @@
 
 // Import project sub modules.
 const UserModel = require('../models').User;
+const ChallengeModel = require('../models').Challenge;
+const ChallengeHistoryModel = require('../models').ChallengeHistory;
 
 // Define user controller.
 var UserController = {}; 
@@ -108,6 +110,39 @@ UserController.login = function(req, res) {
             flag: false,
             message: 'Server connection error'
         });
+    });
+}
+
+// Get notification by user id.
+UserController.getNotificationByUserId = function(req, res) {
+    ChallengeModel.findAll({
+        attributes: [
+            'id', 'type', 'data', 'message'
+        ],
+        include: [{
+            model: ChallengeHistoryModel,
+            as: 'ChallengeHistories',
+            attributes: [
+                'bot_id', 'bot_name'
+            ],
+            where: {
+                user_id: req.body.userId
+            }
+        }],
+        where: {
+            state: 1
+        }
+    }).then(function(histories) {
+        res.json({
+            flag: true,
+            data: histories
+        })
+    }).catch(function(error){
+        res.json({
+            flag: false
+        });
+
+        console.log('Get notifiaction error: ' + error);
     });
 }
 
