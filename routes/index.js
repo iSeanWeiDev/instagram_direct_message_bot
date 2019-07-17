@@ -13,6 +13,7 @@ var router = express.Router();
 // import service files.
 var ProxyService = require('../services/proxyService');
 var BotService = require('../services/botService');
+var UserService = require('../services/userService');
 
 /* GET login page. */
 router.get('/', function(req, res) {
@@ -32,10 +33,17 @@ router.get('/signup', function(req, res) {
   res.render('pages/auth/signup');
 });
 
+
+
 /* GET logout page. */
 router.get('/logout',function (req, res) {
   req.session.destroy();
    res.redirect('/');
+});
+
+/* GET profile page. */
+router.get('/profile', isAuthenicated, function(req, res) {
+  res.render('pages/profile', {user: req.session.user});
 });
 
 /* GET dashboard page. */
@@ -62,6 +70,15 @@ router.get('/createbot', isAuthenicated, function(req, res) {
 /* GET schedule page. */
 router.get('/schedule', isAuthenicated, function(req, res) {
   res.render('pages/schedule', {user: req.session.user});
+});
+
+/* GET notifications page. */
+router.get('/notifications', isAuthenicated, function(req, res) {
+  UserService.getInitialNotifications(req.session.user.userId, function (cb) {
+    if(cb.flag == true) {
+      res.render('pages/notifications', {user: req.session.user, data: cb.data});
+    }
+  })
 });
 
 /* Admin route */

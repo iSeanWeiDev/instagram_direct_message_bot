@@ -8,6 +8,14 @@ var app = require('../app');
 var debug = require('debug')('ig-dm-bot:server');
 var http = require('http');
 var config = require('../config/env');
+// var https = require('https');
+// var fs = require('fs');
+// var path = require('path');
+
+// var privateKey = fs.readFileSync(path.join(__dirname, './ssl/privatekey.pem)'));
+// var certificate = fs.readFileSync(path.join(__dirname, './ssl/certification.pem'));
+
+
 
 /**
  * Get port from environment and store in Express.
@@ -21,6 +29,15 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
+
+/**
+ * Create HTTPS server.
+ */
+
+//  var server = https.createServer({
+//    key: privateKey,
+//    cert: certificate
+//  }, app);
 
 /**
  * Listen on provided port, on all network interfaces.

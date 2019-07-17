@@ -1,0 +1,146 @@
+<body data-gr-c-s-loaded="true">
+    <div class="container-scroller">
+        <!-- partial:../../partials/_navbar.html -->
+        <% include ../partials/_navbar %>
+        <!-- partial -->
+
+        <div class="container-fluid page-body-wrapper">
+
+        <!-- partial:../../partials/_sidebar.html -->
+        <% include ../partials/_sidebar %>
+        <!-- partial -->
+            <div class="main-panel">
+                <div class="content-wrapper"> 
+                    <div class="form-group text-left mb-3">
+                        <h3>
+                            <strong>
+                                Challenge Histories
+                            </strong>
+                        </h3>
+                    </div>
+                <% if(data.length == 0) { %>
+                    <div class="col-md-6 offset-xl-2">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <h4 class="text-danger">
+                                    <strong>
+                                        There are not Notifications to display.
+                                    </strong>
+                                </h4>
+                                <div class="text-center pt-3">
+                                    <h5 class="text-primary">
+                                        <b>
+                                            If you want to create new bot, click
+                                            <a href="/createBot" class="text-success">
+                                                here
+                                            </a>
+                                        </b>
+                                    </h5>
+                                    
+                                </div>
+    
+                                <div class="pt-3 text-center">
+                                    <a href="/createBot" class="btn btn-outline-success font-weight-bold">
+                                        create new bot
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% } else { %>
+                    <div class="card-columns">
+                    <style>
+                        .card:hover{
+                            width: 100%;
+                            height: 100%;
+                            -webkit-transition: width .3s; /* Safari prior 6.1 */
+                            transition: width .3s;
+                            opacity: 1 !important;
+                        }
+                    
+                    </style>
+                        <% for(var objType of data) {
+                            for(var objHistory of objType.dataValues.ChallengeHistories) { %>
+    
+                            <div class="card" style="cursor: pointer; opacity: 0.75;">
+                                <!-- <img class="card-img-top" src="holder.js/100x180/" alt=""> -->
+                                <div class="card-body p-4">
+                                <% if(objType.data == 'CheckpointError') { %>
+                                    <h4 class="text-danger">
+                                        <strong>Title: &nbsp; <%= objType.message %></strong>
+                                    </h4>
+    
+                                    <% if(objHistory.bot_id > 0) { %>
+                                        <p class="card-text">
+                                            <strong>Message: </strong>
+                                            Your <strong>" <%= objHistory.bot_name %> "</strong> Bot action required
+                                        </p>
+                                        <div class="form-group">
+                                            <!-- Button trigger modal -->
+                                            <button type="button" 
+                                                class="btn btn-outline-primary btn-rounded m-1" 
+                                                data-toggle="modal" 
+                                                data-target="#modelId">
+                                                Verify 
+                                            </button>
+    
+                                            <button type="button" 
+                                                class="btn btn-outline-danger btn-rounded m-1">
+                                                Delete
+                                            </button>
+                                        </div>
+                                        
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                        <div class="modal-header">
+                                                                <h5 class="modal-title">Modal title</h5>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                            </div>
+                                                    <div class="modal-body">
+                                                        <div class="container-fluid">
+                                                            Add rows here
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                        <button type="button" class="btn btn-primary">Save</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <% } else { %>
+                                        <p class="card-text">
+                                            <strong>Message: </strong>
+                                            Your <strong>"<%= objHistory.bot_name %>"</strong> bot has been action required,
+                                            but you didn't created the bot using our platform before, 
+                                            so please check your Instagarm account first.
+                                        </p>
+                                    <% } %>
+    
+                                <% } %>
+                                </div>
+                            </div>
+    
+                            <% } %>    
+                        <% } %>
+                    </div>
+                <% } %>
+                </div>
+            <!-- content-wrapper ends -->
+
+            <!-- partial:../../partials/_footer.html -->
+            <% include ../partials/_footer %>
+            <!-- partial -->
+            </div>
+        <!-- main-panel ends -->
+        </div>
+        <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+
+    <% include ../partials/_scripts %>
+</body>

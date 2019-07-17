@@ -21,7 +21,6 @@ $(document).ready(function() {
                 data: sendData
             }).done(function (response) {
                 if(response.flag == true) {
-                    console.log(response.data);
                     var appendNotificationString = '';
                     var countOfNotificationIndex = 0;
                     for(var objType of response.data) {
@@ -37,10 +36,6 @@ $(document).ready(function() {
                                 </div>
                             </a> `;
                         }
-                        // for(var objNotification of objType.ChallengeHistories) {
-                        //     console.log(objNotification);
-                        // }
-                        
                     }
 
                     countOfNotification.html(countOfNotificationIndex);
@@ -50,15 +45,6 @@ $(document).ready(function() {
             });
         }
     }
-/* <a class="dropdown-item preview-item">
-            <div class="preview-thumbnail">
-              <img src="assets/images/faces/face10.jpg" alt="image" class="img-sm profile-pic"> </div>
-            <div class="preview-item-content flex-grow py-2">
-              <p class="preview-subject ellipsis font-weight-medium text-dark">Marian Garner </p>
-              <p class="font-weight-light small-text"> The meeting is cancelled </p>
-            </div>
-          </a> */
-
 
     // initialize the pusher.
     var pusher = new Pusher('a8bc919ab3d65a7c3875', {cluster: 'us3'});
@@ -71,7 +57,7 @@ $(document).ready(function() {
 
     // it will be work on "https://" secure mode.
     Notification.requestPermission().then(function(permission) {
-        console.log(permission);
+        //console.log(permission);
     });
 
     pusher.subscribe('notifications')
@@ -87,18 +73,6 @@ $(document).ready(function() {
                         notification.close();
                     }
                 }
-
-                // if we're on the home page, show an "Updated" badge
-                // if (window.location.pathname === "/") {
-                //     $('a[href="/posts/' + post._id + '"]').append('<span class="badge badge-primary badge-pill">Updated</span>');
-                // }
-                // var notification = new Notification(processId + " was just updated. Check it out.");
-                // notification.onclick = function (event) {
-                //     console.log(event);
-                //     // window.location.href = '/posts/' + post._id;
-                //     // event.preventDefault();
-                //     // notification.close();
-                // }
             });
 });
 
