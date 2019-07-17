@@ -309,31 +309,45 @@ BotController.createNewBot = function(req, res) {
 
             if(data.type == 5) {
                 if(data.flag == true) {
-                    console.log(data);
                     // challenge part
                     BotService.getChallengeList(function (challengeList) { 
                         for(var obj of challengeList) {
-                            if(data.message == obj.message) {
+                            if(data.message == obj.dataValues.data) {
                                 BotService.getBotPropertiesForChallenge(data.botId, function (cb) {
-                                    var pusher = new Pusher({
-                                        appId: process.env.PUSHER_APP_ID,
-                                        key: process.env.PUSHER_APP_KEY,
-                                        secret: process.env.PUSHER_APP_SECRET,
-                                        cluster: process.env.PUSHER_APP_CLUSTER
-                                    });
-                                    
-                                    var indexOfSendData = 'ToUser:'+req.session.user.userId;
-                                    
-                                    var sendData = {
-                                        userId: req.session.user.userId,
-                                        botId: data.botId,
-                                        botName: cb.bot_name,
-                                        accountName: cb.account_name,
-                                        accountImage: cb.account_image_url,
-                                        type: obj.type
+                                    var historyData = {
+                                        user_id: req.session.user.userId,
+                                        bot_id: data.botId,
+                                        bot_name: cb.bot_name,
+                                        challenge_id: obj.dataValues.id,
+                                        state: 1
                                     }
-                              
-                                    pusher.trigger('notifications', indexOfSendData, sendData, req.headers['x-socket-id']);
+
+                                    BotService.saveChallengeHistory(historyData, function(historyCB) {
+                                        if(historyCB == true) {
+
+
+                                            var pusher = new Pusher({
+                                                appId: process.env.PUSHER_APP_ID,
+                                                key: process.env.PUSHER_APP_KEY,
+                                                secret: process.env.PUSHER_APP_SECRET,
+                                                cluster: process.env.PUSHER_APP_CLUSTER
+                                            });
+                                            
+                                            var indexOfSendData = 'ToUser:'+req.session.user.userId;
+                                            
+                                            var sendData = {
+                                                userId: req.session.user.userId,
+                                                botId: data.botId,
+                                                botName: cb.bot_name,
+                                                accountName: cb.account_name,
+                                                type: obj.dataValues.type,
+                                                data: obj.dataValues.data,
+                                                message: obj.dataValues.message
+                                            }
+                                      
+                                            pusher.trigger('notifications', indexOfSendData, sendData, req.headers['x-socket-id']);
+                                        }
+                                    });
                                 });
                             }
                         }

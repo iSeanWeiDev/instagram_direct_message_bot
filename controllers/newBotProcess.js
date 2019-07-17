@@ -221,8 +221,7 @@ setInterval(() => {
                             }
                         }
                     } else {
-                        console.log(mediaData);
-                        // challenge 
+                        // challenge for getting media list from Instagram.
                         process.send({
                             type: 5,
                             flag: true,

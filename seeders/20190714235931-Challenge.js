@@ -17,7 +17,7 @@ module.exports = {
       {
         type: 'S',
         data: 'ActionSpamError',
-        message: '',
+        message: 'This action was disabled due to block from instagram!',
         state: '1',
         createdAt : new Date(),
         updatedAt : new Date(),
@@ -42,6 +42,14 @@ module.exports = {
         type: 'B',
         data: '',
         message: '',
+        state: '1',
+        createdAt : new Date(),
+        updatedAt : new Date(),
+      },
+      {
+        type: 'T',
+        data: 'TypeError',
+        message: 'Cannot read property search key of null',
         state: '1',
         createdAt : new Date(),
         updatedAt : new Date(),
