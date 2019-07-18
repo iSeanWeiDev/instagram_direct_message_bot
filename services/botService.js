@@ -2068,7 +2068,7 @@ function verifyPhone(botId, code, cb) {
                 Client.Web.Challenge.resolve(error)
                     .then(function(challenge) {
                         challenge.code(verifyCode);
-                        
+
                         cb({
                             flag: true
                         })
@@ -2079,6 +2079,7 @@ function verifyPhone(botId, code, cb) {
                             data: error
                         })
                     });
+            });
     }).catch(function(error) {
         cb({
             flag: false,
@@ -2086,6 +2087,7 @@ function verifyPhone(botId, code, cb) {
         });
         console.log();
     });
+    
 }
 
 /**
