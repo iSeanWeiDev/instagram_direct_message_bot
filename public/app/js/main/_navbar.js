@@ -74,8 +74,9 @@ $(document).ready(function() {
 
 
 
-                    notificationDropDownMenu.apppend(appendNotificationString);
-                    console.log(data);
+                    notificationDropDownMenu.append(appendNotificationString);
+                    var notificationIndex = parseInt(countOfNotification.text()) + 1;
+                    countOfNotification.html(notificationIndex);
                     
                     var notification = new Notification(data);
                     notification.onclick = function (event) {

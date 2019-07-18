@@ -90,8 +90,7 @@ router.get('/proxy', isAuthenicated, function(req, res) {
       res.redirect('dashboard');
     }
   });
-  
-})
+});
 
 /* Validate authenticated user. */
 function isAuthenicated(req, res, next) {

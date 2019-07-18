@@ -1264,6 +1264,7 @@ function getBotHistoryData(userId, cb) {
                             A.id = B.user_id
                             AND B.id = C.bot_id
                             AND A.id = ?
+                            AND A.state > 0
                         GROUP BY
                             B.id, 
                             B.bot_name, 
@@ -1287,7 +1288,8 @@ function getBotHistoryData(userId, cb) {
                     clientName: obj.client_name,
                     imageUrl: obj.client_image_url,
                     last: last,
-                    count: obj.count
+                    count: obj.count,
+                    state: obj.state
                 })
             });
         }

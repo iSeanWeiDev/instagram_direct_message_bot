@@ -32,7 +32,7 @@
                                                 </th>
                                                 <th scope="col">
                                                     <strong>
-                                                        Client
+                                                    Client
                                                     </strong>
                                                 </th>
                                                 <th scope="col">
@@ -48,6 +48,8 @@
                                             </tr>
                                         </thead>
                                         <tbody style="cursor: pointer;">
+                                            <% console.log(data) %>
+
                                             <% for(var obj of data) { %>
                                             <tr class="text-center align-middle" 
                                                 onclick="getMessageHistory(<%=obj.botId%>, <%=obj.clientId%>)"
@@ -182,6 +184,11 @@
                                         <table class="table table-hover">
                                             <thead class="bg-secondary">
                                                 <tr class="text-center">
+                                                    <th scope="col">
+                                                        <strong>
+                                                        Status
+                                                        </strong>
+                                                    </th>
                                                     <th scope="col">
                                                         <strong>
                                                         Bot
