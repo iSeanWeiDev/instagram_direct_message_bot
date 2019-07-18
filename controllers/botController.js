@@ -322,30 +322,45 @@ BotController.createNewBot = function(req, res) {
                                         state: 1
                                     }
 
-                                    BotService.saveChallengeHistory(historyData, function(historyCB) {
-                                        if(historyCB == true) {
-                                            var pusher = new Pusher({
-                                                appId: process.env.PUSHER_APP_ID,
-                                                key: process.env.PUSHER_APP_KEY,
-                                                secret: process.env.PUSHER_APP_SECRET,
-                                                cluster: process.env.PUSHER_APP_CLUSTER
+                                    BotService.UpdateBotForChallenge(data.botId, obj.dataValues.id, function (updateCB) {
+                                        if(updateCB == true) {
+                                            BotService.saveChallengeHistory(historyData, function(historyCB) {
+                                                if(historyCB == true) {
+                                                    var pusher = new Pusher({
+                                                        appId: process.env.PUSHER_APP_ID,
+                                                        key: process.env.PUSHER_APP_KEY,
+                                                        secret: process.env.PUSHER_APP_SECRET,
+                                                        cluster: process.env.PUSHER_APP_CLUSTER
+                                                    });
+                                                    
+                                                    var indexOfSendData = 'ToUser:'+req.session.user.userId;
+                                                    
+                                                    var sendData = {
+                                                        userId: req.session.user.userId,
+                                                        botId: data.botId,
+                                                        botName: cb.bot_name,
+                                                        accountName: cb.account_name,
+                                                        type: obj.dataValues.type,
+                                                        data: obj.dataValues.data,
+                                                        message: obj.dataValues.message
+                                                    }
+                                              
+                                                    pusher.trigger('notifications', indexOfSendData, sendData, req.headers['x-socket-id']);
+        
+                                                    for(var i = 0; i < arrBotProcessName.length; i++) {    
+                                                        if(arrBotProcessName[i] == data.botId) {                        
+                                                            arrBotProcess[i].send({
+                                                                is_activated: 'N',
+                                                                is_created: 'N',
+                                                                is_updated: 'N'
+                                                            });
+                                                           
+                                                        }
+                                                    }
+                                                }
                                             });
-                                            
-                                            var indexOfSendData = 'ToUser:'+req.session.user.userId;
-                                            
-                                            var sendData = {
-                                                userId: req.session.user.userId,
-                                                botId: data.botId,
-                                                botName: cb.bot_name,
-                                                accountName: cb.account_name,
-                                                type: obj.dataValues.type,
-                                                data: obj.dataValues.data,
-                                                message: obj.dataValues.message
-                                            }
-                                      
-                                            pusher.trigger('notifications', indexOfSendData, sendData, req.headers['x-socket-id']);
                                         }
-                                    });
+                                    })
                                 });
                             }
                         }

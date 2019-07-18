@@ -27,11 +27,14 @@ app.set('port', port);
 /**
  * Create HTTP server.
  */
-var option = {
-  hostname: 'local.metamedias.co'
-}
+// var option = {
+//   hostname: 'local.metamedias.com',
+//   port: port
+// }
 
-var server = http.createServer(option, app);
+// var server = http.createServer(option, app);
+var server = http.createServer(app);
+
 
 /**
  * Create HTTPS server.

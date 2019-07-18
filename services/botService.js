@@ -58,6 +58,7 @@ BotService.updateFiltersByBotid = updateFiltersByBotid;
 BotService.updateCommentsByBotid = updateCommentsByBotid;
 BotService.updateRepliesByBotid = updateRepliesByBotid;
 BotService.updateFUMsByBotid = updateFUMsByBotid;
+BotService.UpdateBotForChallenge = UpdateBotForChallenge;
 
 // challenge
 BotService.getChallengeList = getChallengeList; 
@@ -1264,13 +1265,15 @@ function getBotHistoryData(userId, cb) {
                             A.id = B.user_id
                             AND B.id = C.bot_id
                             AND A.id = ?
-                            AND A.state > 0
                         GROUP BY
+                            A."createdAt",
                             B.id, 
                             B.bot_name, 
                             C.client_id, 
                             C.client_name, 
-                            C.client_image_url `;
+                            C.client_image_url 
+                        ORDER BY 
+                            A."createdAt" DESC;`;
     sequelize.query(selectQuery, { 
         replacements: [userId], 
         type: sequelize.QueryTypes.SELECT 
@@ -1288,8 +1291,7 @@ function getBotHistoryData(userId, cb) {
                     clientName: obj.client_name,
                     imageUrl: obj.client_image_url,
                     last: last,
-                    count: obj.count,
-                    state: obj.state
+                    count: obj.count
                 })
             });
         }
@@ -1362,30 +1364,36 @@ function getDashboardHistory(state, userId, cb) {
     switch (state) {
         case 1: // tody
             selectQuery = ` (SELECT  'reply' AS type,
+                                aa.state,
                                 aa.bot_id,
                                 aa.bot_name ,
                                 count(aa.client_id) 
                             FROM (
-                            SELECT 
-                                B.id AS bot_id,
-                                B.bot_name AS bot_name,
-                                C.client_id
-                            FROM
+                                SELECT 
+                                    A.state,
+                                    B.id AS bot_id,
+                                    B.bot_name AS bot_name,
+                                    C.client_id
+                                FROM
                                     "public"."Users" AS A,
                                     "public"."Bots" AS B,
                                     "public"."ReplyHistories" AS C
-                            WHERE
+                                WHERE
                                     A.id = B.user_id
                                     AND B.id = C.bot_id
                                     AND A.id = ?
                                     AND DATE(C."createdAt") = DATE(now())
-                            GROUP BY B.id, B.bot_name, C.client_id ) aa
-                            GROUP BY aa.bot_id,
+                                GROUP BY A.state, B.id, B.bot_name, C.client_id 
+                            ) AS aa
+                            GROUP BY 
+                                aa.state,
+                                aa.bot_id,
                                 aa.bot_name) 
                             
                             UNION ALL
                             
                             (SELECT 'comment' AS type,
+                                A.state,
                                 B.id,
                                 B.bot_name,
                                 COUNT(B.id)
@@ -1399,6 +1407,7 @@ function getDashboardHistory(state, userId, cb) {
                                 AND A.id = ?
                                 AND DATE(C."createdAt") = DATE(now())
                             GROUP BY
+                                A.state,
                                 B.id,
                                 B.bot_name
                             ORDER BY
@@ -1406,30 +1415,40 @@ function getDashboardHistory(state, userId, cb) {
             break;
         case 2: // Yesterday
             selectQuery = ` (SELECT  'reply' AS type,
+                                aa.state,
                                 aa.bot_id,
                                 aa.bot_name ,
                                 count(aa.client_id) 
                             FROM (
-                            SELECT 
-                                B.id AS bot_id,
-                                B.bot_name AS bot_name,
-                                C.client_id
-                            FROM
-                                    "public"."Users" AS A,
-                                    "public"."Bots" AS B,
-                                    "public"."ReplyHistories" AS C
-                            WHERE
-                                    A.id = B.user_id
-                                    AND B.id = C.bot_id
-                                    AND A.id = ?
-                                    AND DATE(C."createdAt") BETWEEN DATE(NOW())-1 AND DATE(NOW())
-                            GROUP BY B.id, B.bot_name, C.client_id ) aa
-                            GROUP BY aa.bot_id,
+                                SELECT 
+                                    A.state,
+                                    B.id AS bot_id,
+                                    B.bot_name AS bot_name,
+                                    C.client_id
+                                FROM
+                                        "public"."Users" AS A,
+                                        "public"."Bots" AS B,
+                                        "public"."ReplyHistories" AS C
+                                WHERE
+                                        A.id = B.user_id
+                                        AND B.id = C.bot_id
+                                        AND A.id = ?
+                                        AND DATE(C."createdAt") BETWEEN DATE(NOW())-1 AND DATE(NOW())
+                                GROUP BY 
+                                    A.state,
+                                    B.id, 
+                                    B.bot_name, 
+                                    C.client_id 
+                            ) AS aa
+                            GROUP BY
+                                aa.state,
+                                aa.bot_id,
                                 aa.bot_name) 
                             
                             UNION ALL
                             
                             (SELECT 'comment' AS type,
+                                A.state
                                 B.id,
                                 B.bot_name,
                                 COUNT(B.id)
@@ -1443,6 +1462,7 @@ function getDashboardHistory(state, userId, cb) {
                                 AND A.id = ?
                                 AND DATE(C."createdAt") BETWEEN DATE(NOW())-1 AND DATE(NOW())
                             GROUP BY
+                                A.state,
                                 B.id,
                                 B.bot_name
                             ORDER BY
@@ -1450,30 +1470,40 @@ function getDashboardHistory(state, userId, cb) {
             break;
         case 3: // Week
             selectQuery = ` (SELECT  'reply' AS type,
+                                aa.state
                                 aa.bot_id,
                                 aa.bot_name ,
                                 count(aa.client_id) 
                             FROM (
-                            SELECT 
-                                B.id AS bot_id,
-                                B.bot_name AS bot_name,
-                                C.client_id
-                            FROM
+                                SELECT 
+                                    A.state,
+                                    B.id AS bot_id,
+                                    B.bot_name AS bot_name,
+                                    C.client_id
+                                FROM
                                     "public"."Users" AS A,
                                     "public"."Bots" AS B,
                                     "public"."ReplyHistories" AS C
-                            WHERE
+                                WHERE
                                     A.id = B.user_id
                                     AND B.id = C.bot_id
                                     AND A.id = ?
                                     AND DATE(C."createdAt") BETWEEN DATE(now()) - 7 AND DATE(now())
-                            GROUP BY B.id, B.bot_name, C.client_id ) aa
-                            GROUP BY aa.bot_id,
+                                GROUP BY 
+                                    A.state,
+                                    B.id, 
+                                    B.bot_name, 
+                                    C.client_id 
+                            ) AS aa
+                            GROUP BY 
+                                aa.state,
+                                aa.bot_id,
                                 aa.bot_name) 
                             
                             UNION ALL
                             
                             (SELECT 'comment' AS type,
+                                A.state,
                                 B.id,
                                 B.bot_name,
                                 COUNT(B.id)
@@ -1487,6 +1517,7 @@ function getDashboardHistory(state, userId, cb) {
                                 AND A.id = ?
                                 AND DATE(C."createdAt") BETWEEN DATE(now()) - 7 AND DATE(now())
                             GROUP BY
+                                A.state,
                                 B.id,
                                 B.bot_name
                             ORDER BY
@@ -1494,30 +1525,40 @@ function getDashboardHistory(state, userId, cb) {
                 break;
             case 4: // Month
                 selectQuery = ` (SELECT  'reply' AS type,
+                                    aa.state,
                                     aa.bot_id,
                                     aa.bot_name ,
                                     count(aa.client_id) 
                                 FROM (
-                                SELECT 
-                                    B.id AS bot_id,
-                                    B.bot_name AS bot_name,
-                                    C.client_id
-                                FROM
+                                    SELECT 
+                                        A.state,
+                                        B.id AS bot_id,
+                                        B.bot_name AS bot_name,
+                                        C.client_id
+                                    FROM
                                         "public"."Users" AS A,
                                         "public"."Bots" AS B,
                                         "public"."ReplyHistories" AS C
-                                WHERE
+                                    WHERE
                                         A.id = B.user_id
                                         AND B.id = C.bot_id
                                         AND A.id = ?
                                         AND DATE(C."createdAt") BETWEEN DATE(DATE(NOW()) - interval '1 month') AND DATE(NOW())
-                                GROUP BY B.id, B.bot_name, C.client_id ) aa
-                                GROUP BY aa.bot_id,
+                                    GROUP BY 
+                                        A.state,
+                                        B.id,
+                                        B.bot_name, 
+                                        C.client_id 
+                                ) AS aa
+                                GROUP BY 
+                                    aa.state,
+                                    aa.bot_id,
                                     aa.bot_name) 
                                 
                                 UNION ALL
                                 
                                 (SELECT 'comment' AS type,
+                                    A.state,
                                     B.id,
                                     B.bot_name,
                                     COUNT(B.id)
@@ -1531,6 +1572,7 @@ function getDashboardHistory(state, userId, cb) {
                                     AND A.id = ?
                                     AND DATE(C."createdAt") BETWEEN DATE(DATE(NOW()) - interval '1 month') AND DATE(NOW())
                                 GROUP BY
+                                    A.state,
                                     B.id,
                                     B.bot_name
                                 ORDER BY
@@ -1538,30 +1580,40 @@ function getDashboardHistory(state, userId, cb) {
                 break;
             case 5: // year
                 selectQuery = ` (SELECT  'reply' AS type,
+                                    aa.state,
                                     aa.bot_id,
                                     aa.bot_name ,
                                     count(aa.client_id) 
                                 FROM (
-                                SELECT 
-                                    B.id AS bot_id,
-                                    B.bot_name AS bot_name,
-                                    C.client_id
-                                FROM
+                                    SELECT 
+                                        A.state,
+                                        B.id AS bot_id,
+                                        B.bot_name AS bot_name,
+                                        C.client_id
+                                    FROM
                                         "public"."Users" AS A,
                                         "public"."Bots" AS B,
                                         "public"."ReplyHistories" AS C
-                                WHERE
+                                    WHERE
                                         A.id = B.user_id
                                         AND B.id = C.bot_id
                                         AND A.id = ?
                                         AND DATE(C."createdAt") BETWEEN DATE(DATE(NOW()) - interval '1 year') AND DATE(NOW())
-                                GROUP BY B.id, B.bot_name, C.client_id ) aa
-                                GROUP BY aa.bot_id,
+                                    GROUP BY 
+                                        A.state,
+                                        B.id, 
+                                        B.bot_name, 
+                                        C.client_id 
+                                ) AS aa
+                                GROUP BY
+                                    aa.state,
+                                    aa.bot_id,
                                     aa.bot_name) 
                                 
                                 UNION ALL
                                 
                                 (SELECT 'comment' AS type,
+                                    A.state
                                     B.id,
                                     B.bot_name,
                                     COUNT(B.id)
@@ -1575,6 +1627,7 @@ function getDashboardHistory(state, userId, cb) {
                                     AND A.id = ?
                                     AND DATE(C."createdAt") BETWEEN DATE(DATE(NOW()) - interval '1 year') AND DATE(NOW())
                                 GROUP BY
+                                    A.state,
                                     B.id,
                                     B.bot_name
                                 ORDER BY
@@ -2090,6 +2143,34 @@ function verifyPhone(botId, code, cb) {
         console.log();
     });
     
+}
+
+/**
+ * @description
+ * Update the bot state with challenge id.
+ * 
+ * @param {INTEGER} botId 
+ * @param {INTEGER} challengeId 
+ * @param {OBJECT} cb 
+ */
+function UpdateBotForChallenge(botId, challengeId, cb) {
+    var updateData = {
+        state: parseInt(challengeId) + 1
+    }
+    BotModel.update(updateData, {
+        where: {
+            id: botId
+        }
+    }).then(function(result) {
+        if(result[0] == 1) {
+            cb(true);
+        } else {
+            cb(false);
+        }
+    }).catch(function(error) {
+        cb(false);
+        console.log("update bot for challenge error: " + error);
+    });
 }
 
 /**

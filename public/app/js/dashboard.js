@@ -15,6 +15,7 @@ $(document).ready(function() {
             data: sendData,
         }).done(function(response) {
             if(response && response.flag) {
+                console.log(response.data);
                 if(response.data.length == 0) {
                     $('div#dialogDiv').html('<div class="col-12 text-center pt-3 text-danger font-weight-bold"> \
                                                         <label class="pl-3 pt-2 pr-3 pb-2 border-danger" style="border: 3px solid;"> \
@@ -29,7 +30,43 @@ $(document).ready(function() {
                 } else {
                     for(var obj of response.data) {
                         if(obj.type == 'reply') {
+                            var imgUrl = '';
+                            switch(obj.state) {
+                                case 0:
+                                    imgUrl = 'assets/images/action_images/Deleted.png';
+                                    break;
+                                case 1: 
+                                    imgUrl = 'assets/images/action_images/Activated.png';
+                                    break;
+                                case 2:
+                                    imgUrl = 'assets/images/action_images/ActionSpamError.png';
+                                    break;
+                                case 3:
+                                    imgUrl = 'assets/images/action_images/RequestError.png';
+                                    break;
+                                case 4:
+                                    imgUrl = 'assets/images/action_images/CheckPointError.png';
+                                    break;
+                                case 5:
+                                    imgUrl = 'assets/images/action_images/SentryBlockError.png';
+                                    break;
+                                case 6:
+                                    imgUrl = 'assets/images/action_images/ParseError.png';
+                                    break;
+                                case 7:
+                                    imgUrl = 'assets/images/action_images/TypeError.png';
+                                    break;
+                                default:
+                                    imgUrl = 'assets/images/action_images/Activated.png';
+                                    break;
+                            }
+
+
+
                             $('tbody#dialogTbody').append('<tr class="text-center align-middle"> \
+                                                                <th scope="row" class="p-2"> ' +
+                                                                    '<img src="' + imgUrl + '" style="">' + 
+                                                                ' </th> \
                                                                 <th scope="row">' + 
                                                                     obj.bot_name +
                                                                 '</th> \
