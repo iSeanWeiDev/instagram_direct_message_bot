@@ -252,7 +252,7 @@ $(document).ready(function() {
         if(id > 0 && challengePhoneNumber > 0) {
             var sendData = {
                 botId: id,
-                phone_number: challengePhoneNumber
+                phoneNumber: challengePhoneNumber
             }
 
             $.ajax({
@@ -263,7 +263,7 @@ $(document).ready(function() {
                 if(response && response.flag == true) {
                     mkNoti(
                         'Congratration!',
-                        response.message,
+                        'Please input your verfication code',
                         {
                             status:'success'
                         }
@@ -271,7 +271,6 @@ $(document).ready(function() {
                 }
             });
         }
-        console.log(id, challengePhoneNumber);
     }
 
 /* ================================================ */ 
@@ -294,7 +293,7 @@ $(document).ready(function() {
                     if(response && response.flag == true) {
                         mkNoti(
                             'Congratration!',
-                            response.message,
+                            'Verified your account, keep your bot.',
                             {
                                 status:'success'
                             }

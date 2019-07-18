@@ -635,19 +635,37 @@ BotController.updateBot = function(req, res) {
 
 // challenge using phone number.
 BotController.challengeInputPhone = function(req, res) {
-    console.log(req.body);
-     res.json({
-         flag: true,
-         message: 'Inputed your phone number'
-     });
+    var botId = req.body.botId;
+    var phoneNumber = req.body.phoneNumber;
+
+    BotService.makeChallengePhone(botId, phoneNumber, function(cb) {
+        if(cb.flag == true) {
+            res.json({
+                flag: true
+            });
+        } else {
+            res.json({
+                flag: false
+            });
+        }
+    });
 }
 
 // challenge verify phone number with verify code.
 BotController.challengePhoneVerify = function(req, res) {
-    console.log(req.body);
-    res.json({
-        flag: true,
-        message: 'Verified your bot by phone'
+    var botId = req.body.botId;
+    var phoneNumber = req.body.phoneNumber;
+
+    BotService.verifyPhone(botId, phoneNumber, function (cb) {
+        if(cb.flag == true) {
+            res.json({
+                flag: true
+            });
+        } else {
+            res.json({
+                flag: false
+            });
+        }
     });
 }
 

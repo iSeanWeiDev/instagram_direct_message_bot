@@ -63,6 +63,8 @@ BotService.updateFUMsByBotid = updateFUMsByBotid;
 BotService.getChallengeList = getChallengeList; 
 BotService.getBotPropertiesForChallenge = getBotPropertiesForChallenge;
 BotService.saveChallengeHistory = saveChallengeHistory;
+BotService.makeChallengePhone = makeChallengePhone;
+BotService.verifyPhone = verifyPhone;
 
 // Import Data Models
 var ProxyModel = require('../models').Proxy;
@@ -1962,6 +1964,128 @@ function saveChallengeHistory(data, cb) {
 
             console.log('Save challenge history error: ' + error);
         });
+}
+
+/**
+ * @description
+ * make verifiy using phone number.
+ * 
+ * @param {INTEGER} botId 
+ * @param {STRING} phoneNumber
+ * @param {OBJECT} cb 
+ */
+function makeChallengePhone(botId, phone, cb) {
+    BotModel.findOne({
+        attributes: [
+            'account_name', 'account_password'
+        ],
+        where: {
+            id: botId
+        }
+    }).then(function(botCB) {
+        var name = botCB.dataValues.account_name;
+        var password = botCB.dataValues.account_password;
+        var phoneNumber = phone;
+
+        var cookieFileURL = '../cookies/' + name + '.json',
+        storage = new Client.CookieFileStorage(path.join(__dirname, cookieFileURL)),
+        device = new Client.Device(name);
+
+        Client.Session.create(device, storage, name, password)
+            .then(async function(session) {
+                if(!session) {
+                    cb({
+                        flag: false,
+                        type: 'CreateError'
+                    })
+                } else {
+                    cb({
+                        flag: true
+                    })
+                }
+            })
+            .catch(Client.Exceptions.CheckpointError, function(error) {
+                Client.Web.PhoneVerificationChallenge.resolve(error)
+                    .then(function(challenge) {
+                        challenge.phone(phoneNumber);
+
+                        cb({
+                            flag: true
+                        })
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                    });
+            });
+    }).catch(function(error) {
+        cb({
+            flag: false,
+            type: error
+        });
+        console.log();
+    });
+}
+
+/**
+ * @description
+ * verification using phone verification code.
+ * 
+ * @param {INTEGER} botId 
+ * @param {INTEGER} code 
+ * @param {OBJECT} cb 
+ */
+function verifyPhone(botId, code, cb) {
+    BotModel.findOne({
+        attributes: [
+            'account_name', 'account_password'
+        ],
+        where: {
+            id: botId
+        }
+    }).then(function(botCB) {
+        var name = botCB.dataValues.account_name;
+        var password = botCB.dataValues.account_password;
+        var verifyCode = code;
+
+        var cookieFileURL = '../cookies/' + name + '.json',
+        storage = new Client.CookieFileStorage(path.join(__dirname, cookieFileURL)),
+        device = new Client.Device(name);
+
+        Client.Session.create(device, storage, name, password)
+            .then(async function(session) {
+                if(!session) {
+                    cb({
+                        flag: false,
+                        type: 'CreateError'
+                    })
+                } else {
+                    cb({
+                        flag: true
+                    })
+                }
+            })
+            .catch(Client.Exceptions.CheckpointError, function(error) {
+                Client.Web.Challenge.resolve(error)
+                    .then(function(challenge) {
+                        challenge.code(verifyCode);
+                        
+                        cb({
+                            flag: true
+                        })
+                    })
+                    .catch(function (error) {
+                        cb({
+                            flag: false,
+                            data: error
+                        })
+                    });
+    }).catch(function(error) {
+        cb({
+            flag: false,
+            type: error
+        });
+        console.log();
+    });
 }
 
 /**
