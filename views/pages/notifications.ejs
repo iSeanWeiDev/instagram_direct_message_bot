@@ -122,8 +122,19 @@
                                     <% } %>
     
                                 <% } %>
-
+                                
+                                <!-- Cannot read property search key of null -->
                                 <% if(objType.data == 'TypeError') { %>
+                                
+                                <% } %>
+                                
+                                <!-- Blocked bot by instagram -->
+                                <% if(objType.data == 'SentryBlockError') { %>
+
+                                <% } %>
+
+                                <!-- Maually paused by our platform -->
+                                <% if(objType.data == 'PausedBot') { %>
 
                                 <% } %>
                                 </div>

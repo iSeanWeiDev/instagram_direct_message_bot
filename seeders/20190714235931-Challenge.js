@@ -40,8 +40,16 @@ module.exports = {
       },
       {
         type: 'B',
-        data: '',
-        message: '',
+        data: 'SentryBlockError',
+        message: 'Sentry block from instagram',
+        state: '1',
+        createdAt : new Date(),
+        updatedAt : new Date(),
+      },
+      {
+        type: 'P',
+        data: 'ParseError',
+        message: 'Not possible to parse API response',
         state: '1',
         createdAt : new Date(),
         updatedAt : new Date(),

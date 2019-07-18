@@ -64,13 +64,13 @@ $(document).ready(function() {
             .bind('ToUser:'+userId.val(), function (data) {
                 if(data.userId == userId.val()) {
                     var appendNotificationString = `<a class="dropdown-item preview-item">
-                    <div class="preview-thumbnail">
-                    <img src="assets/images/faces/face12.jpg" alt="image" class="img-sm profile-pic"> </div>
-                    <div class="preview-item-content flex-grow py-2">
-                    <p class="preview-subject ellipsis font-weight-medium text-dark">`+ data.message +` </p>
-                    <p class="font-weight-light small-text"> `+ data.botName + ` &nbsp; ` + data.data +` </p>
-                    </div>
-                </a> `;
+                                                        <div class="preview-thumbnail">
+                                                        <img src="assets/images/faces/face12.jpg" alt="image" class="img-sm profile-pic"> </div>
+                                                        <div class="preview-item-content flex-grow py-2">
+                                                        <p class="preview-subject ellipsis font-weight-medium text-dark">`+ data.message +` </p>
+                                                        <p class="font-weight-light small-text"> `+ data.botName + ` &nbsp; ` + data.data +` </p>
+                                                        </div>
+                                                    </a> `;
 
 
 

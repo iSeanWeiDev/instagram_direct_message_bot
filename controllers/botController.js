@@ -324,8 +324,6 @@ BotController.createNewBot = function(req, res) {
 
                                     BotService.saveChallengeHistory(historyData, function(historyCB) {
                                         if(historyCB == true) {
-
-
                                             var pusher = new Pusher({
                                                 appId: process.env.PUSHER_APP_ID,
                                                 key: process.env.PUSHER_APP_KEY,
@@ -499,9 +497,39 @@ BotController.changeBotStatus = function(req, res) {
                                                 message: 'Successfully paused your bot!'
                                             });
                                         } else {
-                                            res.json({
-                                                flag: false,
-                                                message: 'Challenge required!'
+                                            BotService.getBotPropertiesForChallenge(data.botId, function(cb) {
+                                                var historyData = {
+                                                    user_id: req.session.user.userId,
+                                                    bot_id: data.botId,
+                                                    bot_name: cb.bot_name,
+                                                    challenge_id: 0,
+                                                    state: 1
+                                                }
+            
+                                                BotService.saveChallengeHistory(historyData, function(historyCB) {
+                                                    if(historyCB == true) {
+                                                        var pusher = new Pusher({
+                                                            appId: process.env.PUSHER_APP_ID,
+                                                            key: process.env.PUSHER_APP_KEY,
+                                                            secret: process.env.PUSHER_APP_SECRET,
+                                                            cluster: process.env.PUSHER_APP_CLUSTER
+                                                        });
+                                                        
+                                                        var indexOfPausedBotData = 'ToUser:'+req.session.user.userId;
+
+                                                        var pauseNotification = {
+                                                            userId: req.session.user.userId,
+                                                            botId: data.botId,
+                                                            botName: cb.bot_name,
+                                                            accountName: cb.account_name,
+                                                            type: 'M',
+                                                            data: 'PausedBot',
+                                                            message: 'Bot had been paused by our platform.'
+                                                        }
+            
+                                                        pusher.trigger('notifications', indexOfPausedBotData, pauseNotification, req.headers['x-socket-id'])
+                                                    }
+                                                });
                                             });
                                         }
 
@@ -558,7 +586,7 @@ BotController.changeBotStatus = function(req, res) {
                                 });
 
                                 arrBotProcess[i].send(response);
-2                            }
+                            }
                         }
                     });
                 }
