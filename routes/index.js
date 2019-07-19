@@ -13,6 +13,7 @@ var router = express.Router();
 // import service files.
 var ProxyService = require('../services/proxyService');
 var BotService = require('../services/botService');
+var UserService = require('../services/userService');
 var ChallengeService = require('../services/challengeService');
 
 /* GET login page. */
@@ -43,7 +44,9 @@ router.get('/logout',function (req, res) {
 
 /* GET profile page. */
 router.get('/profile', isAuthenicated, function(req, res) {
-  res.render('pages/profile', {user: req.session.user});
+  UserService.getUserDetail(req.session.user.userId, function (cb) {
+    res.render('pages/profile', {user: req.session.user, data: cb});
+  });
 });
 
 /* GET dashboard page. */
