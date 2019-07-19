@@ -14,6 +14,7 @@ var Client = require('instagram-private-api').V1,
     Sequelize = require('sequelize');
 
 var sequelize = new Sequelize('postgres://postgres:Rango941001top@@@@localhost:5432/instagram_dev');
+var Op = Sequelize.Op;
 
 // Definition Bot Service module.
 var BotService = {};
@@ -1038,7 +1039,9 @@ function getAllBotsDetail(id, cb) {
                 'is_activated'
             ],
             where: {
-                state: 1,
+                state: {
+                    [Op.gt]: 0
+                },
                 user_id: id
             }
         }).then(function(bots) {
@@ -2155,7 +2158,8 @@ function verifyPhone(botId, code, cb) {
  */
 function UpdateBotForChallenge(botId, challengeId, cb) {
     var updateData = {
-        state: parseInt(challengeId) + 1
+        state: parseInt(challengeId) + 1,
+        is_activated: 'N'
     }
     BotModel.update(updateData, {
         where: {
