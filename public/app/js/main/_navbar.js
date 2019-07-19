@@ -30,7 +30,7 @@ $(document).ready(function() {
                                 <div class="preview-thumbnail">
                                     <div class="preview-item-content flex-grow py-2">
                                         <p class="preview-subject ellipsis font-weight-medium text-danger"> "`+ obj.bot_name + '" Bot (' + obj.account_name + ')' +` </p>
-                                        <p class="font-weight-light small-text text-google"> `+ obj.message +` </p>
+                                        <p class="font-weight-light ellipsis small-text text-google"> `+ obj.message +` </p>
                                     </div>
                                 </div>
                             </a> `;

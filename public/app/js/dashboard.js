@@ -15,7 +15,6 @@ $(document).ready(function() {
             data: sendData,
         }).done(function(response) {
             if(response && response.flag) {
-                console.log(response.data);
                 if(response.data.length == 0) {
                     $('div#dialogDiv').html('<div class="col-12 text-center pt-3 text-danger font-weight-bold"> \
                                                         <label class="pl-3 pt-2 pr-3 pb-2 border-danger" style="border: 3px solid;"> \

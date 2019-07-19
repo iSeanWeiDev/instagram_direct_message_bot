@@ -15,7 +15,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       message: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(500)
       },
       state: {
         type: Sequelize.INTEGER
