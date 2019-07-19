@@ -11,10 +11,10 @@
         <!-- partial -->
             <div class="main-panel">
                 <div class="content-wrapper"> 
-                    <div class="form-group text-left mb-3">
+                    <div class="form-group align-items-center mb-3">
                         <h3>
                             <strong>
-                                Challenge Histories
+                                Unread Notifications
                             </strong>
                         </h3>
                     </div>
@@ -48,7 +48,6 @@
                         </div>
                     </div>
                 <% } else { %>
-                    <div class="card-columns">
                     <style>
                         .card:hover{
                             width: 100%;
@@ -57,91 +56,87 @@
                             transition: width .3s;
                             opacity: 1 !important;
                         }
-                    
+                                            
+                        .form-check .form-check-label input:checked + .input-helper:after {
+                            width: 18px;
+                            opacity: 1;
+                            line-height: 0px;
+                            -webkit-transform: scale(2);
+                            transform: scale(2);
+                        }
                     </style>
-                        <% for(var objType of data) {
-                            for(var objHistory of objType.dataValues.ChallengeHistories) { %>
-    
-                            <div class="card" style="cursor: pointer; opacity: 0.75;">
-                                <!-- <img class="card-img-top" src="holder.js/100x180/" alt=""> -->
-                                <div class="card-body p-4">
-                                <% if(objType.data == 'CheckpointError') { %>
-                                    <h4 class="text-danger">
-                                        <strong>Title: &nbsp; <%= objType.message %></strong>
-                                    </h4>
-    
-                                    <% if(objHistory.bot_id > 0) { %>
-                                        <p class="card-text">
-                                            <strong>Message: </strong>
-                                            Your <strong>" <%= objHistory.bot_name %> "</strong> Bot action required
-                                        </p>
-                                        <div class="form-group">
-                                            <!-- Button trigger modal -->
-                                            <button type="button" 
-                                                class="btn btn-outline-primary btn-rounded m-1" 
-                                                data-toggle="modal" 
-                                                data-target="#modelId">
-                                                Verify 
-                                            </button>
-    
-                                            <button type="button" 
-                                                class="btn btn-outline-danger btn-rounded m-1">
-                                                Delete
-                                            </button>
-                                        </div>
-                                        
-                                        <!-- Modal -->
-                                        <div class="modal fade" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-                                            <div class="modal-dialog" role="document">
-                                                <div class="modal-content">
-                                                        <div class="modal-header">
-                                                                <h5 class="modal-title">Modal title</h5>
-                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                        <span aria-hidden="true">&times;</span>
-                                                                    </button>
-                                                            </div>
-                                                    <div class="modal-body">
-                                                        <div class="container-fluid">
-                                                            Add rows here
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                        <button type="button" class="btn btn-primary">Save</button>
-                                                    </div>
-                                                </div>
+                    <div class="card-columns">
+                    <% for(var obj of data) { %>
+                        <div class="card"
+                             id = "card-<%= obj.history_id %>"
+                             style="opacity: 0.5; cursor:pointer;">
+                            <div class="card-body p-3">
+                                <% 
+                                    var imgUrl = '';
+                                    var issueDetail = '';
+                                    switch (obj.challenge_id + 1) {
+                                        case 0:
+                                            imgUrl = 'assets/images/action_images/Deleted.png';
+                                            issueDetail = obj.message;
+                                            break;
+                                        case 1: 
+                                            imgUrl = 'assets/images/action_images/Activated.png';
+                                            issueDetail = obj.message;
+                                            break;
+                                        case 2:
+                                            imgUrl = 'assets/images/action_images/ActionSpamError.png';
+                                            issueDetail = obj.message;
+                                            break;
+                                        case 3:
+                                            imgUrl = 'assets/images/action_images/RequestError.png';
+                                            issueDetail = obj.message;
+                                            break;
+                                        case 4:
+                                            imgUrl = 'assets/images/action_images/CheckPointError.png';
+                                            issueDetail = obj.message;
+                                            break;
+                                        case 5:
+                                            imgUrl = 'assets/images/action_images/SentryBlockError.png';
+                                            issueDetail = obj.message;
+                                            break;
+                                        case 6:
+                                            imgUrl = 'assets/images/action_images/ParseError.png';
+                                            issueDetail = obj.message;
+                                            break;
+                                        case 7:
+                                            imgUrl = 'assets/images/action_images/TypeError.png';
+                                            issueDetail = obj.message;
+                                            break;
+                                    }
+                                %>
+
+                                <div class="form-group mb-0">
+                                    <div class="row">
+                                        <div class="col-md-9">
+                                            <div class="form-group">
+                                                <img class="card-img-top" src="<%= imgUrl %>" style="width: 30px;" alt="">
+                                                <span class="font-weight-bolder text-danger" id="botname-<%= obj.history_id %>">
+                                                    " <%= obj.bot_name %> " <%= obj.history_id%>
+                                                </span>
                                             </div>
                                         </div>
-                                    <% } else { %>
-                                        <p class="card-text">
-                                            <strong>Message: </strong>
-                                            Your <strong>"<%= objHistory.bot_name %>"</strong> bot has been action required,
-                                            but you didn't created the bot using our platform before, 
-                                            so please check your Instagarm account first.
-                                        </p>
-                                    <% } %>
-    
-                                <% } %>
-                                
-                                <!-- Cannot read property search key of null -->
-                                <% if(objType.data == 'TypeError') { %>
-                                
-                                <% } %>
-                                
-                                <!-- Blocked bot by instagram -->
-                                <% if(objType.data == 'SentryBlockError') { %>
+                                        <div class="col-md-3">
+                                            <div class="form-check p-0 float-right" title="Check out" >
+                                                <label class="form-check-label">
+                                                    <input type="checkbox" class="form-check-inline" name="" id="checkbox-<%= obj.history_id %>" value="<%= obj.history_id %>" />
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
-                                <% } %>
-
-                                <!-- Maually paused by our platform -->
-                                <% if(objType.data == 'PausedBot') { %>
-
-                                <% } %>
+                                <div class="form-group">
+                                    <span><%= issueDetail %></span>
                                 </div>
                             </div>
-    
-                            <% } %>    
-                        <% } %>
+                        </div>
+                    <% } %>
+        
                     </div>
                 <% } %>
                 </div>
@@ -158,4 +153,6 @@
     <!-- container-scroller -->
 
     <% include ../partials/_scripts %>
+
+    <script src="app/js/notification.js"></script>
 </body>

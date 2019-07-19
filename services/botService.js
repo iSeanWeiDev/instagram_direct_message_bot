@@ -1269,14 +1269,14 @@ function getBotHistoryData(userId, cb) {
                             AND B.id = C.bot_id
                             AND A.id = ?
                         GROUP BY
-                            A."createdAt",
+                            B."createdAt",
                             B.id, 
                             B.bot_name, 
                             C.client_id, 
                             C.client_name, 
                             C.client_image_url 
                         ORDER BY 
-                            A."createdAt" DESC;`;
+                            B."createdAt" DESC;`;
     sequelize.query(selectQuery, { 
         replacements: [userId], 
         type: sequelize.QueryTypes.SELECT 
@@ -1373,7 +1373,7 @@ function getDashboardHistory(state, userId, cb) {
                                 count(aa.client_id) 
                             FROM (
                                 SELECT 
-                                    A.state,
+                                    B.state,
                                     B.id AS bot_id,
                                     B.bot_name AS bot_name,
                                     C.client_id
@@ -1386,7 +1386,7 @@ function getDashboardHistory(state, userId, cb) {
                                     AND B.id = C.bot_id
                                     AND A.id = ?
                                     AND DATE(C."createdAt") = DATE(now())
-                                GROUP BY A.state, B.id, B.bot_name, C.client_id 
+                                GROUP BY B.state, B.id, B.bot_name, C.client_id 
                             ) AS aa
                             GROUP BY 
                                 aa.state,
@@ -1396,7 +1396,7 @@ function getDashboardHistory(state, userId, cb) {
                             UNION ALL
                             
                             (SELECT 'comment' AS type,
-                                A.state,
+                                B.state,
                                 B.id,
                                 B.bot_name,
                                 COUNT(B.id)
@@ -1410,7 +1410,7 @@ function getDashboardHistory(state, userId, cb) {
                                 AND A.id = ?
                                 AND DATE(C."createdAt") = DATE(now())
                             GROUP BY
-                                A.state,
+                                B.state,
                                 B.id,
                                 B.bot_name
                             ORDER BY
@@ -1424,7 +1424,7 @@ function getDashboardHistory(state, userId, cb) {
                                 count(aa.client_id) 
                             FROM (
                                 SELECT 
-                                    A.state,
+                                    B.state,
                                     B.id AS bot_id,
                                     B.bot_name AS bot_name,
                                     C.client_id
@@ -1438,7 +1438,7 @@ function getDashboardHistory(state, userId, cb) {
                                         AND A.id = ?
                                         AND DATE(C."createdAt") BETWEEN DATE(NOW())-1 AND DATE(NOW())
                                 GROUP BY 
-                                    A.state,
+                                    B.state,
                                     B.id, 
                                     B.bot_name, 
                                     C.client_id 
@@ -1451,7 +1451,7 @@ function getDashboardHistory(state, userId, cb) {
                             UNION ALL
                             
                             (SELECT 'comment' AS type,
-                                A.state
+                                B.state,
                                 B.id,
                                 B.bot_name,
                                 COUNT(B.id)
@@ -1465,7 +1465,7 @@ function getDashboardHistory(state, userId, cb) {
                                 AND A.id = ?
                                 AND DATE(C."createdAt") BETWEEN DATE(NOW())-1 AND DATE(NOW())
                             GROUP BY
-                                A.state,
+                                B.state,
                                 B.id,
                                 B.bot_name
                             ORDER BY
@@ -1473,13 +1473,13 @@ function getDashboardHistory(state, userId, cb) {
             break;
         case 3: // Week
             selectQuery = ` (SELECT  'reply' AS type,
-                                aa.state
+                                aa.state,
                                 aa.bot_id,
-                                aa.bot_name ,
+                                aa.bot_name,
                                 count(aa.client_id) 
                             FROM (
                                 SELECT 
-                                    A.state,
+                                    B.state,
                                     B.id AS bot_id,
                                     B.bot_name AS bot_name,
                                     C.client_id
@@ -1493,7 +1493,7 @@ function getDashboardHistory(state, userId, cb) {
                                     AND A.id = ?
                                     AND DATE(C."createdAt") BETWEEN DATE(now()) - 7 AND DATE(now())
                                 GROUP BY 
-                                    A.state,
+                                    B.state,
                                     B.id, 
                                     B.bot_name, 
                                     C.client_id 
@@ -1506,7 +1506,7 @@ function getDashboardHistory(state, userId, cb) {
                             UNION ALL
                             
                             (SELECT 'comment' AS type,
-                                A.state,
+                                B.state,
                                 B.id,
                                 B.bot_name,
                                 COUNT(B.id)
@@ -1520,7 +1520,7 @@ function getDashboardHistory(state, userId, cb) {
                                 AND A.id = ?
                                 AND DATE(C."createdAt") BETWEEN DATE(now()) - 7 AND DATE(now())
                             GROUP BY
-                                A.state,
+                                B.state,
                                 B.id,
                                 B.bot_name
                             ORDER BY
@@ -1534,7 +1534,7 @@ function getDashboardHistory(state, userId, cb) {
                                     count(aa.client_id) 
                                 FROM (
                                     SELECT 
-                                        A.state,
+                                        B.state,
                                         B.id AS bot_id,
                                         B.bot_name AS bot_name,
                                         C.client_id
@@ -1548,7 +1548,7 @@ function getDashboardHistory(state, userId, cb) {
                                         AND A.id = ?
                                         AND DATE(C."createdAt") BETWEEN DATE(DATE(NOW()) - interval '1 month') AND DATE(NOW())
                                     GROUP BY 
-                                        A.state,
+                                        B.state,
                                         B.id,
                                         B.bot_name, 
                                         C.client_id 
@@ -1561,7 +1561,7 @@ function getDashboardHistory(state, userId, cb) {
                                 UNION ALL
                                 
                                 (SELECT 'comment' AS type,
-                                    A.state,
+                                    B.state,
                                     B.id,
                                     B.bot_name,
                                     COUNT(B.id)
@@ -1575,7 +1575,7 @@ function getDashboardHistory(state, userId, cb) {
                                     AND A.id = ?
                                     AND DATE(C."createdAt") BETWEEN DATE(DATE(NOW()) - interval '1 month') AND DATE(NOW())
                                 GROUP BY
-                                    A.state,
+                                    B.state,
                                     B.id,
                                     B.bot_name
                                 ORDER BY
@@ -1589,7 +1589,7 @@ function getDashboardHistory(state, userId, cb) {
                                     count(aa.client_id) 
                                 FROM (
                                     SELECT 
-                                        A.state,
+                                        B.state,
                                         B.id AS bot_id,
                                         B.bot_name AS bot_name,
                                         C.client_id
@@ -1603,7 +1603,7 @@ function getDashboardHistory(state, userId, cb) {
                                         AND A.id = ?
                                         AND DATE(C."createdAt") BETWEEN DATE(DATE(NOW()) - interval '1 year') AND DATE(NOW())
                                     GROUP BY 
-                                        A.state,
+                                        B.state,
                                         B.id, 
                                         B.bot_name, 
                                         C.client_id 
@@ -1616,7 +1616,7 @@ function getDashboardHistory(state, userId, cb) {
                                 UNION ALL
                                 
                                 (SELECT 'comment' AS type,
-                                    A.state
+                                    B.state,
                                     B.id,
                                     B.bot_name,
                                     COUNT(B.id)
@@ -1630,7 +1630,7 @@ function getDashboardHistory(state, userId, cb) {
                                     AND A.id = ?
                                     AND DATE(C."createdAt") BETWEEN DATE(DATE(NOW()) - interval '1 year') AND DATE(NOW())
                                 GROUP BY
-                                    A.state,
+                                    B.state,
                                     B.id,
                                     B.bot_name
                                 ORDER BY

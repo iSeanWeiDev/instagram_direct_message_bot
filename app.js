@@ -24,6 +24,7 @@ var config = require('./config/env');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var botsRouter = require('./routes/bots');
+var challengeRouter = require('./routes/challenges');
 var adminRouter = require('./routes/admin');
 
 // Initialize application.
@@ -54,6 +55,7 @@ app.use(session(config.session));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/bots', botsRouter);
+app.use('/challenges', challengeRouter);
 app.use('/admin', adminRouter);
 
 // catch 404 and forward to error handler

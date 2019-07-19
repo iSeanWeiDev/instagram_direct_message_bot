@@ -222,8 +222,6 @@ BotController.validateBot = function(req, res) {
             }
         });
     }
-
-   
 }
 
 // Save filters by array to rows.
@@ -567,12 +565,12 @@ BotController.changeBotStatus = function(req, res) {
         }
     } else {
         if(req.body.botId > 0) {
-            var sendData = {
+            var sendBotData = {
                 botId: req.body.botId,
                 is_activated: 'Y'
-            }
+            };
 
-            BotService.changeBotStatusById(sendData, function(cb) {
+            BotService.changeBotStatusById(sendBotData, function(cb) {
                 if(cb.flag == true) {
                     BotService.getBotProperties(req.body.botId, function(response) {
                         response.is_created = 'N';
@@ -609,7 +607,7 @@ BotController.changeBotStatus = function(req, res) {
             });
         }
     }
-}
+};
 
 // Update current bot by bot id.
 /**
@@ -646,7 +644,7 @@ BotController.updateBot = function(req, res) {
     //         });
     //     });
     // });
-}
+};
 
 // challenge using phone number.
 BotController.challengeInputPhone = function(req, res) {
@@ -664,7 +662,7 @@ BotController.challengeInputPhone = function(req, res) {
             });
         }
     });
-}
+};
 
 // challenge verify phone number with verify code.
 BotController.challengePhoneVerify = function(req, res) {
@@ -682,7 +680,7 @@ BotController.challengePhoneVerify = function(req, res) {
             });
         }
     });
-}
+};
 
 // challenge verify email with verify code.
 BotController.challengeEmailVerify = function(req, res) {
@@ -691,7 +689,7 @@ BotController.challengeEmailVerify = function(req, res) {
         flag: true,
         message: 'Verified your bot by email'
     });
-}
+};
 
 // Export module with UserController.
 module.exports = BotController;

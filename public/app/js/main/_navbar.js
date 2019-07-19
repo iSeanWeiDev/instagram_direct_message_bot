@@ -17,31 +17,29 @@ $(document).ready(function() {
     
             $.ajax({
                 method: 'POST',
-                url: '/users/notification',
+                url: '/challenges/dropdown/notification',
                 data: sendData
             }).done(function (response) {
                 if(response.flag == true) {
                     var appendNotificationString = '';
-                    var countOfNotificationIndex = 0;
-                    for(var objType of response.data) {
-                        for(var objNotification of objType.ChallengeHistories) {
-                            countOfNotificationIndex++;
-                            appendNotificationString = appendNotificationString + 
-                            `<a class="dropdown-item preview-item">
+                    var countOfNotificationIndex = response.count;
+
+                    for(var obj of response.data) {
+                        appendNotificationString = appendNotificationString + 
+                            `<a href="#" class="dropdown-item preview-item">
                                 <div class="preview-thumbnail">
-                                <img src="assets/images/faces/face12.jpg" alt="image" class="img-sm profile-pic"> </div>
-                                <div class="preview-item-content flex-grow py-2">
-                                <p class="preview-subject ellipsis font-weight-medium text-dark">`+ objType.message +` </p>
-                                <p class="font-weight-light small-text"> `+ objNotification.bot_name + ` &nbsp; ` + objType.data +` </p>
+                                    <div class="preview-item-content flex-grow py-2">
+                                        <p class="preview-subject ellipsis font-weight-medium text-danger"> "`+ obj.bot_name + '" Bot (' + obj.account_name + ')' +` </p>
+                                        <p class="font-weight-light small-text text-google"> `+ obj.message +` </p>
+                                    </div>
                                 </div>
                             </a> `;
-                        }
                     }
 
                     countOfNotification.html(countOfNotificationIndex);
                     notificationHeaderString.html('You have '+countOfNotificationIndex+' notifications')
                     notificationDropDownMenu.append(appendNotificationString);
-                } 
+                }
             });
         }
     }
@@ -63,16 +61,14 @@ $(document).ready(function() {
     pusher.subscribe('notifications')
             .bind('ToUser:'+userId.val(), function (data) {
                 if(data.userId == userId.val()) {
-                    var appendNotificationString = `<a class="dropdown-item preview-item">
-                                                        <div class="preview-thumbnail">
-                                                        <img src="assets/images/faces/face12.jpg" alt="image" class="img-sm profile-pic"> </div>
-                                                        <div class="preview-item-content flex-grow py-2">
-                                                        <p class="preview-subject ellipsis font-weight-medium text-dark">`+ data.message +` </p>
-                                                        <p class="font-weight-light small-text"> `+ data.botName + ` &nbsp; ` + data.data +` </p>
-                                                        </div>
-                                                    </a> `;
-
-
+                    var appendNotificationString = `<a href="#" class="dropdown-item preview-item">
+                                <div class="preview-thumbnail">
+                                    <div class="preview-item-content flex-grow py-2">
+                                        <p class="preview-subject ellipsis font-weight-medium text-danger"> "`+ data.botName + '" Bot (' + data.accountName + ')' +` </p>
+                                        <p class="font-weight-light small-text text-google"> `+ data.message +` </p>
+                                    </div>
+                                </div>
+                            </a> `;
 
                     notificationDropDownMenu.append(appendNotificationString);
                     var notificationIndex = parseInt(countOfNotification.text()) + 1;
@@ -88,13 +84,3 @@ $(document).ready(function() {
                 }
             });
 });
-
-// var sendData = {
-//     userId: req.session.user.userId,
-//     botId: data.botId,
-//     botName: cb.bot_name,
-//     accountName: cb.account_name,
-//     type: obj.dataValues.type,
-//     data: obj.dataValues.data,
-//     message: obj.dataValues.message
-// }

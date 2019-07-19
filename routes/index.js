@@ -13,7 +13,7 @@ var router = express.Router();
 // import service files.
 var ProxyService = require('../services/proxyService');
 var BotService = require('../services/botService');
-var UserService = require('../services/userService');
+var ChallengeService = require('../services/challengeService');
 
 /* GET login page. */
 router.get('/', function(req, res) {
@@ -74,7 +74,7 @@ router.get('/schedule', isAuthenicated, function(req, res) {
 
 /* GET notifications page. */
 router.get('/notifications', isAuthenicated, function(req, res) {
-  UserService.getInitialNotifications(req.session.user.userId, function (cb) {
+  ChallengeService.getInitialNotifications(req.session.user.userId, function (cb) {
     if(cb.flag == true) {
       res.render('pages/notifications', {user: req.session.user, data: cb.data});
     }

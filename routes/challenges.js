@@ -1,6 +1,6 @@
 /**
  * @description User router.
- * @name users.js
+ * @name challenges.js
  * @version 2.1.2
  * @author Super-Sean1995
  */
@@ -10,17 +10,14 @@ var express = require('express');
 var router = express.Router();
 
 // Import related core files
-var UserController = require('../controllers/userController');
+var ChallengeController = require('../controllers/challengeController');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });
 
-/* POST users signup listing. */
-router.post('/signup', UserController.signup);
-
-/* POST users login listing. */
-router.post('/login', UserController.login);
+router.post('/dropdown/notification', ChallengeController.getDropDownNotification);
+router.post('/read/notification', ChallengeController.readNotification);
 
 module.exports = router;
