@@ -95,6 +95,12 @@ router.get('/proxy', isAuthenicated, function(req, res) {
   });
 });
 
+
+/* Maintance model */
+router.get('/maintance', (req, res) => {
+  res.send('You can not access this platform! <a href="/">Click here to return.</a>');
+});
+
 /* Validate authenticated user. */
 function isAuthenicated(req, res, next) {
   if(req.session.authenticated) {

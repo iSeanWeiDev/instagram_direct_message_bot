@@ -210,7 +210,7 @@ setInterval(() => {
                     // Get media list by hashtag from instagram.
                     BotService.getMediaIdByHashTag(gSession, hashtag, function(mediaData) {
                         // if there is not hashtag on instagram, change the hashtag.
-                        if(mediaData.is_challenge == false) {
+                        // if(mediaData.is_challenge == false) {
                             if(mediaData.flag == false) {
                                 countOfFilters--;
 
@@ -221,15 +221,15 @@ setInterval(() => {
                                     gMediaIdList.push(obj);
                                 }
                             }
-                        } else {
-                            // challenge for getting media list from Instagram.
-                            process.send({
-                                type: 5,
-                                flag: true,
-                                botId:botId,
-                                message: mediaData.data
-                            })
-                        }
+                        // } else {
+                        //     // challenge for getting media list from Instagram.
+                        //     process.send({
+                        //         type: 5,
+                        //         flag: true,
+                        //         botId:botId,
+                        //         message: mediaData.data
+                        //     })
+                        // }
                     });
                 }
             }
@@ -575,7 +575,7 @@ setInterval(() => {
                     // Get media list by hashtag from instagram.
                     BotService.getMediaIdByHashTag(gSession, hashtag, function(mediaData) {
                         // if there is not hashtag on instagram, change the hashtag.
-                        if(mediaData.is_challenge == false) {
+                        // if(mediaData.is_challenge == false) {
                             if(mediaData.flag == false) {
                                 countOfFilters--;
 
@@ -586,15 +586,15 @@ setInterval(() => {
                                     gMediaIdList.push(obj);
                                 }
                             }
-                        } else {
-                            // challenge for getting media list from Instagram.
-                            process.send({
-                                type: 5,
-                                flag: true,
-                                botId:botId,
-                                message: mediaData.data
-                            })
-                        }
+                        // } else {
+                        //     // challenge for getting media list from Instagram.
+                        //     process.send({
+                        //         type: 5,
+                        //         flag: true,
+                        //         botId:botId,
+                        //         message: mediaData.data
+                        //     })
+                        // }
                     });
                 }
             }

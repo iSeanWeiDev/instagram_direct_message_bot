@@ -1,6 +1,8 @@
 'use strict';
 
 $(document).ready(function() {
+    window.token = 'PRIVATED_TOKEN_FOR_TESTING';
+
     var firstName = $('input#first-name.form-control'),
         lastName = $('input#last-name.form-control'),
         userName = $('input#user-name.form-control'),
@@ -42,26 +44,31 @@ $(document).ready(function() {
                 url: '/users/signup',
                 data: sendData
             }).done(function(response) {
-                if(response.flag == true) {
-                    mkNoti(
-                        'Congratration!',
-                        response.message,
-                        {
-                            status:'success'
-                        }
-                    );
-
-                    setTimeout(() => {
-                        window.open('/', '_self');
-                    }, 1500);
+                console.log(response);
+                if(response.isToken == true) {
+                    if(response.flag == true) {
+                        mkNoti(
+                            'Congratration!',
+                            response.message,
+                            {
+                                status:'success'
+                            }
+                        );
+    
+                        setTimeout(() => {
+                            window.open('/', '_self');
+                        }, 1500);
+                    } else {
+                        mkNoti(
+                            'Sign up failure!',
+                            response.message,
+                            {
+                                status:'danger'
+                            }
+                        );
+                    }
                 } else {
-                    mkNoti(
-                        'Sign up failure!',
-                        response.message,
-                        {
-                            status:'danger'
-                        }
-                    );
+                    window.open('/maintance', '_self');
                 }
             });
         }

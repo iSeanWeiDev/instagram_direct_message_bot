@@ -15,52 +15,63 @@ var UserController = {};
 
 // Register user by user email.
 UserController.signup = function(req, res) {
-    UserModel.findAll({
-        where: {
-            email: req.body.email
-        }
-    }).then(function(users) {
-        if(users.length == 0) {
-            var newUser = {
-                first_name: req.body.firstName,
-                last_name: req.body.lastName,
-                email: req.body.email,
-                user_name: req.body.userName,
-                password: req.body.password,
-                bill_token: req.body.billToken,
-                role: 1,
-                state: 1
+    if(req.body.billToken == 'PRIVATED_TOKEN_FOR_TESTING') {
+        UserModel.findAll({
+            where: {
+                email: req.body.email
             }
-
-            UserModel.create(newUser)
-                .then(function(user) {
-                    res.status(200).json({
-                        flag: true,
-                        message: 'Successfully created your account.'
+        }).then(function(users) {
+            if(users.length == 0) {
+                var newUser = {
+                    first_name: req.body.firstName,
+                    last_name: req.body.lastName,
+                    email: req.body.email,
+                    user_name: req.body.userName,
+                    password: req.body.password,
+                    bill_token: req.body.billToken,
+                    role: 1,
+                    state: 1
+                }
+    
+                UserModel.create(newUser)
+                    .then(function(user) {
+                        res.status(200).json({
+                            flag: true,
+                            isToken: true,
+                            message: 'Successfully created your account.'
+                        });
+                    })
+                    .catch(function(error) {
+                        console.log('Create user error: ' + error);
+    
+                        res.json({
+                            flag: false,
+                            isToken: true,
+                            message: 'Server connection error, Try again.'
+                        });
                     });
-                })
-                .catch(function(error) {
-                    console.log('Create user error: ' + error);
-
-                    res.json({
-                        flag: false,
-                        message: 'Server connection error, Try again.'
-                    });
+            } else {
+                res.json({
+                    flag: false,
+                    isToken: true,
+                    message: ' This email already used by another user.'
                 });
-        } else {
+            }
+        }).catch(function(error) {
+            console.log('Get user data for Auth error: ' + error);
+    
             res.json({
                 flag: false,
-                message: ' This email already used by another user.'
+                isToken: true,
+                message: 'Server connection error, Try again.'
             });
-        }
-    }).catch(function(error) {
-        console.log('Get user data for Auth error: ' + error);
-
+        });
+    } else {
         res.json({
             flag: false,
-            message: 'Server connection error, Try again.'
-        });
-    })
+            isToken: false
+        })
+    }
 }
 
 // Authenticate the user by email and create the session.
