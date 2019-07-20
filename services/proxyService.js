@@ -53,7 +53,6 @@ function getAllProxies(cb) {
         
     }).catch(function(error) {
         console.log('Get all proxy error: ' + error);
-        console.log(error);
     });
 }
 

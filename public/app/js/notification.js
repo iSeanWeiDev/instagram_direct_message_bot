@@ -27,7 +27,7 @@ $(document).ready(function () {
                 data: sendData
             }).done(function (response) {
                 var botName = $('span#botname-'+response.id).text().trim().split(' ')[1];
-                console.log();
+
                 mkNoti(
                     'Great!',
                     'You are checked out the '+botName+' notification',
@@ -44,7 +44,7 @@ $(document).ready(function () {
                         notificationHeaderString.html('You have '+notificationIndex+' notifications')
                         $('div#card-'+response.id).remove();
                     }, 800);
-                    console.log();
+
                 }
             });
         }

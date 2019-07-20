@@ -684,7 +684,6 @@ BotController.challengePhoneVerify = function(req, res) {
 
 // challenge verify email with verify code.
 BotController.challengeEmailVerify = function(req, res) {
-    console.log(req.body);
     res.json({
         flag: true,
         message: 'Verified your bot by email'

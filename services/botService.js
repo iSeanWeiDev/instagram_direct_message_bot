@@ -640,7 +640,12 @@ function followUserById(session, clientId, cb) {
                         });
                     })
                     .catch(function(error) {
-                        console.log(error);
+                        cb({
+                            flag: false,
+                            data: error.name
+                        })
+
+                        console.log('Create relationship error: ' + error);
                     })
             } 
             
@@ -1057,8 +1062,6 @@ function getAllBotsDetail(id, cb) {
                         replies: [],
                         fums: []
                     }
-    
-                    console.log(countOfBot);
         
                     var botId = bots[countOfBot].dataValues.id;
                     
@@ -1815,8 +1818,7 @@ function updateCommentsByBotid(botId, data, cb) {
         replacements: [
             botId
         ]
-    }).then(function(result) {
-        // console.log(result);
+    }).then(function() {
         var countOfData = data.length - 1;
 
         async function asyncInsertComment() {
@@ -1871,9 +1873,7 @@ function updateRepliesByBotid(botId, data, cb) {
         replacements: [
             botId
         ]
-    }).then(function(result) {
-        // console.log(result);
-
+    }).then(function() {
        async function asyncInsertReply() {
             var countOfData = data.length - 1;
             var text = data[countOfData];
@@ -2072,7 +2072,12 @@ function makeChallengePhone(botId, phone, cb) {
                         })
                     })
                     .catch(function(error) {
-                        console.log(error);
+                        cb({
+                            flag: error,
+                            data: error.name
+                        })
+
+                        console.log('Instagram phone verification error: ' + error);
                     });
             });
     }).catch(function(error) {
@@ -2080,7 +2085,6 @@ function makeChallengePhone(botId, phone, cb) {
             flag: false,
             type: error
         });
-        console.log();
     });
 }
 
@@ -2143,7 +2147,6 @@ function verifyPhone(botId, code, cb) {
             flag: false,
             type: error
         });
-        console.log();
     });
     
 }

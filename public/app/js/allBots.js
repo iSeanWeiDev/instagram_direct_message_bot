@@ -145,7 +145,6 @@ $(document).ready(function() {
                                 url: '/bots/change/status',
                                 data: sendData
                             }).done(function(response) {
-                                console.log(response);
                                 if(response && response.flag == true) {
                                     mkNoti(
                                         'Your Bot Paused!',
@@ -202,8 +201,6 @@ $(document).ready(function() {
                                 url: '/bots/change/status',
                                 data: sendData
                             }).done(function(response) {
-                                console.log(response);
-
                                 if(response && response.flag == true) {
                                     mkNoti(
                                         'Your Bot Activity Started!',

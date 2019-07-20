@@ -74,7 +74,6 @@ $(document).ready(function() {
 
     // Delete the proxy
     this.deleteProxy = function(id) {
-        console.log(id);
         if(id >= 0) {
             $.confirm({
                 title: 'Sure delete?',
