@@ -58,9 +58,12 @@ $(document).ready(function() {
     this.updateBot = function(id) {
         var messageDelay = $('input#message-delay-'+id),
             maxComment = $('input#max-comment-'+id),
-            filters = $('textarea#filters-'+id).val().replace(/\n/g, '').replace(/ /g, '').replace(/#/g, '').split(','),
-            comments = $('textarea#comments-'+id).val().replace(/\n/g, '').replace(/ /g, '').replace(/#/g, '').split(','),
-            replies = $('textarea#replies-'+id).val().replace(/\n/g, '').replace(/ /g, '').replace(/#/g, '').split(','),
+            // filters = $('textarea#filters-'+id).val().replace(/\n/g, '').replace(/ /g, '').replace(/#/g, '').split(','),
+            // comments = $('textarea#comments-'+id).val().replace(/\n/g, '').replace(/ /g, '').replace(/#/g, '').split(','),
+            // replies = $('textarea#replies-'+id).val().replace(/\n/g, '').replace(/ /g, '').replace(/#/g, '').split(','),
+            filters = $('textarea#filters-'+id).val().replace(/\n/g, '').replace(/#/g, '').split(','),
+            comments = $('textarea#comments-'+id).val().replace(/\n/g, '').replace(/#/g, '').split(','),
+            replies = $('textarea#replies-'+id).val().replace(/\n/g, '').replace(/#/g, '').split(','),
             fum1 = $('textarea#fum-'+id+'-2th'),
             fum2 = $('textarea#fum-'+id+'-6th'),
             fum3 = $('textarea#fum-'+id+'-12th'),
@@ -70,25 +73,41 @@ $(document).ready(function() {
             fum7 = $('textarea#fum-'+id+'-3month'),
             fum8 = $('textarea#fum-'+id+'-4month');
 
+        var arrFilter = stringToArray(filters);
+        var arrComment = stringToArray(comments);
+        var arrReply = stringToArray(replies);
+
+        function stringToArray(params) {
+            var array = [];
+
+            for(var obj of params) {
+                if(obj.replace(/ /g, '').trim().length > 0) {
+                    array.push(obj.replace(/ /g, '').trim());
+                }
+            }
+
+            return array;
+        }   
+
         var sendData = {
             botId: id,
             messageDelay: messageDelay.val(),
             maxComment: maxComment.val(),
-            filters: filters,
-            comments: comments,
-            replies: replies,
+            filters: arrFilter,
+            comments: arrComment,
+            replies: arrReply,
             fums: [
-                fum1.val(), 
-                fum2.val(), 
-                fum3.val(), 
-                fum4.val(), 
-                fum5.val(), 
-                fum6.val(), 
-                fum7.val(), 
-                fum8.val()
+                fum1.val().trim(), 
+                fum2.val().trim(), 
+                fum3.val().trim(), 
+                fum4.val().trim(), 
+                fum5.val().trim(), 
+                fum6.val().trim(), 
+                fum7.val().trim(), 
+                fum8.val().trim()
             ]
         }
-
+        
         $.ajax({
             method: 'POST',
             url: '/bots/update',

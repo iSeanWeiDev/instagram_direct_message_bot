@@ -616,33 +616,25 @@ BotController.changeBotStatus = function(req, res) {
  * and re-send data to bot by using bot id
  */
 BotController.updateBot = function(req, res) {
+    // console.log(req.body);
     var botId = req.body.botId,
         messageDelay = req.body.messageDelay,
         maxComment = req.body.maxComment,
-        arrFilter = JSON.parse(JSON.stringify(req.body.filters)),
-        arrComment = JSON.parse(JSON.stringify(req.body.comments)),
-        arrReply = JSON.parse(JSON.stringify(req.body.replies)),
-        arrFUM = JSON.parse(JSON.stringify(req.body.fums));
+        arrFilter = req.body.filters,
+        arrComment = req.body.comments,
+        arrReply = req.body.replies,
+        arrFUM = req.body.fums;
 
-    var updateBotData = {
-        message_delay: messageDelay,
-        max_comment: maxComment
-    }
-    // console.log(req.body);
-    // console.log(updateBotData, arrFUM,arrReply,arrComment,arrFilter);
     // BotService.updateBotSettingbyId(botId, updateBotData, function(botCB) {
-    //     BotService.updateFiltersByBotid(botId, arrFilter, function(filterCB) {
-    //         BotService.updateCommentsByBotid(botId, arrComment, function(commentCB) {
-    //             BotService.updateRepliesByBotid(botId, arrReply, function(replyCB) {
-    //                 BotService.updateFUMsByBotid(botId, arrFUM, function(fumCB) {
-                        res.json({
-                            flag: true,
-                            message: 'Updated your bot'
-                        })
-    //                 });
-    //             });
-    //         });
-    //     });
+        // BotService.updateFiltersByBotid(botId, arrFilter, function(filterCB) {
+            // BotService.updateCommentsByBotid(botId, arrComment, function(commentCB) {
+                // BotService.updateRepliesByBotid(botId, arrReply, function(replyCB) {
+                    // BotService.updateFUMsByBotid(botId, arrFUM, function(fumCB) {
+                        
+                    // });
+                // });
+            // });
+        // });
     // });
 };
 

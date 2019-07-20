@@ -54,12 +54,12 @@ BotService.getDashboardHistory = getDashboardHistory;
 BotService.getBotGeneralDetail = getBotGeneralDetail;
 BotService.changeBotStatusById = changeBotStatusById;
 // update bot by bot id => allbots page
-BotService.updateBotSettingbyId = updateBotSettingbyId
-BotService.updateFiltersByBotid = updateFiltersByBotid;
-BotService.updateCommentsByBotid = updateCommentsByBotid;
-BotService.updateRepliesByBotid = updateRepliesByBotid;
-BotService.updateFUMsByBotid = updateFUMsByBotid;
-BotService.UpdateBotForChallenge = UpdateBotForChallenge;
+// BotService.updateBotSettingbyId = updateBotSettingbyId
+// BotService.updateFiltersByBotid = updateFiltersByBotid;
+// BotService.updateCommentsByBotid = updateCommentsByBotid;
+// BotService.updateRepliesByBotid = updateRepliesByBotid;
+// BotService.updateFUMsByBotid = updateFUMsByBotid;
+// BotService.UpdateBotForChallenge = UpdateBotForChallenge;
 
 // challenge
 BotService.getChallengeList = getChallengeList; 
@@ -1734,20 +1734,20 @@ function changeBotStatusById(data, cb) {
  * @param {OBJECT} data 
  * @param {OBJECT} cb 
  */
-function updateBotSettingbyId(botId, data, cb) {
-    BotModel.update(data, {
-        where: {
-            id:  botId
-        }
-    }).then(function(result) {
-        if(result[0] == 1) {
-            cb(1);
-        }
-    }).catch(function(error) {
-        console.log('Update bot setting error:' + error);
-        cb(0);
-    })
-}
+// function updateBotSettingbyId(botId, data, cb) {
+//     BotModel.update(data, {
+//         where: {
+//             id:  botId
+//         }
+//     }).then(function(result) {
+//         if(result[0] == 1) {
+//             cb(1);
+//         }
+//     }).catch(function(error) {
+//         console.log('Update bot setting error:' + error);
+//         cb(0);
+//     })
+// }
 
 /**
  * @description
@@ -1758,48 +1758,48 @@ function updateBotSettingbyId(botId, data, cb) {
  * @param {OBJECT} data 
  * @param {OBJECT} cb 
  */
-function updateFiltersByBotid(botId, data, cb) {
-    var updateSQL = `UPDATE "public"."Filters"	
-                        SET  state = 0
-                        WHERE 	bot_id = ?`;
+// function updateFiltersByBotid(botId, data, cb) {
+//     var updateSQL = `UPDATE "public"."Filters"	
+//                         SET  state = 0
+//                         WHERE 	bot_id = ?`;
 
-    sequelize.query(updateSQL, {
-        replacements: [
-            botId
-        ]
-    }).then(function(result) {
-        var countOfData = data.length - 1;
+//     sequelize.query(updateSQL, {
+//         replacements: [
+//             botId
+//         ]
+//     }).then(function(result) {
+//         var countOfData = data.length - 1;
 
-        async function asyncInsertFilter() {
-            var hashTag = data[countOfData];
-            if(hashTag != '') {
-                var  createData = {
-                    bot_id: botId,
-                    hashtag: hashTag,
-                    state: 1
-                }
+//         async function asyncInsertFilter() {
+//             var hashTag = data[countOfData];
+//             if(hashTag != '') {
+//                 var  createData = {
+//                     bot_id: botId,
+//                     hashtag: hashTag,
+//                     state: 1
+//                 }
     
-                FilterModel.create(createData)
-                    .then(function(result) {
-                        if(result) {
-                            cb(1);
-                            countOfData --;
-                        }
+//                 FilterModel.create(createData)
+//                     .then(function(result) {
+//                         if(result) {
+//                             cb(1);
+//                             countOfData --;
+//                         }
 
-                        if(countOfData >= 0) {
-                            asyncInsertFilter();
-                        }
-                    })
-                    .catch(function(error) {
-                        console.lo('Insert new hashtag error: ' + error);
-                        cb(2)
-                    })
-            }
-        }
+//                         if(countOfData >= 0) {
+//                             asyncInsertFilter();
+//                         }
+//                     })
+//                     .catch(function(error) {
+//                         console.lo('Insert new hashtag error: ' + error);
+//                         cb(2)
+//                     })
+//             }
+//         }
 
-        asyncInsertFilter();
-    });
-}
+//         asyncInsertFilter();
+//     });
+// }
 
 /**
  * @description
@@ -1810,50 +1810,50 @@ function updateFiltersByBotid(botId, data, cb) {
  * @param {OBJECT} data 
  * @param {OBJECT} cb 
  */
-function updateCommentsByBotid(botId, data, cb) {
-    var updateSql = ` update "public"."Comments"
-                        SET state = 0
-                        WHERE bot_id = ?`;
-    sequelize.query(updateSql, {
-        replacements: [
-            botId
-        ]
-    }).then(function() {
-        var countOfData = data.length - 1;
+// function updateCommentsByBotid(botId, data, cb) {
+//     var updateSql = ` update "public"."Comments"
+//                         SET state = 0
+//                         WHERE bot_id = ?`;
+//     sequelize.query(updateSql, {
+//         replacements: [
+//             botId
+//         ]
+//     }).then(function() {
+//         var countOfData = data.length - 1;
 
-        async function asyncInsertComment() {
-            var text = data[countOfData];
+//         async function asyncInsertComment() {
+//             var text = data[countOfData];
 
-            if(text != '') {
-                var createData = {
-                    bot_id: botId,
-                    text: text,
-                    state: 1
-                }
+//             if(text != '') {
+//                 var createData = {
+//                     bot_id: botId,
+//                     text: text,
+//                     state: 1
+//                 }
                 
-                CommentModel.create(createData)
-                    .then(function(comment) {
-                        if(comment) {
-                            cb(1);
+//                 CommentModel.create(createData)
+//                     .then(function(comment) {
+//                         if(comment) {
+//                             cb(1);
 
-                            countOfData--;
-                        }
+//                             countOfData--;
+//                         }
 
                         
-                        if(countOfData >= 0) {
-                            asyncInsertComment();
-                        }
-                    })
-                    .catch(function(error) {
-                        console.lo('Save new Comment error: ' + error );
-                        cb(2)
-                    })
-            }
-        }
+//                         if(countOfData >= 0) {
+//                             asyncInsertComment();
+//                         }
+//                     })
+//                     .catch(function(error) {
+//                         console.lo('Save new Comment error: ' + error );
+//                         cb(2)
+//                     })
+//             }
+//         }
 
-        asyncInsertComment()
-    });
-}
+//         asyncInsertComment()
+//     });
+// }
 
 /**
  * @description
@@ -1864,49 +1864,49 @@ function updateCommentsByBotid(botId, data, cb) {
  * @param {OBJECT} data 
  * @param {OBJECT} cb 
  */
-function updateRepliesByBotid(botId, data, cb) {
-    var updateSql = `UPDATE "public"."Replies"
-                        SET state = 0
-                        WHERE bot_id = ?`;
+// function updateRepliesByBotid(botId, data, cb) {
+//     var updateSql = `UPDATE "public"."Replies"
+//                         SET state = 0
+//                         WHERE bot_id = ?`;
 
-    sequelize.query(updateSql, {
-        replacements: [
-            botId
-        ]
-    }).then(function() {
-       async function asyncInsertReply() {
-            var countOfData = data.length - 1;
-            var text = data[countOfData];
-            if(text != '') {
-                var createData = {
-                    bot_id: botId,
-                    text: text,
-                    state: 1
-                }
+//     sequelize.query(updateSql, {
+//         replacements: [
+//             botId
+//         ]
+//     }).then(function() {
+//        async function asyncInsertReply() {
+//             var countOfData = data.length - 1;
+//             var text = data[countOfData];
+//             if(text != '') {
+//                 var createData = {
+//                     bot_id: botId,
+//                     text: text,
+//                     state: 1
+//                 }
 
-                ReplyModel.create(createData)
-                    .then(function(reply) {
-                        if(reply) {
-                            cb(1);
-                            countOfData --;
-                        }
+//                 ReplyModel.create(createData)
+//                     .then(function(reply) {
+//                         if(reply) {
+//                             cb(1);
+//                             countOfData --;
+//                         }
 
-                        if(countOfData >= 0) {
-                            asyncInsertReply();
-                        }
-                    })
-                    .catch(function(error) {
-                        console.log('Create new reply error:' + error);
-                        cb(2);
-                    });
-            }
-       }
+//                         if(countOfData >= 0) {
+//                             asyncInsertReply();
+//                         }
+//                     })
+//                     .catch(function(error) {
+//                         console.log('Create new reply error:' + error);
+//                         cb(2);
+//                     });
+//             }
+//        }
 
-       asyncInsertReply();
-    }).catch(function(error) {
-        console.log('Update Replies error:' + error);
-    })
-}
+//        asyncInsertReply();
+//     }).catch(function(error) {
+//         console.log('Update Replies error:' + error);
+//     })
+// }
 
 /**
  * @description
@@ -1917,47 +1917,77 @@ function updateRepliesByBotid(botId, data, cb) {
  * @param {OBJECT} data 
  * @param {OBJECT} cb 
  */
-function updateFUMsByBotid(botId, data, cb) {
-    FUMModel.findAll({
-        attributes: [
-            'id', 'start_date'
-        ],
-        where: {
-            bot_id: botId
-        }
-    }).then(function(result) {
-        var countOfRow = 8;
+// function updateFUMsByBotid(botId, data, cb) {
+//     FUMModel.findAll({
+//         attributes: [
+//             'id', 'start_date'
+//         ],
+//         where: {
+//             bot_id: botId
+//         }
+//     }).then(function(result) {
+//         var countOfRow = 8;
         
-        async function asyncUpdateFUM() {
-            var updateData = {
-                bot_id: botId,
-                start_date: result[countOfRow - 1].dataValues.start_date,
-                text: data[countOfRow - 1],
-                state: 1
-            }
+//         async function asyncUpdateFUM() {
+//             var updateData = {
+//                 bot_id: botId,
+//                 start_date: result[countOfRow - 1].dataValues.start_date,
+//                 text: data[countOfRow - 1],
+//                 state: 1
+//             }
 
-            FUMModel.update(updateData, {
-                where: {
-                    id: result[countOfRow - 1].dataValues.id
-                }
-            }).then(function(result) {
-                if(result[0] == 1) {
-                    countOfRow--;
-                }
+//             FUMModel.update(updateData, {
+//                 where: {
+//                     id: result[countOfRow - 1].dataValues.id
+//                 }
+//             }).then(function(result) {
+//                 if(result[0] == 1) {
+//                     countOfRow--;
+//                 }
 
-                if(countOfRow > 0) {
-                    asyncUpdateFUM();
-                }
-            }).catch(function(error) {
-                console.log('Update follow up message error: ' + error);
-            });
-        }
+//                 if(countOfRow > 0) {
+//                     asyncUpdateFUM();
+//                 }
+//             }).catch(function(error) {
+//                 console.log('Update follow up message error: ' + error);
+//             });
+//         }
 
-        asyncUpdateFUM();
-    }).catch(function(error) {
-        console.lo('Get FUMs error:' + error);
-    });
-}
+//         asyncUpdateFUM();
+//     }).catch(function(error) {
+//         console.lo('Get FUMs error:' + error);
+//     });
+// }
+
+/**
+ * @description
+ * Update the bot state with challenge id.
+ * 
+ * @param {INTEGER} botId 
+ * @param {INTEGER} challengeId 
+ * @param {OBJECT} cb 
+ */
+// function UpdateBotForChallenge(botId, challengeId, cb) {
+//     var updateData = {
+//         state: parseInt(challengeId) + 1,
+//         is_activated: 'N'
+//     }
+//     BotModel.update(updateData, {
+//         where: {
+//             id: botId
+//         }
+//     }).then(function(result) {
+//         if(result[0] == 1) {
+//             cb(true);
+//         } else {
+//             cb(false);
+//         }
+//     }).catch(function(error) {
+//         cb(false);
+//         console.log("update bot for challenge error: " + error);
+//     });
+// }
+
 
 /**
  * @description
@@ -2151,34 +2181,7 @@ function verifyPhone(botId, code, cb) {
     
 }
 
-/**
- * @description
- * Update the bot state with challenge id.
- * 
- * @param {INTEGER} botId 
- * @param {INTEGER} challengeId 
- * @param {OBJECT} cb 
- */
-function UpdateBotForChallenge(botId, challengeId, cb) {
-    var updateData = {
-        state: parseInt(challengeId) + 1,
-        is_activated: 'N'
-    }
-    BotModel.update(updateData, {
-        where: {
-            id: botId
-        }
-    }).then(function(result) {
-        if(result[0] == 1) {
-            cb(true);
-        } else {
-            cb(false);
-        }
-    }).catch(function(error) {
-        cb(false);
-        console.log("update bot for challenge error: " + error);
-    });
-}
+
 
 /**
  * @description
