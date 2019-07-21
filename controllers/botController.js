@@ -614,9 +614,10 @@ BotController.changeBotStatus = function(req, res) {
  * before update the bot, update current data, 
  * and restart the validation for re-create the bot.
  * and re-send data to bot by using bot id
+ * 
+ * Needed ask to sebastian about update the bot, if user updated his bot then bot must work on server?
  */
 BotController.updateBot = function(req, res) {
-    // console.log(req.body);
     var botId = req.body.botId,
         messageDelay = req.body.messageDelay,
         maxComment = req.body.maxComment,
@@ -625,17 +626,100 @@ BotController.updateBot = function(req, res) {
         arrReply = req.body.replies,
         arrFUM = req.body.fums;
 
-    // BotService.updateBotSettingbyId(botId, updateBotData, function(botCB) {
-        // BotService.updateFiltersByBotid(botId, arrFilter, function(filterCB) {
-            // BotService.updateCommentsByBotid(botId, arrComment, function(commentCB) {
-                // BotService.updateRepliesByBotid(botId, arrReply, function(replyCB) {
-                    // BotService.updateFUMsByBotid(botId, arrFUM, function(fumCB) {
-                        
-                    // });
-                // });
-            // });
-        // });
-    // });
+    var updateBotData = {
+        message_delay: messageDelay,
+        max_comment: maxComment
+    };
+
+    BotService.updateBotSettingbyId(botId, updateBotData, function(botCB) {
+        if(botCB.flag == true) {
+            BotService.updateFiltersByBotid(botId, arrFilter, function(filterCB) {
+                if(filterCB.flag == true) {
+                    BotService.updateCommentsByBotid(botId, arrComment, function(commentCB) {
+                        if(commentCB.flag == true) {
+                            BotService.updateRepliesByBotid(botId, arrReply, function(replyCB) {
+                                if(replyCB.flag == true) {
+                                    BotService.updateFUMsByBotid(botId, arrFUM, function(fumCB) {
+                                        if(fumCB.flag == true) {
+                                            /**
+                                             * @description
+                                             * Send data to bot by using new data from database.
+                                             */
+                                            var sendBotData = {
+                                                botId: req.body.botId,
+                                                is_activated: 'Y'
+                                            };
+                                
+                                            BotService.changeBotStatusById(sendBotData, function(cb) {
+                                                if(cb.flag == true) {
+                                                    BotService.getBotProperties(req.body.botId, function(response) {
+                                                        response.is_created = 'N';
+                                                        response.is_updated = 'Y';
+                                
+                                                        for(var i = 0; i < arrBotProcessName.length; i++) {    
+                                                            if(arrBotProcessName[i] == req.body.botId) {
+                                                                arrBotProcess[i].on('message', function(data) {
+                                                                    if(data.type == 2) {
+                                                                        if(startFlag == true) {
+                                                                            if(data.flag == true) {
+                                                                                res.json({
+                                                                                    flag: true,
+                                                                                    message: 'Successfully updated your bot!'
+                                                                                });
+                                                                            } else {
+                                                                                res.json({
+                                                                                    flag: false,
+                                                                                    message: 'Challenge required!'
+                                                                                });
+                                                                            }
+                                                                        }
+
+                                                                        // initialize the flag for duplicated sending.
+                                                                        startFlag = false;
+                                                                    }
+                                                                });
+                                
+                                                                arrBotProcess[i].send(response);
+                                                            }
+                                                        }
+                                                    });
+                                                }
+                                                
+                                            });
+                                        } else {
+                                            res.json({
+                                                flag: false,
+                                                message: 'Update bot failure.'
+                                            });
+                                        }
+                                    });
+                                } else {
+                                    res.json({
+                                        flag: false
+                                    });
+                                }
+                            });
+                        } else {
+                            res.json({
+                                flag: false,
+                                message: 'Update bot failure.'
+                            });
+                        }
+                    });
+                } else {
+                    res.json({
+                        flag: false,
+                        message: 'Update bot failure.'
+                    });
+                }
+            });
+        } else {
+            res.json({
+                flag: false,
+                message: 'Update bot failure.'
+            });
+        }
+    });
 };
 
 // challenge using phone number.

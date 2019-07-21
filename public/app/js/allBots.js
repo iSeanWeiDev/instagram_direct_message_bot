@@ -115,7 +115,7 @@ $(document).ready(function() {
         }).done(function(response) {
             if(response && response.flag == true) {
                 mkNoti(
-                    'Your Bot Paused!',
+                    'Success!',
                     response.message,
                     {
                         status:'success'
@@ -127,7 +127,7 @@ $(document).ready(function() {
                 }, 1000);
             } else {
                 mkNoti(
-                    'Pause Bot Failure!',
+                    'Updatae Bot Failure!',
                     response.message,
                     {
                         status:'danger'

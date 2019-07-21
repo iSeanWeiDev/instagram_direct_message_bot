@@ -51,7 +51,51 @@
                     <% for(var obj of data) { %> 
                         <div class="col-md-2 mt-3 mb-3 card-bots">
                             <div class="card">
-                                <img src="assets/images/bot.jpg" class="card-img bot-img" alt="header-image">
+                            <%  var imgUrl = '';
+                                if(obj.bot[0].is_activated == 'Y') {
+                                    imgUrl = 'assets/images/action_images/activated_bot.png';
+                                } else {
+                                    switch (obj.bot[0].state) {
+                                        case 0:
+                                            imgUrl = 'assets/images/action_images/deleted_bot.png'
+                                            break;
+    
+                                        case 1:
+                                            imgUrl = 'assets/images/action_images/activated_bot.png'
+                                            break;
+    
+                                        case 2:
+                                            imgUrl = 'assets/images/action_images/action_required_bot.png'
+                                            break;
+                                        
+                                        case 3:
+                                            imgUrl = 'assets/images/action_images/action_required_bot.png'
+                                            break;
+                                        
+                                        case 4:
+                                            imgUrl = 'assets/images/action_images/blocked_bot.png'
+                                            break;
+    
+                                        case 5:
+                                            imgUrl = 'assets/images/action_images/blocked_bot.png'
+                                            break;
+    
+                                        case 6:
+                                            imgUrl = 'assets/images/action_images/action_required_bot.png'
+                                            break;
+                                        
+                                        case 7:
+                                            imgUrl = 'assets/images/action_images/action_required_bot.png'
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                }
+                            
+                            
+                            
+                            %>
+                                <img src="<%= imgUrl %>" class="card-img bot-img" alt="header-image">
                                 <div class="card-img-overlay">
                                     <div class="text-right text-white">
                                         <i onclick="deleteBot(<%= obj.bot[0].id %>)"
