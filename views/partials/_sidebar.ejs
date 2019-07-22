@@ -3,7 +3,7 @@
     <li class="nav-item nav-profile">
       <a href="#" class="nav-link">
         <div class="profile-image">
-          <img class="img-xs rounded-circle" src="assets/images/faces/face8.jpg" alt="profile image">
+          <img class="img-xs rounded-circle" src="assets/images/instagram-user.png" alt="profile image">
           <div class="dot-indicator bg-success"></div>
         </div>
         <div class="text-wrapper">
@@ -49,14 +49,14 @@
         <span class="menu-title">Create Bot</span>
       </a>
     </li>
-
+<%# 
     <li class="nav-item">
       <a class="nav-link" href="/schedule">
         <i class="menu-icon typcn typcn-bell"></i>
         <span class="menu-title">Schedule manager</span>
       </a>
     </li>
-
+%>
     <% if(parseInt(user.role) == 5) { %>
     <li class="nav-item">
       <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
@@ -67,11 +67,12 @@
       <div class="collapse" id="auth">
         <ul class="nav flex-column sub-menu">
           <li class="nav-item">
-            <a class="nav-link" href="/proxy"> Proxy manage </a>
+            <a class="nav-link" href="/admin-proxy"> Proxy manage </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#"> User manage </a>
+            <a class="nav-link" href="/admin-user"> User manage </a>
           </li>
+<%#
           <li class="nav-item">
             <a class="nav-link" href="#"> Default page3 </a>
           </li>
@@ -80,7 +81,7 @@
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#"> Default page5 </a>
-          </li>
+          </li> %>
         </ul>
       </div>
     </li>

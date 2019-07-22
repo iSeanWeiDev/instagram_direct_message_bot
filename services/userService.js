@@ -14,6 +14,7 @@ var UserModel = require('../models').User;
 var UserService = {};
 
 UserService.getUserDetail = getUserDetail;
+UserService.getAllUsers = getAllUsers;
 
 /**
  * @description
@@ -32,5 +33,20 @@ function getUserDetail(id, cb) {
     })
 }
 
+/**
+ * @description
+ * get all users to manage for admin
+ * 
+ * @param {OBJECT} cb 
+ */
+function getAllUsers(cb) {
+    UserModel.findAll()
+        .then(function (users) {
+            cb(users);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+}
 // Export BotService module.
 module.exports = UserService;

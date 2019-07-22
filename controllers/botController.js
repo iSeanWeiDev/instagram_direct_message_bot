@@ -641,51 +641,56 @@ BotController.updateBot = function(req, res) {
                                 if(replyCB.flag == true) {
                                     BotService.updateFUMsByBotid(botId, arrFUM, function(fumCB) {
                                         if(fumCB.flag == true) {
+                                            res.json({
+                                                flag: true,
+                                                message: 'Successfully updated your bot!'
+                                            });
+
                                             /**
                                              * @description
                                              * Send data to bot by using new data from database.
                                              */
-                                            var sendBotData = {
-                                                botId: req.body.botId,
-                                                is_activated: 'Y'
-                                            };
+                                            // var sendBotData = {
+                                            //     botId: req.body.botId,
+                                            //     is_activated: 'Y'
+                                            // };
                                 
-                                            BotService.changeBotStatusById(sendBotData, function(cb) {
-                                                if(cb.flag == true) {
-                                                    BotService.getBotProperties(req.body.botId, function(response) {
-                                                        response.is_created = 'N';
-                                                        response.is_updated = 'Y';
+                                            // BotService.changeBotStatusById(sendBotData, function(cb) {
+                                            //     if(cb.flag == true) {
+                                            //         BotService.getBotProperties(req.body.botId, function(response) {
+                                            //             response.is_created = 'N';
+                                            //             response.is_updated = 'Y';
                                 
-                                                        for(var i = 0; i < arrBotProcessName.length; i++) {    
-                                                            if(arrBotProcessName[i] == req.body.botId) {
-                                                                arrBotProcess[i].on('message', function(data) {
-                                                                    if(data.type == 2) {
-                                                                        if(startFlag == true) {
-                                                                            if(data.flag == true) {
-                                                                                res.json({
-                                                                                    flag: true,
-                                                                                    message: 'Successfully updated your bot!'
-                                                                                });
-                                                                            } else {
-                                                                                res.json({
-                                                                                    flag: false,
-                                                                                    message: 'Challenge required!'
-                                                                                });
-                                                                            }
-                                                                        }
+                                            //             for(var i = 0; i < arrBotProcessName.length; i++) {    
+                                            //                 if(arrBotProcessName[i] == req.body.botId) {
+                                            //                     arrBotProcess[i].on('message', function(data) {
+                                            //                         if(data.type == 2) {
+                                            //                             if(startFlag == true) {
+                                            //                                 if(data.flag == true) {
+                                            //                                     res.json({
+                                            //                                         flag: true,
+                                            //                                         message: 'Successfully updated your bot!'
+                                            //                                     });
+                                            //                                 } else {
+                                            //                                     res.json({
+                                            //                                         flag: false,
+                                            //                                         message: 'Challenge required!'
+                                            //                                     });
+                                            //                                 }
+                                            //                             }
 
-                                                                        // initialize the flag for duplicated sending.
-                                                                        startFlag = false;
-                                                                    }
-                                                                });
+                                            //                             // initialize the flag for duplicated sending.
+                                            //                             startFlag = false;
+                                            //                         }
+                                            //                     });
                                 
-                                                                arrBotProcess[i].send(response);
-                                                            }
-                                                        }
-                                                    });
-                                                }
+                                            //                     arrBotProcess[i].send(response);
+                                            //                 }
+                                            //             }
+                                            //         });
+                                            //     }
                                                 
-                                            });
+                                            // });
                                         } else {
                                             res.json({
                                                 flag: false,

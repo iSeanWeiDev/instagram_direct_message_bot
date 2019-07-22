@@ -85,7 +85,7 @@ router.get('/notifications', isAuthenicated, function(req, res) {
 });
 
 /* Admin route */
-router.get('/proxy', isAuthenicated, function(req, res) {
+router.get('/admin-proxy', isAuthenicated, function(req, res) {
   ProxyService.getAllProxies(function(cb) {
     if(req.session.user.role == 5) {
       res.render('pages/admin/proxy', {user: req.session.user, data: cb});
@@ -95,6 +95,15 @@ router.get('/proxy', isAuthenicated, function(req, res) {
   });
 });
 
+router.get('/admin-user', isAuthenicated, function(req, res) {
+  UserService.getAllUsers(function(cb) {
+    if(req.session.user.role == 5) {
+      res.render('pages/admin/user', {user: req.session.user, data: cb});
+    } else {
+      res.redirect('dashboard');
+    }
+  });
+});
 
 /* Maintance model */
 router.get('/maintance', (req, res) => {

@@ -9,8 +9,12 @@
   </div>
   <div class="navbar-menu-wrapper d-flex align-items-center">
     <ul class="navbar-nav">
-      <li class="nav-item font-weight-semibold d-none d-lg-block">Help: igagentprime@gmail.com</li>
-      <li class="nav-item dropdown language-dropdown">
+      <li class="nav-item font-weight-semibold d-none d-lg-block">
+        Help: igagentprime@gmail.com
+      </li>
+
+      <!-- Begin Language drop down -->
+      <!-- <li class="nav-item dropdown language-dropdown">
         <a class="nav-link dropdown-toggle px-2 d-flex align-items-center" id="LanguageDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
           <div class="d-inline-flex mr-0 mr-md-3">
             <div class="flag-icon-holder">
@@ -19,9 +23,6 @@
           </div>
           <span class="profile-text font-weight-medium d-none d-md-block">English</span>
         </a>
-
-        <input id="logedin-user-id" value="<%= user.userId %>" type="text" hidden>
-
         <div class="dropdown-menu dropdown-menu-left navbar-dropdown py-2" aria-labelledby="LanguageDropdown">
           <a class="dropdown-item">
             <div class="flag-icon-holder">
@@ -44,14 +45,73 @@
             </div>Russian
           </a>
         </div>
-      </li>
+      </li> -->
+      <!-- End Language drop down -->
+
     </ul>
-    <form class="ml-auto search-form d-none d-md-block" action="#">
+    <!-- set user id to input tag by value -->
+    <input id="logedin-user-id" value="<%= user.userId %>" type="text" hidden>
+    <!-- don't remove this part -->
+
+    <!-- <form class="ml-auto search-form d-none d-md-block" action="#">
       <div class="form-group">
         <input type="search" class="form-control" placeholder="Search Here">
       </div>
-    </form>
+    </form> -->
+
+    <div class="dropdown">
+        <button class="btn btn-lg dropdown-toggle" type="button" id="triggerId" data-toggle="dropdown" aria-haspopup="true"
+           aria-expanded="false">
+           <i class="mdi mdi-robot-vacuum" style="font-size: 25px"></i>
+          <strong>
+            Bot Status
+          </strong>
+          <i class="mdi mdi-menu-down"></i>
+        </button>
+       <div class="dropdown-menu" style="width: 300%;" aria-labelledby="triggerId">
+         <a class="dropdown-item" href="#">
+            <img src="assets/images/action_images/Deleted.png" style="width: 20px;" alt="">
+            The bot had been deleted.
+          </a><hr class="p-0 m-0">
+          <a class="dropdown-item"  href="#">
+            <img src="assets/images/action_images/ActionSpamError.png" style="width: 20px;" alt="">
+            The bot was registered with spam on Instagram and paused by our platform.
+          </a><hr class="p-0 m-0">
+          <a class="dropdown-item" href="#">
+            <img src="assets/images/action_images/Activated.png" style="width: 20px;" alt="">
+            Your bot is working and everything is functioning perfectly.
+          </a><hr class="p-0 m-0">
+          <a class="dropdown-item" href="#">
+            <img src="assets/images/action_images/CheckPointError.png" style="width: 20px;" alt="">
+            Please verify your Bot using phone number from Instagram
+          </a><hr class="p-0 m-0">
+          <a class="dropdown-item" href="#">
+            <img src="assets/images/action_images/ParseError.png" style="width: 20px;" alt="">
+            The bot can not parse the response from Instagram, 
+          </a><hr class="p-0 m-0">
+          <!-- <a class="dropdown-item" href="#">
+            <img src="assets/images/action_images/Paused.png" style="width: 20px;" alt="">
+            Action
+          </a> -->
+          <a class="dropdown-item" href="#">
+            <img src="assets/images/action_images/RequestError.png" style="width: 20px;" alt="">
+            The bot had made an unknown action to Instagram and paused by our platform.
+          </a><hr class="p-0 m-0">
+          <a class="dropdown-item" href="#">
+            <img src="assets/images/action_images/SentryBlockError.png" style="width: 20px;" alt="">
+            It was blocked from Instagram and paused by our platform.
+          </a><hr class="p-0 m-0">
+          <a class="dropdown-item" href="#">
+            <img src="assets/images/action_images/TypeError.png" style="width: 20px;" alt="">
+            The bot can not filter using your hashtag, so it was paused by our platform.
+          </a>
+      </div>
+    </div>
+
     <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+
+      </li>
       <!-- Begin Challenge notification -->
       <li class="nav-item dropdown">
         <a class="nav-link count-indicator" id="messageDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
