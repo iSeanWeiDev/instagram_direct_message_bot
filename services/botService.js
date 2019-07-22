@@ -13,8 +13,8 @@ var Client = require('instagram-private-api').V1,
     Promise = require('bluebird'),
     Sequelize = require('sequelize');
 
-//var sequelize = new Sequelize('postgres://postgres:Rango941001top@@@@localhost:5432/instagram_dev');
-var sequelize = new Sequelize('postgres://postgres:Rango941001top@@@@149.28.82.166:5432/instagram_dev');
+var sequelize = new Sequelize('postgres://postgres:Rango941001top@@@@localhost:5432/instagram_dev');
+// var sequelize = new Sequelize('postgres://postgres:Rango941001top@@@@149.28.82.166:5432/instagram_dev');
 
 var Op = Sequelize.Op;
 
