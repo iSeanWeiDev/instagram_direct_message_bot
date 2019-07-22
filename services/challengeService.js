@@ -8,7 +8,8 @@
 // Import npm modules.
 var Sequelize = require('sequelize');
 
-var sequelize = new Sequelize('postgres://postgres:Rango941001top@@@@localhost:5432/instagram_dev');
+// var sequelize = new Sequelize('postgres://postgres:Rango941001top@@@@localhost:5432/instagram_dev');
+var sequelize = new Sequelize('postgres://postgres:Rango941001top@@@@149.28.82.166:5432/instagram_dev');
 var Op = Sequelize.Op;
 
 // Import project sub modules.
