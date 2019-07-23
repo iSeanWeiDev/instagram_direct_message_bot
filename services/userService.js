@@ -6,9 +6,17 @@
  */
 
 'use strict';
+// Import npm modules
+var path = require('path'),
+    _ = require('lodash'),
+    Promise = require('bluebird'),
+    Sequelize = require('sequelize');
+
 
 // Import Data Models.
 var UserModel = require('../models').User;
+// var sequelize = new Sequelize('postgres://postgres:Rango941001top@@@@localhost:5432/instagram_dev');
+var sequelize = new Sequelize('postgres://postgres:Rango941001top@@@@149.28.82.166:5432/instagram_dev');
 
 // Definition Bot Service module.
 var UserService = {};
@@ -40,13 +48,32 @@ function getUserDetail(id, cb) {
  * @param {OBJECT} cb 
  */
 function getAllUsers(cb) {
-    UserModel.findAll()
-        .then(function (users) {
-            cb(users);
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
+    var selectQuery = ` SELECT
+                            A.id,
+                            A.first_name,
+                            A.last_name,
+                            A.email,
+                            A.user_name,
+                            A.password,
+                            A.bill_token,
+                            B.name,
+                            A.state,
+                            A."createdAt",
+                            A."updatedAt"
+                        FROM
+                            "public"."Users" AS A,
+                            "public"."Roles" AS B
+                        WHERE
+                            A.role = B.id`;
+
+    sequelize.query(selectQuery, {
+        type: sequelize.QueryTypes.SELECT
+    }).then(function(result) {
+
+        cb(result);
+    }).catch(function(error) {
+        console.log('Get all bots detail error:' + error);
+    })
 }
 // Export BotService module.
 module.exports = UserService;

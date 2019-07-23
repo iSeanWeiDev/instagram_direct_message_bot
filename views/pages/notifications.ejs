@@ -65,6 +65,7 @@
                             transform: scale(2);
                         }
                     </style>
+
                     <div class="card-columns">
                     <% for(var obj of data) { %>
                         <div class="card"
@@ -116,7 +117,7 @@
                                             <div class="form-group">
                                                 <img class="card-img-top" src="<%= imgUrl %>" style="width: 30px;" alt="">
                                                 <span class="font-weight-bolder text-danger" id="botname-<%= obj.history_id %>">
-                                                    " <%= obj.bot_name %> " <%= obj.history_id%>
+                                                    " <%= obj.bot_name %> "
                                                 </span>
                                             </div>
                                         </div>

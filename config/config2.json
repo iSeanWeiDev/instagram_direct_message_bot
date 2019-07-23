@@ -3,7 +3,7 @@
     "username": "postgres",
     "password": "Rango941001top@@@",
     "database": "instagram_dev",
-    "host": "149.28.82.166",
+    "host": "127.0.0.1",
     "port": "5432",
     "dialect": "postgres"
   },
