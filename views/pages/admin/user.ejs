@@ -3,10 +3,7 @@
         <!-- partial:../../partials/_navbar.html -->
         <% include ../../partials/_navbar %>
         <!-- partial -->
-
-        <!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css"> -->
-
-
+        
         <div class="container-fluid page-body-wrapper">
             <!-- partial:../../partials/_sidebar.html -->
             <% include ../../partials/_sidebar %>
@@ -15,47 +12,97 @@
                 <div class="content-wrapper">
                     <div class="card">
                         <div class="card-body">
-                            <table id="example" class="display hover" style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th>First name</th>
-                                        <th>Last name</th>
-                                        <th>User name</th>
-                                        <th>Email</th>
-                                        <th>Role</th>
-                                        <th>Created Date</th>
+                            <table id="example" class="table table-hover">
+                                <thead class="bg-primary ">
+                                    <tr class="text-center">
+                                        <th class="font-weight-bolder">First name</th>
+                                        <th class="font-weight-bolder">Last name</th>
+                                        <th class="font-weight-bolder">User name</th>
+                                        <th class="font-weight-bolder">Email</th>
+                                        <th class="font-weight-bolder">Role</th>
+                                        <th class="font-weight-bolder">Create At</th>
+                                        <th class="font-weight-bolder">Action</th>
                                     </tr>
                                 </thead>
+  
                                 <tbody>
                                 <% for(var obj of data) { %>
-                                    <tr>
-                                        <td> <%= obj.first_name %> </td>
-                                        <td> <%= obj.last_name %> </td>
-                                        <td> <%= obj.user_name %> </td>
-                                        <td> <%= obj.email %> </td>
-                                        <td> <%= obj.name %> </td>
-                                        <td> <%= (new Date(obj.createdAt)).toISOString().split('T')[0] %> </td>
+                                    <tr style="cursor: pointer">
+                                        <td scope="row">
+                                            <%= obj.first_name %>
+                                        </td>
+                                        <td>
+                                            <%= obj.last_name %>
+                                        </td>
+                                        <td>
+                                            <%= obj.user_name %>
+                                        </td>
+                                        <td>
+                                            <%= obj.email %>
+                                        </td>
+                                        <td>
+                                            <%= obj.name %>
+                                        </td>
+                                        <td>
+                                            <%= (new Date(obj.createdAt)).toISOString().split('T')[0] %>
+                                        </td>
+                                        <td>
+                                            <div class="button-group">
+                                                <button type="button"
+                                                    data-toggle="modal" 
+                                                    data-target="#model<%= obj.id %>" 
+                                                    class="btn btn-outline-primary pl-2 p-1 m-0 btn-rounded">
+                                                    <i class="mdi mdi-content-save-edit-outline"></i>
+                                                </button>
+
+                                                <button class="btn btn-outline-danger pl-2 p-1 m-0 btn-rounded">
+                                                    <i class="mdi mdi-delete-outline"></i>
+                                                </button>
+                                            </div>
+                                        </td>
                                     </tr>
-                                <% } %>
                                     
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="model<%= obj.id %>" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">Modal title</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Body
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                    <button type="button" class="btn btn-primary">Save</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                <% } %>
                                 </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <th>First name</th>
-                                        <th>Last name</th>
-                                        <th>User name</th>
-                                        <th>Email</th>
-                                        <th>Role</th>
-                                        <th>Created Date</th>
+
+                                <!-- <tfoot>
+                                    <tr class="text-center">
+                                        <th class="font-weight-bolder">First name</th>
+                                        <th class="font-weight-bolder">Last name</th>
+                                        <th class="font-weight-bolder">User name</th>
+                                        <th class="font-weight-bolder">Email</th>
+                                        <th class="font-weight-bolder">Role</th>
+                                        <th class="font-weight-bolder">Create At</th>
+                                        <th class="font-weight-bolder">Action</th>
                                     </tr>
-                                </tfoot>
+                                </tfoot> -->
                             </table>
                         </div>
                     </div>
-
-
                 </div>
-
+                
             <!-- partial:../../partials/_footer.html -->
             <% include ../../partials/_footer %>
             <!-- partial -->
