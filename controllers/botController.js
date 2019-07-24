@@ -580,17 +580,19 @@ BotController.changeBotStatus = function(req, res) {
                             if(arrBotProcessName[i] == req.body.botId) {
                                 arrBotProcess[i].on('message', function(data) {
                                     if(data.type == 3) {
+                                        
+                                        // validation required
                                         if(startFlag == true) {
                                             if(data.flag == true) {
                                                 res.json({
                                                     flag: true,
                                                     message: 'Successfully started your bot!'
                                                 });
-                                            } else {
-                                                res.json({
-                                                    flag: false,
-                                                    message: 'Challenge required!'
-                                                });
+                                            // } else {
+                                            //     res.json({
+                                            //         flag: false,
+                                            //         message: 'Challenge required!'
+                                            //     });
                                             }
                                         }
                                         // initialize the flag for duplicated sending.
