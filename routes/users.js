@@ -35,5 +35,8 @@ router.post('/create', UserController.createUser);
 /* POST get all bots by id Admin */
 router.post('/get/allbots', UserController.getAllBotByUserId);
 
+/* POST update current user profile */
+router.post('/update/profile', UserController.saveProfilebyId);
+
 
 module.exports = router;

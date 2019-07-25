@@ -9,6 +9,30 @@
         <!-- partial:../../partials/_sidebar.html -->
         <% include ../partials/_sidebar %>
         <!-- partial -->
+            <%console.log(data)%>
+
+            <%
+                var strRole = '';
+                switch (data.role) {
+                    case 1:
+                        strRole = 'Tier 1';
+                        break;
+                    case 2:
+                        strRole = 'Tier 2';
+                        break;
+                    case 3:
+                        strRole = 'Tier 3';
+                        break;
+                    case 4:
+                        strRole = 'Tier 4';
+                        break;
+                    case 5:
+                        strRole = 'Super-admin';
+                        break;                
+                    default:
+                        break;
+                }
+            %>
 
             <div class="main-panel">
                 <div class="content-wrapper"> 
@@ -35,6 +59,7 @@
                                                     <a href="#" class="">
                                                         metamedias.co
                                                     </a>
+                                                    
                                                 </div>
                                             </div>
                                         </div>
@@ -73,9 +98,9 @@
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label for="">Firest name: </label>
-                                                    <input type="text"
+                                                    <input type="text" value="<%= data.first_name %>"
                                                         class="form-control form-control-lg" 
-                                                        name="" id="" aria-describedby="helpId" 
+                                                        name="" id="first-name" aria-describedby="helpId" 
                                                         placeholder="ex: David" disabled>
                                                     <small id="helpId" class="form-text text-muted" hidden>Help text</small>
                                                 </div>
@@ -83,9 +108,9 @@
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                   <label for="">Last name: </label>
-                                                  <input type="text"
+                                                  <input type="text" value="<%= data.last_name %>"
                                                     class="form-control form-control-lg" 
-                                                    name="" id="" aria-describedby="helpId" 
+                                                    name="" id="last-name" aria-describedby="helpId" 
                                                     placeholder="ex: James" disabled>
                                                   <small id="helpId" class="form-text text-muted" hidden>Help text</small>
                                                 </div>
@@ -96,9 +121,9 @@
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label for="">User name: </label>
-                                                    <input type="text"
+                                                    <input type="text" value="data.user_name"
                                                         class="form-control form-control-lg" 
-                                                        name="" id="" aria-describedby="helpId" 
+                                                        name="" id="user-name" aria-describedby="helpId" 
                                                         placeholder="ex: Rango941001" disabled>
                                                     <small id="helpId" class="form-text text-muted" hidden>Help text</small>
                                                 </div>
@@ -106,9 +131,9 @@
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label for="">Email: </label>
-                                                    <input type="text"
+                                                    <input type="email" value="<%=data.email %>"
                                                         class="form-control form-control-lg" 
-                                                        name="" id="" aria-describedby="helpId" 
+                                                        name="" id="email" aria-describedby="helpId" 
                                                         placeholder="ex: test@example.com" disabled>
                                                     <small id="helpId" class="form-text text-muted" hidden>Help text</small>
                                                 </div>
@@ -119,9 +144,9 @@
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label for="">Phone number: </label>
-                                                    <input type="text"
+                                                    <input type="number" value=""
                                                         class="form-control form-control-lg" 
-                                                        name="" id="" aria-describedby="helpId" 
+                                                        name="" id="phone" aria-describedby="helpId" 
                                                         placeholder="ex: +17709194472" disabled>
                                                     <small id="helpId" class="form-text text-muted" hidden>Help text</small>
                                                 </div>
@@ -131,7 +156,7 @@
                                                     <label for="">Password: </label>
                                                     <input type="text"
                                                         class="form-control form-control-lg" 
-                                                        name="" id="" aria-describedby="helpId" 
+                                                        name="" id="password" aria-describedby="helpId" 
                                                         placeholder="************" disabled>
                                                     <small id="helpId" class="form-text text-muted" hidden>Help text</small>
                                                 </div>
@@ -140,12 +165,18 @@
                                         
                                         <div class="form-group">
                                             <div class="d-flex justify-content-end align-items-right">
-                                                <button class="btn btn-primary btn-default m-1">
+                                                <button id="btnEdit" type="button" onclick="editProfile()" 
+                                                    class="btn btn-primary btn-default m-1">
                                                     <i class="mdi mdi-account-edit"></i>
                                                     Edit
                                                 </button>
+                                                <button id="btnSave" type="button" onclick="saveProfile(<%= data.id %>)" 
+                                                    class="btn btn-primary btn-default m-1" hidden>
+                                                    <i class="mdi mdi-content-save-all"></i>
+                                                    Save
+                                                </button>
     
-                                                <button class="btn btn-outline-danger btn-default m-1">
+                                                <button type="button" onclick="reset()" class="btn btn-outline-danger btn-default m-1">
                                                     <i class="mdi mdi-refresh"></i>
                                                     Reset
                                                 </button>
@@ -160,24 +191,44 @@
                                             </div>
 
                                             <div class="card-body p-3">
-                                                <div class="d-flex justify-content-end align-items-end">
-                                                    <button class="btn btn-success btn-sm">
-                                                        <i class="mdi mdi-circle-edit-outline"></i>
-                                                        Input token
-                                                    </button>
+                                                <div class="form-group">
+                                                    <h5 class="text-primary float-left">
+                                                        <strong>
+                                                            Role: 
+                                                            <a href="#">
+                                                                <%= strRole %> 
+                                                            </a>
+                                                        </strong>
+                                                    </h5>
+    
+                                                    <div class="d-flex justify-content-end align-items-end">
+                                                        <button type="button" id="btnInputToken" 
+                                                            onclick="inputToken()" 
+                                                            class="btn btn-success btn-sm">
+                                                            <i class="mdi mdi-circle-edit-outline"></i>
+                                                            Input token
+                                                        </button>
+
+                                                        <button type="button" id="btnSendToken"
+                                                            onclick="sendToken(<%= data.id %>)" 
+                                                            class="btn btn-primary btn-sm" hidden>
+                                                            <i class="mdi mdi-send-circle"></i>
+                                                            Send token
+                                                        </button>
+                                                    </div>
                                                 </div>
+                                                
 
                                                 <div class="form-group">
                                                     <label for="">Private token</label>
                                                     <input type="text"
                                                         class="form-control form-control-lg" 
-                                                        name="" id="" aria-describedby="helpId" 
+                                                        name="" id="inputBillToken" aria-describedby="helpId" 
                                                         placeholder="You can use private token to update your role." disabled>
                                                     <small id="helpId" class="form-text text-muted" hidden>Help text</small>
                                                 </div>
                                             </div>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>

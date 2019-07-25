@@ -33,36 +33,43 @@ $(document).ready(function () {
                             strImageUrl = 'assets/images/action_images/activated_bot.png';
                             strIconUrl = 'assets/images/action_images/Activated.png';
                             break;
+                            
                         case 2:
                             strStyle = 'text-warning';
                             strImageUrl = 'assets/images/action_images/action_required_bot.png';
                             strIconUrl = 'assets/images/action_images/ActionSpamError.png';
                             break;
+
                         case 3:
                             strStyle = 'text-warning';
                             strImageUrl = 'assets/images/action_images/action_required_bot.png';
                             strIconUrl = 'assets/images/action_images/RequestError.png';
                             break;
+
                         case 4:
                             strStyle = 'text-danger';
                             strImageUrl = 'assets/images/action_images/action_required_bot.png';
                             strIconUrl = 'assets/images/action_images/CheckPointError.png';
                             break;
+
                         case 5:
                             strStyle = 'text-danger';
                             strImageUrl = 'assets/images/action_images/blocked_bot.png';
                             strIconUrl = 'assets/images/action_images/SentryBlockError.png';
                             break;
+
                         case 6:
                             strStyle = 'text-warning';
                             strImageUrl = 'assets/images/action_images/action_required_bot.png';
                             strIconUrl = 'assets/images/action_images/ParseError.png';
                             break;
+
                         case 7:
                             strStyle = 'text-warning';
                             strImageUrl = 'assets/images/action_images/action_required_bot.png';
                             strIconUrl = 'assets/images/action_images/TypeError.png';
                             break;
+                            
                         default:
                             break;
                     }

@@ -154,5 +154,13 @@ UserController.getAllBotByUserId = function (req, res) {
          res.json(cb);
     });
 }
+
+// save profile by user id
+UserController.saveProfilebyId = function(req, res) {
+    console.log(req.body);
+}
+
+
+
 // Export module with UserController.
 module.exports = UserController;
