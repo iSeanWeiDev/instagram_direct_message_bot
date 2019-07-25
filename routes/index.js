@@ -105,6 +105,16 @@ router.get('/admin-user', isAuthenicated, function(req, res) {
   });
 });
 
+router.get('/admin-bot', isAuthenicated, function(req, res) {
+  UserService.getAllUsersDetail(function (cb) {
+    if(req.session.user.role == 5) {
+      res.render('pages/admin/bot', {user: req.session.user, data: cb});
+    } else {
+      res.redirect('dashboard');
+    }
+  })
+});
+
 /* Maintance model */
 router.get('/maintance', (req, res) => {
   res.send('You can not access this platform! <a href="/">Click here to return.</a>');

@@ -1,0 +1,204 @@
+<body data-gr-c-s-loaded="true">
+    <div class="container-scroller">
+        <!-- partial:../../partials/_navbar.html -->
+        <% include ../../partials/_navbar %>
+        <!-- partial -->
+        
+        <div class="container-fluid page-body-wrapper">
+            <!-- partial:../../partials/_sidebar.html -->
+            <% include ../../partials/_sidebar %>
+
+            <%
+                var arrList = data.userList;
+                var arrData = data.data;
+
+                for(var i = 0; i < arrList.length; i++) {
+                    for(var j = 0; j < arrData.length; j++) {
+                        if(arrList[i].id == arrData[j].id) {
+                        var string = '{"' + arrData[j].type + '":' + arrData[j].count + '}';
+                        Object.assign(arrList[i], JSON.parse(string))    
+                    }
+                    }
+                }
+            %>            
+
+
+            <div class="main-panel">
+                <div class="content-wrapper">
+                    <div class="card p-1">
+                        <div class="card-body p-0">
+                            <table id="example" class="table table-hover">
+                                <thead>
+                                    <tr class="text-center">
+                                        <th class="font-weight-bolder">User name</th>
+                                        <th class="font-weight-bolder">Bots</th>
+                                        <th class="font-weight-bolder">Proxies</th>
+                                        <th class="font-weight-bolder">Dialoges</th>
+                                        <th class="font-weight-bolder">Comments</th>
+                                        <th class="font-weight-bolder">Follows</th>
+                                        <th class="font-weight-bolder">Likes</th>
+                                    </tr>
+                                </thead>
+                                <style>
+                                    .modal-admin-right {
+                                        min-width: 75%;
+                                        margin: 0;
+                                        float: right;
+                                        -webkit-animation-name: fadeInRight;
+                                        -moz-animation-name: fadeInRight;
+                                        -o-animation-name: fadeInRight;
+                                        animation-name: fadeInRight;
+                                        -webkit-animation-fill-mode: both;
+                                        -moz-animation-fill-mode: both;
+                                        -o-animation-fill-mode: both;
+                                        animation-fill-mode: both;
+                                        -webkit-animation-duration: 0.5s;
+                                        -moz-animation-duration: 0.5s;
+                                        -o-animation-duration: 0.5s;
+                                        animation-duration: 0.5s;
+                                        -webkit-animation-delay: 0.5s;
+                                        -moz-animation-delay: 0.5s;
+                                        -o-animation-duration: 0.5s;
+                                        animation-delay: 0.5s;                       
+                                    }
+
+                                    .modal-admin-right .modal-content {
+                                        min-height: 100vh;
+                                    }
+                                </style>
+
+                                <tbody>
+                                <% for(var obj of arrList) { %>
+                                    <tr onclick="getAllBotByUserId(<%= obj.id %>)"
+                                        data-toggle="modal" 
+                                        data-target="#modal<%= obj.id %>" 
+                                        class="text-center" style="cursor: pointer">
+                                        <td scope="row">
+                                            <%= obj.user_name %>
+                                        </td>
+                                    <% if(obj.bot_count > 0) { %>
+                                        <td>
+                                            <%= obj.bot_count %>
+                                        </td>
+                                    <% } else { %>
+                                        <td>
+                                            0
+                                        </td>
+                                    <% } %>
+                                        
+
+                                    <% if(obj.proxy_count > 0) { %>
+                                        <td>
+                                            <%= obj.proxy_count %>
+                                        </td>
+                                    <% } else { %>
+                                        <td>
+                                            0
+                                        </td>
+                                    <% } %>
+                                        
+                                        
+                                    <% if(obj.dialog_count > 0) { %>
+                                        <td>
+                                            <%= obj.dialog_count %>
+                                        </td>
+                                    <% } else { %>
+                                        <td>
+                                            0
+                                        </td>
+                                    <% } %>
+                                        
+                                    <% if(obj.comment_count > 0) { %>
+                                        <td>
+                                            <%= obj.comment_count %>
+                                        </td>
+                                    <% } else { %>
+                                        <td>
+                                            0
+                                        </td>
+                                    <% } %>
+
+                                    <% if(obj.follow_count > 0) { %>
+                                        <td>
+                                            <%= obj.follow_count %>
+                                        </td>
+                                    <% } else { %>
+                                        <td>
+                                            0
+                                        </td>
+                                    <% } %>
+                                        
+                                    <% if(obj.like_count > 0) { %>
+                                        <td>
+                                            <%= obj.like_count %>
+                                        </td>
+                                    <% } else { %>
+                                        <td>
+                                            0
+                                        </td>
+                                    <% } %>
+                                        
+                                    </tr>
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="modal<%= obj.id %>" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                                            <div class="modal-dialog modal-admin-right" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header pl-5">
+                                                        <h4 class="modal-title text-primary"> 
+                                                            <strong>
+                                                                <i class="fa fa-robot pr-3"></i>
+                                                                <%= obj.user_name %>
+                                                            </strong>
+                                                        </h4>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="row" id="modal<%= obj.id %>">
+                                                            <!-- Append Bot  -->
+                                                        </div>
+                                                    </div>
+                                                    <!-- <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                        <button type="button" class="btn btn-primary">Save</button>
+                                                    </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                <% } %>
+                                </tbody>
+                                <!-- <tfoot>
+                                    <tr class="text-center">
+                                        <th class="font-weight-bolder">User name</th>
+                                        <th class="font-weight-bolder">Bots</th>
+                                        <th class="font-weight-bolder">Proxies</th>
+                                        <th class="font-weight-bolder">Dialoges</th>
+                                        <th class="font-weight-bolder">Comments</th>
+                                        <th class="font-weight-bolder">Follows</th>
+                                        <th class="font-weight-bolder">Likes</th>
+                                    </tr>
+                                </tfoot> -->
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+               
+            <!-- partial:../../partials/_footer.html -->
+            <% include ../../partials/_footer %>
+            <!-- partial -->
+            </div>
+        <!-- main-panel ends -->
+        </div>
+        <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+
+    <% include ../../partials/_scripts %>
+
+    <script src="app/js/admin/bot.js"></script>
+
+    
+</body>

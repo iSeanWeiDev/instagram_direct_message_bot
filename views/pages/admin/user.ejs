@@ -10,9 +10,10 @@
 
             <div class="main-panel">
                 <div class="content-wrapper">
-                    <div class="card">
-                        <div class="card-body">
-                            <table id="example" class="table table-hover table-striped">
+                    <% console.log(data) %>
+                    <div class="card p-1">
+                        <div class="card-body p-0">
+                            <table id="example" class="table table-hover">
                                 <thead>
                                     <tr class="text-center">
                                         <th class="font-weight-bolder">First name</th>
@@ -20,7 +21,7 @@
                                         <th class="font-weight-bolder">User name</th>
                                         <th class="font-weight-bolder">Email</th>
                                         <th class="font-weight-bolder">Role</th>
-                                        <th class="font-weight-bolder">Create At</th>
+                                        <th class="font-weight-bolder">Date</th>
                                         <th class="font-weight-bolder">Action</th>
                                     </tr>
                                 </thead>
@@ -32,7 +33,7 @@
                                 </style>
                                 <tbody>
                                 <% for(var obj of data) { %>
-                                    <tr style="cursor: pointer">
+                                    <tr class="text-center" style="cursor: pointer">
                                         <td scope="row">
                                             <%= obj.first_name %>
                                         </td>
@@ -49,7 +50,7 @@
                                             <%= obj.name %>
                                         </td>
                                         <td>
-                                            <%= (new Date(obj.createdAt)).toISOString().split('T')[0] %>
+                                            <%= 30 - Math.round(((new Date()).getTime() - (new Date(obj.createdAt)).getTime())/(1000*60*60*24)) %>
                                         </td>
                                         <td>
                                             <div class="button-group">
@@ -124,10 +125,11 @@
                                                         </select>
                                                     </div>
                                                     <div class="button-group text-right">
-                                                        <button class="btn btn-primary btn-default">
-                                                            <i class="fa fa-edit" aria-hidden="true">
-                                                                Edit User
-                                                            </i>
+                                                        <button type="button"
+                                                            onclick="saveUser(<%= obj.id %>)" 
+                                                            class="btn btn-primary btn-default">
+                                                            <i class="fa fa-edit" aria-hidden="true"></i>
+                                                            Edit User
                                                         </button>
                                                         <button class="btn btn-danger btn-default" data-dismiss="modal">
                                                             <i class="fa fa-times" aria-hidden="true"></i>
@@ -148,7 +150,7 @@
                                         <th class="font-weight-bolder">User name</th>
                                         <th class="font-weight-bolder">Email</th>
                                         <th class="font-weight-bolder">Role</th>
-                                        <th class="font-weight-bolder">Create At</th>
+                                        <th class="font-weight-bolder">Date</th>
                                         <th class="font-weight-bolder">Action</th>
                                     </tr>
                                 </tfoot>
@@ -157,6 +159,90 @@
                     </div>
                 </div>
                 
+                <!-- Modal -->
+                <div class="modal fade" id="create-new-user" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                    <div class="modal-dialog user-modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <form action="" id="create-new-user-form" class="validation-required">
+                                    <h2 class="font-weight-bold">
+                                        <strong>
+                                            Create new user
+                                        </strong>
+                                    </h2>
+                                    <div class="form-group">
+                                        <label for="">First name</label>
+                                        <input type="text" 
+                                            name="" id="new-first-name" 
+                                            class="form-control" placeholder="" 
+                                            aria-describedby="helpId" required>
+                                        <small id="helpId" class="text-muted" hidden>Help text</small>
+                                    </div>
+    
+                                    <div class="form-group">
+                                        <label for="">Last name: </label>
+                                        <input type="text" 
+                                            name="" id="new-last-name" 
+                                            class="form-control" placeholder="" 
+                                            aria-describedby="helpId" required>
+                                        <small id="helpId" class="text-muted" hidden>Help text</small>
+                                    </div>
+    
+                                    <div class="form-group">
+                                        <label for="">User name: </label>
+                                        <input type="text" 
+                                            name="" id="new-user-name" 
+                                            class="form-control" placeholder="" 
+                                            aria-describedby="helpId" required>
+                                        <small id="helpId" class="text-muted" hidden>Help text</small>
+                                    </div>
+    
+                                    <div class="form-group">
+                                        <label for="">Email: </label>
+                                        <input type="email" 
+                                            name="" id="new-email" 
+                                            class="form-control" placeholder="" 
+                                            aria-describedby="helpId" required>
+                                        <small id="helpId" class="text-muted" hidden>Help text</small>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="">Password: </label>
+                                        <input type="text" 
+                                            name="" id="new-password" 
+                                            class="form-control" placeholder="" 
+                                            aria-describedby="helpId" required>
+                                        <small id="helpId" class="text-muted" hidden>Help text</small>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="">Role</label>
+                                        <select class="custom-select custom-select-sm" name="" id="new-choose-role" required>
+                                            <option value="" selected>Select one</option>
+                                            <option value="1"> Tier 1 </option>
+                                            <option value="2"> Tier 2 </option>
+                                            <option value="3"> Tier 3 </option>
+                                            <option value="4"> Tier 4 </option>
+                                            <option value="5"> Admin </option>
+                                        </select>
+                                    </div>
+                                    <div class="button-group text-right">
+                                        <button type="submit"
+                                            class="btn btn-primary btn-default">
+                                            <i class="fa fa-plus" aria-hidden="true"></i>
+                                            Crete New User
+                                        </button>
+                                        <button class="btn btn-danger btn-default" data-dismiss="modal">
+                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                            Close
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             <!-- partial:../../partials/_footer.html -->
             <% include ../../partials/_footer %>
             <!-- partial -->
@@ -171,3 +257,5 @@
 
     <script src="app/js/admin/user.js"></script>
 </body>
+
+

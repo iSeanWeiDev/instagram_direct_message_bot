@@ -23,4 +23,17 @@ router.post('/signup', UserController.signup);
 /* POST users login listing. */
 router.post('/login', UserController.login);
 
+/* POST user save by admin */
+router.post('/save', UserController.saveUser);
+
+/* POST user delete by amdin */
+router.post('/delete', UserController.deleteUser);
+
+/* POST create new user by admin */
+router.post('/create', UserController.createUser);
+
+/* POST get all bots by id Admin */
+router.post('/get/allbots', UserController.getAllBotByUserId);
+
+
 module.exports = router;

@@ -8,7 +8,7 @@
 
 // Import project sub modules.
 const UserModel = require('../models').User;
-
+var UserService = require('../services/userService');
 
 // Define user controller.
 var UserController = {}; 
@@ -123,5 +123,36 @@ UserController.login = function(req, res) {
     });
 }
 
+// save user
+UserController.saveUser = function(req, res) {
+    UserService.updateUserByAdmin(req.body, function (cb) {
+        if(cb.flag == true) {
+             res.json(cb);
+        } else {
+             res.json(cb);
+        }
+    })
+}
+
+// delete user by admin
+UserController.deleteUser = function(req, res) {
+    UserService.deleteUserByAdmin(req.body, function (cb) {
+        res.json(cb);
+    });
+}
+
+// Create user by admin
+UserController.createUser = function(req, res) {
+    UserService.createNewUserByAdmin(req.body, function (cb) {
+        res.json(cb);
+    });
+}
+
+// get all bot by user id for admin
+UserController.getAllBotByUserId = function (req, res) {
+    UserService.getAllBotByUserIdForAdmin(req.body.id, function (cb) {
+         res.json(cb);
+    });
+}
 // Export module with UserController.
 module.exports = UserController;
