@@ -1,6 +1,16 @@
 'use strict';
 
 $(document).ready(function () {
+    // Notification initialize.
+    var mkConfig = {
+        positionY: 'top',
+        positionX: 'right',
+        max: 15,
+        scrollable: false
+    };
+
+    mkNotifications(mkConfig);
+
     this.editProfile = function () {
         $('input#first-name').removeAttr('disabled');
         $('input#last-name').removeAttr('disabled');
@@ -30,9 +40,25 @@ $(document).ready(function () {
             dataType: "JSON",
         }).done(function(response) {
             if(response && response.flag == true) {
+                mkNoti(
+                    'Success!',
+                    response.message,
+                    {
+                        status:'success'
+                    }
+                );
 
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
             } else {
-
+                mkNoti(
+                    'Failure!',
+                    response.message,
+                    {
+                        status:'danger'
+                    }
+                );
             }
         });
     }

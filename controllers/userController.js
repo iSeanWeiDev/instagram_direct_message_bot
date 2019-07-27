@@ -157,7 +157,9 @@ UserController.getAllBotByUserId = function (req, res) {
 
 // save profile by user id
 UserController.saveProfilebyId = function(req, res) {
-    console.log(req.body);
+    UserService.updateUserById(req.body, function(cb) {
+        res.json(cb);
+    });
 }
 
 

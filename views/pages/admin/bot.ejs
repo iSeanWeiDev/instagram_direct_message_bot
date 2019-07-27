@@ -68,8 +68,7 @@
 
                                 <tbody>
                                 <% for(var obj of arrList) { %>
-                                    <tr onclick="getAllBotByUserId(<%= obj.id %>)"
-                                        data-toggle="modal" 
+                                    <tr data-toggle="modal" 
                                         data-target="#modal<%= obj.id %>" 
                                         class="text-center" style="cursor: pointer">
                                         <td scope="row">
@@ -144,41 +143,38 @@
                                             <div class="modal-dialog modal-admin-right" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header pl-5">
-                                                        <h4 class="modal-title text-primary"> 
-                                                            <strong>
-                                                                <i class="fa fa-robot pr-3"></i>
-                                                                <%= obj.user_name %>
-                                                            </strong>
-                                                        </h4>
-                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
+                                                        
+
+                                                        <div class="form-inline">
+                                                            <h4 class="modal-title text-primary pr-3"> 
+                                                                <strong>
+                                                                    <i class="fa fa-robot pr-3"></i>
+                                                                    <%= obj.user_name %>
+                                                                </strong>
+                                                            </h4> 
+                                                            <label for=""></label>
+                                                            <select class="form-control" name="" id="botTypeFilter">
+                                                                <option value="1-<%= obj.id %>">Activated bots</option>
+                                                                <option value="2-<%= obj.id %>">Paused bots</option>
+                                                                <option value="3-<%= obj.id %>">Deleted Bots</option>
+                                                                <option value="4-<%= obj.id %>">All bots</option>
+                                                            </select>
+                                                            </div>
+
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
                                                     </div>
                                                     <div class="modal-body">
                                                         <div class="row" id="modal<%= obj.id %>">
                                                             <!-- Append Bot  -->
                                                         </div>
                                                     </div>
-                                                    <!-- <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                        <button type="button" class="btn btn-primary">Save</button>
-                                                    </div> -->
                                                 </div>
                                             </div>
                                         </div>
                                 <% } %>
                                 </tbody>
-                                <!-- <tfoot>
-                                    <tr class="text-center">
-                                        <th class="font-weight-bolder">User name</th>
-                                        <th class="font-weight-bolder">Bots</th>
-                                        <th class="font-weight-bolder">Proxies</th>
-                                        <th class="font-weight-bolder">Dialoges</th>
-                                        <th class="font-weight-bolder">Comments</th>
-                                        <th class="font-weight-bolder">Follows</th>
-                                        <th class="font-weight-bolder">Likes</th>
-                                    </tr>
-                                </tfoot> -->
                             </table>
                         </div>
                     </div>

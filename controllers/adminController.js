@@ -45,4 +45,14 @@ AdminController.createProxy = function(req, res) {
     });
 }
 
+// get bots by types
+AdminController.getBotsByTypes = function(req, res) {
+    var id = req.body.id;
+    var flag = req.body.flag;
+
+    AdminService.getBotsByUserIdForAdmin(id, flag, function(cb) {
+        res.json(cb);
+    });
+}
+
 module.exports = AdminController;

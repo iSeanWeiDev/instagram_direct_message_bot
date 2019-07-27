@@ -21,5 +21,8 @@ router.post('/delete/proxy', AdminController.deleteProxy);
 /* POST admin create proxy listening */
 router.post('/create/proxy', AdminController.createProxy);
 
+/* POST admin get bots by types */
+router.post('/get/botsbytype', AdminController.getBotsByTypes);
+
 // export module
 module.exports = router;

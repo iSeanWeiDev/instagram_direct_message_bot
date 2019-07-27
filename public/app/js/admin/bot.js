@@ -1,16 +1,21 @@
 'use strict';
 
 $(document).ready(function () {
-    var table = $('#example').DataTable();
+    $('#example').DataTable();
 
-    this.getAllBotByUserId = function(id) {
+    $('select#botTypeFilter.form-control').change(function() {
+        var state = $(this).children("option:selected");
+        var id = state.val().split('-')[1];
+        var flag = state.val().split('-')[0];
+
         var sendData = {
-            id: id
+            id: id,
+            flag: flag
         }
 
         $.ajax({
             method: 'POST',
-            url: '/users/get/allbots',
+            url: '/admin/get/botsbytype',
             data: sendData
         }).done(function(response) {
             if(response && response.flag == true) {
@@ -115,5 +120,5 @@ $(document).ready(function () {
                 strAppendHtml = '';
             }
         });
-    }
+    });
 });

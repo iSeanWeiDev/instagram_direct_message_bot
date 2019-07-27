@@ -58,9 +58,7 @@ $(document).ready(function() {
     this.updateBot = function(id) {
         var messageDelay = $('input#message-delay-'+id),
             maxComment = $('input#max-comment-'+id),
-            // filters = $('textarea#filters-'+id).val().replace(/\n/g, '').replace(/ /g, '').replace(/#/g, '').split(','),
-            // comments = $('textarea#comments-'+id).val().replace(/\n/g, '').replace(/ /g, '').replace(/#/g, '').split(','),
-            // replies = $('textarea#replies-'+id).val().replace(/\n/g, '').replace(/ /g, '').replace(/#/g, '').split(','),
+
             filters = $('textarea#filters-'+id).val().replace(/\n/g, '').replace(/#/g, '').split(','),
             comments = $('textarea#comments-'+id).val().replace(/\n/g, '').replace(/#/g, '').split(','),
             replies = $('textarea#replies-'+id).val().replace(/\n/g, '').replace(/#/g, '').split(','),
@@ -156,8 +154,7 @@ $(document).ready(function() {
                             $('button#change-status-'+id).children().remove();
 
                             $('button#change-status-'+id).append(`<h7 id="play`+ id + `" class="m-0 p-0">
-                                                                                    <i class="fa fa-play"></i>
-                                                                                    Play
+                                                                                    <i class="mdi mdi-play"></i>
                                                                                 </h7>`);
                             $.ajax({
                                 method: 'POST',
@@ -207,8 +204,7 @@ $(document).ready(function() {
                             $('button#change-status-'+id).children().remove();
 
                             $('button#change-status-'+id).append(`<h7 id="pause`+ id + `" class="m-0 p-0">
-                                                                                    <i class="fa fa-pause"></i>
-                                                                                    Pause
+                                                                                    <i class="mdi mdi-pause"></i>
                                                                                 </h7>`);
                             var sendData = {
                                 botId: id,

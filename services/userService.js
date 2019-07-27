@@ -10,14 +10,14 @@
 var path = require('path'),
     _ = require('lodash'),
     Promise = require('bluebird'),
-    Sequelize = require('sequelize');
-
+    Sequelize = require('sequelize'),
+    bcrypt = require('bcrypt-nodejs');
 
 // Import Data Models.
 var UserModel = require('../models').User;
 var BotModel = require('../models').Bot;
-// var sequelize = new Sequelize('postgres://postgres:Rango941001top@@@@localhost:5432/instagram_dev');
-var sequelize = new Sequelize('postgres://postgres:Rango941001top@@@@149.28.82.166:5432/instagram_dev');
+var sequelize = new Sequelize('postgres://postgres:Rango941001top@@@@localhost:5432/instagram_dev');
+// var sequelize = new Sequelize('postgres://postgres:Rango941001top@@@@149.28.82.166:5432/instagram_dev');
 
 // Definition Bot Service module.
 var UserService = {};
@@ -28,7 +28,7 @@ UserService.updateUserByAdmin = updateUserByAdmin;
 UserService.deleteUserByAdmin = deleteUserByAdmin;
 UserService.createNewUserByAdmin = createNewUserByAdmin;
 UserService.getAllUsersDetail = getAllUsersDetail;
-UserService.getAllBotByUserIdForAdmin = getAllBotByUserIdForAdmin;
+UserService.updateUserById = updateUserById;
 
 /**
  * @description
@@ -123,7 +123,6 @@ function updateUserByAdmin(data, cb) {
  * @param {OBJECT} cb 
  */
 function deleteUserByAdmin(data, cb) {
-    console.log(data);
     var deleteData = {
         state: 0
     }
@@ -247,38 +246,56 @@ function getAllUsersDetail(cb) {
 
 /**
  * @description
- * get all bot by id for admin.
+ * update user by id on profile
  * 
- * @param {INTEGER} id 
+ * @param {OBJECT} data 
  * @param {OBJECT} cb 
  */
-function getAllBotByUserIdForAdmin(id, cb) {
-    BotModel.findAll({
-        attributes: [
-            'id', 'bot_name','state', 'is_activated'
-        ],
+function updateUserById(data, cb) {
+    UserModel.findAndCountAll({
         where: {
-            user_id: id
+            email: data.email
         }
-    }).then(function (bots) {
-        var arrBots = [];
+    }).then(function(result) {
+        if(result.count > 0) {
+            cb({
+                flag: false,
+                message: 'This email already used by another user'
+            })
+        } else {
+            var password = bcrypt.hashSync(data.password, bcrypt.genSaltSync(10), null);
 
-        for(var obj of bots) {
-            arrBots.push(obj.dataValues)
+            var updateUserData = {
+                first_name: data.firstName,
+                last_name: data.lastName,
+                user_name: data.userName,
+                email: data.email,
+                password: password
+            }
+
+            UserModel.update(updateUserData, {
+                where:{
+                    id: data.id
+                }
+            }).then(function() {
+                cb({
+                    flag: true,
+                    message: 'Your account had been updated.'
+                })
+            }).catch(function(error) {
+                cb({
+                    flag: false,
+                    message: 'Faild your updating account'
+                })
+            });
         }
-        
-        cb({
-            flag: true,
-            data: arrBots
-        });
-
-        arrBots = [];
     }).catch(function(error) {
         cb({
             flag: false,
-            data: error
-        });
+            message: 'Profile update error:' + error
+        })
     });
 }
+
 // Export BotService module.
 module.exports = UserService;

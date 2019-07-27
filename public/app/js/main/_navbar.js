@@ -82,5 +82,30 @@ $(document).ready(function() {
                         notification.close();
                     }
                 }
-            });
+            })
+            // .bind('ToUserExpiredMembership'+userId.val(), function (data) {
+            //     console.log(data);
+                // if(data.userId == userId.val()) {
+                //     var appendNotificationString = `<a href="#" class="dropdown-item preview-item">
+                //                 <div class="preview-thumbnail">
+                //                     <div class="preview-item-content flex-grow py-2">
+                //                         <p class="preview-subject ellipsis font-weight-medium text-danger"> Your account was paused. </p>
+                //                         <p class="font-weight-light small-text text-google"> `+ data.message +` </p>
+                //                     </div>
+                //                 </div>
+                //             </a> `;
+
+                //     notificationDropDownMenu.append(appendNotificationString);
+                //     var notificationIndex = parseInt(countOfNotification.text()) + 1;
+                //     countOfNotification.html(notificationIndex);
+                    
+                //     var notification = new Notification(data);
+                //     notification.onclick = function (event) {
+                //         console.log(event);
+                //         //window.location.href = '/posts/' + post._id;
+                //         event.preventDefault();
+                //         notification.close();
+                //     }
+                // }
+            // });
 });

@@ -6,10 +6,12 @@
  */
 
 'use strict';
+var Sequelize = require('sequelize');
 
 // Import project models
+var BotModel = require('../models').Bot;
 var ProxyModel = require('../models').Proxy;
-
+var Op = Sequelize.Op;
 // Definition Bot Service module.
 var AdminService = {};
 
@@ -17,6 +19,7 @@ var AdminService = {};
 AdminService.updateProxyById = updateProxyById;
 AdminService.deleteProxyById = deleteProxyById;
 AdminService.insertNewProxy = insertNewProxy;
+AdminService.getBotsByUserIdForAdmin = getBotsByUserIdForAdmin;
 
 /**
  * @description
@@ -95,6 +98,8 @@ function deleteProxyById(id, cb) {
  * @param {OBJECT} data 
  * @param {OBJECT} cb 
  */
+
+
 function insertNewProxy(data, cb) {
     ProxyModel.create(data)
         .then(function(proxy) {
@@ -118,6 +123,132 @@ function insertNewProxy(data, cb) {
                 message: 'Server connection error'
             })
         });
+}
+
+
+
+function getBotsByUserIdForAdmin(id, flag, cb) {
+    console.log(id, flag);
+    if(id > 0 && flag == 1) {
+        BotModel.findAll({
+            attributes: [
+                'id', 'bot_name','state', 'is_activated'
+            ],
+            where: {
+                user_id: id,
+                state: 1
+            }
+        }).then(function (bots) {
+            var arrBots = [];
+    
+            for(var obj of bots) {
+                arrBots.push(obj.dataValues)
+            }
+            
+            cb({
+                flag: true,
+                data: arrBots
+            });
+    
+            arrBots = [];
+        }).catch(function(error) {
+            cb({
+                flag: false,
+                data: error
+            });
+        });
+    }
+
+    if(id > 0 && flag == 2) {
+        BotModel.findAll({
+            attributes: [
+                'id', 'bot_name','state', 'is_activated'
+            ],
+            where: {
+                user_id: id,
+                state: {
+                    [Op.gt]: 1
+                }
+            }
+        }).then(function (bots) {
+            var arrBots = [];
+    
+            for(var obj of bots) {
+                arrBots.push(obj.dataValues)
+            }
+            
+            cb({
+                flag: true,
+                data: arrBots
+            });
+    
+            arrBots = [];
+        }).catch(function(error) {
+            cb({
+                flag: false,
+                data: error
+            });
+        });   
+    }
+
+    if(id > 0 && flag == 3) {
+        BotModel.findAll({
+            attributes: [
+                'id', 'bot_name','state', 'is_activated'
+            ],
+            where: {
+                user_id: id,
+                state: 0
+            }
+        }).then(function (bots) {
+            var arrBots = [];
+    
+            for(var obj of bots) {
+                arrBots.push(obj.dataValues)
+            }
+            
+            cb({
+                flag: true,
+                data: arrBots
+            });
+    
+            arrBots = [];
+        }).catch(function(error) {
+            cb({
+                flag: false,
+                data: error
+            });
+        });
+    }
+
+    if(id > 0 && flag == 4) {
+        BotModel.findAll({
+            attributes: [
+                'id', 'bot_name','state', 'is_activated'
+            ],
+            where: {
+                user_id: id
+            }
+        }).then(function (bots) {
+            var arrBots = [];
+    
+            for(var obj of bots) {
+                arrBots.push(obj.dataValues)
+            }
+            
+            cb({
+                flag: true,
+                data: arrBots
+            });
+    
+            arrBots = [];
+        }).catch(function(error) {
+            cb({
+                flag: false,
+                data: error
+            });
+        });
+    }
 }
 
 // exports module

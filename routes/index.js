@@ -15,22 +15,25 @@ var ProxyService = require('../services/proxyService');
 var BotService = require('../services/botService');
 var UserService = require('../services/userService');
 var ChallengeService = require('../services/challengeService');
+var UserManagerController = require('../controllers/userManagerController');
 
 /* GET login page. */
 router.get('/', function(req, res) {
   if(req.session.authenticated) {
     res.redirect('dashboard');
   }
-  
+
   res.render('pages/auth/login');
+  // UserManagerController.init(req, res);
+
 });
 
 /* GET signup page. */
 router.get('/signup', function(req, res) {
   if(req.session.authenticated) {
     res.redirect('dashboard');
- }
- 
+  }
+
   res.render('pages/auth/signup');
 });
 

@@ -27,6 +27,7 @@ var botsRouter = require('./routes/bots');
 var challengeRouter = require('./routes/challenges');
 var adminRouter = require('./routes/admin');
 
+
 // Initialize application.
 var app = express();
 
@@ -57,6 +58,8 @@ app.use('/users', usersRouter);
 app.use('/bots', botsRouter);
 app.use('/challenges', challengeRouter);
 app.use('/admin', adminRouter);
+// Initialize the user manager.
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
