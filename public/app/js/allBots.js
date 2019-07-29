@@ -61,7 +61,7 @@ $(document).ready(function() {
 
             filters = $('textarea#filters-'+id).val().replace(/\n/g, '').replace(/#/g, '').split(','),
             comments = $('textarea#comments-'+id).val().replace(/\n/g, '').replace(/#/g, '').split(','),
-            replies = $('textarea#replies-'+id).val().replace(/\n/g, '').replace(/#/g, '').split(','),
+            replies = $('textarea#replies-'+id).val().split(','),
             fum1 = $('textarea#fum-'+id+'-2th'),
             fum2 = $('textarea#fum-'+id+'-6th'),
             fum3 = $('textarea#fum-'+id+'-12th'),
@@ -80,7 +80,7 @@ $(document).ready(function() {
 
             for(var obj of params) {
                 if(obj.replace(/ /g, '').trim().length > 0) {
-                    array.push(obj.replace(/ /g, '').trim());
+                    array.push(obj.trim());
                 }
             }
 

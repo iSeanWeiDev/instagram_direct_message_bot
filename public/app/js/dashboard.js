@@ -1,6 +1,9 @@
 'use strict';
 
 $(document).ready(function() {
+    $('table#last-dialogs-table').DataTable();
+
+
     initGetData();
     
     function initGetData() {
@@ -264,5 +267,15 @@ $(document).ready(function() {
                 }
             });
         }
+    }
+
+    this.downloadCSV = function() {
+        $("table#last-dialogs-table").table2excel({
+            // exclude CSS class
+            exclude: ".noExl",
+            name: "Worksheet Name",
+            filename: "output", //do not include extension
+            fileext: ".xls" // file extension
+        });
     }
 });

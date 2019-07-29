@@ -9,6 +9,31 @@
         <!-- partial:../../partials/_sidebar.html -->
         <% include ../partials/_sidebar %>
         <!-- partial -->
+            <style>
+                .fg-toolbar.ui-toolbar.ui-widget-header.ui-helper-clearfix.ui-corner-tl.ui-corner-tr {
+                    background-color: #dde4eb;
+                }
+
+                #last-dialogs-table_length  label{
+                    padding: 0px;
+                    margin: 0px;
+                }
+
+                #last-dialogs-table_filter label{
+                    padding: 0px !important;
+                    margin: 0px;
+                }
+
+                thead.bg-secondary {
+                    vertical-align: center;
+                }
+
+                th.sorting.ui-state-default{
+                    height: 15px;
+                }
+
+            </style>
+
             <div class="main-panel">
                 <div class="content-wrapper"> 
                     <div class="row">
@@ -16,13 +41,19 @@
                             <div class="card">
                                 <div class="card-body">
                                     <div class="form-group pl-3">
-                                        <h4 class="text-primary">
+                                        <h4 class="text-primary pr-2 float-left">
                                             <strong>
                                                 Last Dialogs
                                             </strong>
                                         </h4>
+                                        <button type="button"
+                                            onclick="downloadCSV()" 
+                                            class="btn btn-outline-primary btn-sm float-right">
+                                            <i class="fa fa-download"></i>
+                                            Download
+                                        </button>
                                     </div>
-                                    <table class="table table-hover">
+                                    <table class="table table-hover" id="last-dialogs-table">
                                         <thead class="bg-secondary">
                                             <tr class="text-center">
                                                 <th scope="col">
