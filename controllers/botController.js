@@ -304,71 +304,72 @@ BotController.createNewBot = function(req, res) {
                     });
                 }
             }
-
+            // Challenge part     
             if(data.type == 5) {
-                if(data.flag == true) {
-                    // challenge part
-                    BotService.getChallengeList(function (challengeList) { 
-                        for(var obj of challengeList) {
-                            if(data.message == obj.dataValues.data) {
-                                BotService.getBotPropertiesForChallenge(data.botId, function (cb) {
-                                    var historyData = {
-                                        user_id: req.session.user.userId,
-                                        bot_id: data.botId,
-                                        bot_name: cb.bot_name,
-                                        challenge_id: obj.dataValues.id,
-                                        state: 1
-                                    }
+                var flagOfUnknown = false;
 
-                                    BotService.UpdateBotForChallenge(data.botId, obj.dataValues.id, function (updateCB) {
-                                        if(updateCB == true) {
-                                            BotService.saveChallengeHistory(historyData, function(historyCB) {
-                                                if(historyCB == true) {
-                                                    var pusher = new Pusher({
-                                                        appId: process.env.PUSHER_APP_ID,
-                                                        key: process.env.PUSHER_APP_KEY,
-                                                        secret: process.env.PUSHER_APP_SECRET,
-                                                        cluster: process.env.PUSHER_APP_CLUSTER
-                                                    });
-                                                    
-                                                    var indexOfSendData = 'ToUser:'+req.session.user.userId;
-                                                    
-                                                    var sendData = {
-                                                        userId: req.session.user.userId,
-                                                        botId: data.botId,
-                                                        botName: cb.bot_name,
-                                                        accountName: cb.account_name,
-                                                        type: obj.dataValues.type,
-                                                        data: obj.dataValues.data,
-                                                        message: obj.dataValues.message
-                                                    }
-                                              
-                                                    pusher.trigger('notifications', indexOfSendData, sendData, req.headers['x-socket-id']);
-        
-                                                    for(var i = 0; i < arrBotProcessName.length; i++) {    
-                                                        if(arrBotProcessName[i] == data.botId) {                        
-                                                            arrBotProcess[i].send({
-                                                                is_activated: 'N',
-                                                                is_created: 'N',
-                                                                is_updated: 'N'
-                                                            });
-                                                           
-                                                        }
-                                                    }
-                                                }
-                                            });
-                                        }
-                                    })
-                                });
-                            }
-                        }
-                    });
+                for(var i = 0; i < arrBotProcessName.length; i++) {    
+                    if(arrBotProcessName[i] == data.botId) {                        
+                        arrBotProcess[i].send({
+                            is_activated: 'N',
+                            is_created: 'N'
+                        });
+                       
+                    }
                 }
-            }
+
+                BotService.getChallengeList(function (challengeList) { 
+                    var historyData = {};
+
+                    for(var obj of challengeList) {
+                        if(data.message == obj.dataValues.data) {
+                            flagOfUnknown = true;
+
+                            historyData = {
+								user_id: req.session.user.userId,
+								bot_id: data.botId,
+								bot_name: cb.bot_name,
+								challenge_id: obj.dataValues.id,
+								state: 1
+                            }
+                            
+                            BotService.UpdateBotForChallenge(data.botId, obj.dataValues.id, function (updateCB) {
+                                BotService.saveChallengeHistory(historyData, function(historyCB) {});
+                            });
+                            
+                            var pusher = new Pusher({
+                                appId: process.env.PUSHER_APP_ID,
+                                key: process.env.PUSHER_APP_KEY,
+                                secret: process.env.PUSHER_APP_SECRET,
+                                cluster: process.env.PUSHER_APP_CLUSTER
+                            });
+            
+                            var indexOfSendData = 'ToUser:'+req.session.user.userId;
+            
+                            var sendData = {
+                                userId: req.session.user.userId,
+                                botId: data.botId,
+                                botName: cb.bot_name,
+                                accountName: cb.account_name,
+                                type: obj.dataValues.type,
+                                data: obj.dataValues.data,
+                                message: obj.dataValues.message
+                            }
+            
+                            pusher.trigger('notifications', indexOfSendData, sendData, req.headers['x-socket-id']);
+                        }
+                    }
+
+                    
+                });
+
+                if(flagOfUnknown == true) {
+                    console.log('test');
+                }
+            }       
         });
 
         response.is_created = 'Y';
-        response.is_updated = 'N';
 
         arrBotProcess[botNum].send(response);
     });
@@ -509,45 +510,46 @@ BotController.changeBotStatus = function(req, res) {
                                                 flag: true,
                                                 message: 'Successfully paused your bot!'
                                             });
-                                        } else {
-                                            BotService.getBotPropertiesForChallenge(data.botId, function(cb) {
-                                                var historyData = {
-                                                    user_id: req.session.user.userId,
-                                                    bot_id: data.botId,
-                                                    bot_name: cb.bot_name,
-                                                    challenge_id: 0,
-                                                    state: 1
-                                                }
-            
-                                                BotService.saveChallengeHistory(historyData, function(historyCB) {
-                                                    if(historyCB == true) {
-                                                        var pusher = new Pusher({
-                                                            appId: process.env.PUSHER_APP_ID,
-                                                            key: process.env.PUSHER_APP_KEY,
-                                                            secret: process.env.PUSHER_APP_SECRET,
-                                                            cluster: process.env.PUSHER_APP_CLUSTER
-                                                        });
-                                                        
-                                                        var indexOfPausedBotData = 'ToUser:'+req.session.user.userId;
-
-                                                        var pauseNotification = {
-                                                            userId: req.session.user.userId,
-                                                            botId: data.botId,
-                                                            botName: cb.bot_name,
-                                                            accountName: cb.account_name,
-                                                            type: 'M',
-                                                            data: 'PausedBot',
-                                                            message: 'Bot had been paused by our platform.'
-                                                        }
-            
-                                                        pusher.trigger('notifications', indexOfPausedBotData, pauseNotification, req.headers['x-socket-id'])
-                                                    }
-                                                });
-                                            });
-                                        }
+                                        } 
 
                                         // initialize the flag for duplicated sending.
                                         pauseFlag = false;
+
+                                    } else {
+                                        BotService.getBotPropertiesForChallenge(data.botId, function(cb) {
+                                            var historyData = {
+                                                user_id: req.session.user.userId,
+                                                bot_id: data.botId,
+                                                bot_name: cb.bot_name,
+                                                challenge_id: 0,
+                                                state: 1
+                                            }
+        
+                                            BotService.saveChallengeHistory(historyData, function(historyCB) {
+                                                if(historyCB == true) {
+                                                    var pusher = new Pusher({
+                                                        appId: process.env.PUSHER_APP_ID,
+                                                        key: process.env.PUSHER_APP_KEY,
+                                                        secret: process.env.PUSHER_APP_SECRET,
+                                                        cluster: process.env.PUSHER_APP_CLUSTER
+                                                    });
+                                                    
+                                                    var indexOfPausedBotData = 'ToUser:'+req.session.user.userId;
+
+                                                    var pauseNotification = {
+                                                        userId: req.session.user.userId,
+                                                        botId: data.botId,
+                                                        botName: cb.bot_name,
+                                                        accountName: cb.account_name,
+                                                        type: 'M',
+                                                        data: 'PausedBot',
+                                                        message: 'Bot had been paused by our platform.'
+                                                    }
+        
+                                                    pusher.trigger('notifications', indexOfPausedBotData, pauseNotification, req.headers['x-socket-id'])
+                                                }
+                                            });
+                                        });
                                     }
                                 }
                             });
@@ -555,7 +557,6 @@ BotController.changeBotStatus = function(req, res) {
                             arrBotProcess[i].send({
                                 is_activated: 'N',
                                 is_created: 'N',
-                                is_updated: 'N'
                             });
                            
                         }
@@ -574,7 +575,6 @@ BotController.changeBotStatus = function(req, res) {
                 if(cb.flag == true) {
                     BotService.getBotProperties(req.body.botId, function(response) {
                         response.is_created = 'N';
-                        response.is_updated = 'N';
 
                         for(var i = 0; i < arrBotProcessName.length; i++) {    
                             if(arrBotProcessName[i] == req.body.botId) {

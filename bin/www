@@ -8,14 +8,18 @@ var app = require('../app');
 var debug = require('debug')('ig-dm-bot:server');
 var http = require('http');
 var config = require('../config/env');
-// var https = require('https');
-// var fs = require('fs');
-// var path = require('path');
+var https = require('https');
+var fs = require('fs');
 
-// var privateKey = fs.readFileSync(path.join(__dirname, './ssl/privatekey.pem)'));
-// var certificate = fs.readFileSync(path.join(__dirname, './ssl/certification.pem'));
+// const privateKey = fs.readFileSync('/etc/letsencrypt/live/metamedias.co/privkey.pem', 'utf8');
+// const certificate = fs.readFileSync('/etc/letsencrypt/live/metamedias.co/cert.pem', 'utf8');
+// const ca = fs.readFileSync('/etc/letsencrypt/live/metamedias.co/chain.pem', 'utf8');
 
-
+// const credentials = {
+// 	key: privateKey,
+// 	cert: certificate,
+// 	ca: ca
+// };
 
 /**
  * Get port from environment and store in Express.
@@ -25,25 +29,11 @@ var port = normalizePort(process.env.PORT || config.server.port);
 app.set('port', port);
 
 /**
- * Create HTTP server.
- */
-// var option = {
-//   hostname: 'local.metamedias.com',
-//   port: port
-// }
-
-// var server = http.createServer(option, app);
-var server = http.createServer(app);
-
-
-/**
  * Create HTTPS server.
  */
 
-//  var server = https.createServer({
-//    key: privateKey,
-//    cert: certificate
-//  }, app);
+var server = http.createServer(app);
+// var server = https.createServer(credentials, app);
 
 /**
  * Listen on provided port, on all network interfaces.

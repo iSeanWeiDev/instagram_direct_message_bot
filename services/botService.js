@@ -27,6 +27,7 @@ BotService.saveBotDetail = saveBotDetail;
 BotService.getProxy = getProxy;
 BotService.saveFilters = saveFilters;
 BotService.saveComment = saveComment;
+BotService.getHistoryMediaIdList = getHistoryMediaIdList;
 BotService.saveReply = saveReply;
 BotService.saveFUMessage = saveFUMessage;
 BotService.saveSetting = saveSetting;
@@ -331,6 +332,16 @@ function saveComment(data, cb) {
             })
         });
 }
+
+/**
+ * 
+ * @param {Integer} botId 
+ * @param {object} cb 
+ */
+function getHistoryMediaIdList(botId, cb) {
+
+}
+
 
 /**
  * @description
@@ -749,51 +760,53 @@ function getInboxById(session, cb) {
     });
 
     pFeed.then(function(results) {
-        var countResult = results.length;
-        var accountId;
-        var text = '';
-        var clientId;
-        var arrSendData = [];
+        if(results.length > 0) {
+            var countResult = results.length;
+            var accountId;
+            var text = '';
+            var clientId;
+            var arrSendData = [];
 
-        async function getNewInbox() {
-            countResult--;
+            async function getNewInbox() {
+                countResult--;
 
-            results[countResult].items.forEach(function(item) {
-                text = item._params.text;
-                accountId = item._params.userId;
-            });
+                results[countResult].items.forEach(function(item) {
+                    text = item._params.text;
+                    accountId = item._params.userId;
+                });
 
-            results[countResult].accounts.forEach(function(account) {
-                clientId = account.pk;
-            });
+                results[countResult].accounts.forEach(function(account) {
+                    clientId = account.pk;
+                });
 
-            if(accountId == clientId && text != undefined) {
-                var objSendData = {
-                    text: text,
-                    clientId: clientId
+                if(accountId == clientId && text != undefined) {
+                    var objSendData = {
+                        text: text,
+                        clientId: clientId
+                    }
+
+                    arrSendData.push(objSendData);
                 }
 
-                arrSendData.push(objSendData);
+                if(countResult > 0) {
+                    getNewInbox();
+                }
             }
+            getNewInbox();
 
-            if(countResult > 0) {
-                getNewInbox();
-            }
+            cb({
+                flag: true,
+                data: arrSendData
+            });
+
+            arrSendData = [];
         }
-        getNewInbox();
-
-        cb({
-            flag: true,
-            data: arrSendData
-        });
-
-        arrSendData = [];
     });
 
     pFeed.catch(function(error) {
         cb({
             flag: false,
-            data: error
+            data: error.name
         })
     })
 }

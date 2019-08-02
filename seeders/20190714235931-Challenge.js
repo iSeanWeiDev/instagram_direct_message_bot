@@ -61,6 +61,30 @@ module.exports = {
         state: '1',
         createdAt : new Date(),
         updatedAt : new Date(),
+      },
+      {
+        type: 'N',
+        data: 'NoFilterError',
+        message: 'The bot can not filter using your hashtag, so it was paused by our platform. Please check your bot details and try to update or delete.',
+        state: '1',
+        createdAt : new Date(),
+        updatedAt : new Date(),
+      },
+      {
+        type: 'NN',
+        data: 'NotFoundError',
+        message: 'The bot can not filter using your hashtag, so it was paused by our platform. Please check your bot details and try to update or delete.',
+        state: '1',
+        createdAt : new Date(),
+        updatedAt : new Date(),
+      },
+      {
+        type: 'U',
+        data: 'UnknownError',
+        message: 'The bot had made an unknown action to Instagram and paused by our platform. Please report the problem to Metamedias support team.',
+        state: '1',
+        createdAt : new Date(),
+        updatedAt : new Date(),
       }
     ], {});
   },

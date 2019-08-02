@@ -57,7 +57,7 @@ $(document).ready(function() {
                         }
                     );
                     setTimeout(() => {
-                        window.open('/proxy', '_self');
+                        window.open('/admin-proxy', '_self');
                     }, 1000);
                 } else {
                     mkNoti(
@@ -98,7 +98,7 @@ $(document).ready(function() {
                                     }
                                 );
                                 setTimeout(() => {
-                                    window.open('/proxy', '_self');
+                                    window.open('/admin-proxy', '_self');
                                 }, 1000);
                             } else {
                                 mkNoti(
@@ -166,7 +166,7 @@ $(document).ready(function() {
                         }
                     );
                     setTimeout(() => {
-                        window.open('/proxy', '_self');
+                        window.open('/admin-proxy', '_self');
                     }, 1000);
                 } else {
                     mkNoti(
