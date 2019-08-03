@@ -318,14 +318,36 @@ BotController.createNewBot = function(req, res) {
                     }
                 }
 
+                BotService.getBotPropertiesForChallenge(data.botId, function (botCB) {
+                    var pusher = new Pusher({
+                        appId: process.env.PUSHER_APP_ID,
+                        key: process.env.PUSHER_APP_KEY,
+                        secret: process.env.PUSHER_APP_SECRET,
+                        cluster: process.env.PUSHER_APP_CLUSTER
+                    });
+    
+                    var indexOfSendData = 'ToUser:'+req.session.user.userId;
+    
+                    var sendData = {
+                        userId: req.session.user.userId,
+                        botId: data.botId,
+                        botName: botCB.bot_name,
+                        accountName: botCB.account_name,
+                        type: '',
+                        data: data.message,
+                        message: ''
+                    }
+    
+                    pusher.trigger('notifications', indexOfSendData, sendData, req.headers['x-socket-id']);
+                });
+
                 BotService.getChallengeList(function (challengeList) { 
-                    var historyData = {};
 
                     for(var obj of challengeList) {
                         if(data.message == obj.dataValues.data) {
                             flagOfUnknown = true;
 
-                            historyData = {
+                            var historyData = {
 								user_id: req.session.user.userId,
 								bot_id: data.botId,
 								bot_name: cb.bot_name,
@@ -336,36 +358,25 @@ BotController.createNewBot = function(req, res) {
                             BotService.UpdateBotForChallenge(data.botId, obj.dataValues.id, function (updateCB) {
                                 BotService.saveChallengeHistory(historyData, function(historyCB) {});
                             });
-                            
-                            var pusher = new Pusher({
-                                appId: process.env.PUSHER_APP_ID,
-                                key: process.env.PUSHER_APP_KEY,
-                                secret: process.env.PUSHER_APP_SECRET,
-                                cluster: process.env.PUSHER_APP_CLUSTER
-                            });
-            
-                            var indexOfSendData = 'ToUser:'+req.session.user.userId;
-            
-                            var sendData = {
-                                userId: req.session.user.userId,
-                                botId: data.botId,
-                                botName: cb.bot_name,
-                                accountName: cb.account_name,
-                                type: obj.dataValues.type,
-                                data: obj.dataValues.data,
-                                message: obj.dataValues.message
-                            }
-            
-                            pusher.trigger('notifications', indexOfSendData, sendData, req.headers['x-socket-id']);
                         }
                     }
 
-                    
-                });
+                    if(flagOfUnknown == false) {
+                        BotService.getBotPropertiesForChallenge(data.botId, function (botCB) {
+                            var historyData = {
+                                user_id: req.session.user.userId,
+                                bot_id: data.botId,
+                                bot_name: botCB.bot_name,
+                                challenge_id: 9,
+                                state: 1
+                            }
 
-                if(flagOfUnknown == true) {
-                    console.log('test');
-                }
+                            BotService.UpdateBotForChallenge(data.botId, 9, function (updateCB) {
+                                BotService.saveChallengeHistory(historyData, function(historyCB) {});
+                            });
+                        });
+                    }
+                });
             }       
         });
 
@@ -648,51 +659,6 @@ BotController.updateBot = function(req, res) {
                                                 message: 'Successfully updated your bot!'
                                             });
 
-                                            /**
-                                             * @description
-                                             * Send data to bot by using new data from database.
-                                             */
-                                            // var sendBotData = {
-                                            //     botId: req.body.botId,
-                                            //     is_activated: 'Y'
-                                            // };
-                                
-                                            // BotService.changeBotStatusById(sendBotData, function(cb) {
-                                            //     if(cb.flag == true) {
-                                            //         BotService.getBotProperties(req.body.botId, function(response) {
-                                            //             response.is_created = 'N';
-                                            //             response.is_updated = 'Y';
-                                
-                                            //             for(var i = 0; i < arrBotProcessName.length; i++) {    
-                                            //                 if(arrBotProcessName[i] == req.body.botId) {
-                                            //                     arrBotProcess[i].on('message', function(data) {
-                                            //                         if(data.type == 2) {
-                                            //                             if(startFlag == true) {
-                                            //                                 if(data.flag == true) {
-                                            //                                     res.json({
-                                            //                                         flag: true,
-                                            //                                         message: 'Successfully updated your bot!'
-                                            //                                     });
-                                            //                                 } else {
-                                            //                                     res.json({
-                                            //                                         flag: false,
-                                            //                                         message: 'Challenge required!'
-                                            //                                     });
-                                            //                                 }
-                                            //                             }
-
-                                            //                             // initialize the flag for duplicated sending.
-                                            //                             startFlag = false;
-                                            //                         }
-                                            //                     });
-                                
-                                            //                     arrBotProcess[i].send(response);
-                                            //                 }
-                                            //             }
-                                            //         });
-                                            //     }
-                                                
-                                            // });
                                         } else {
                                             res.json({
                                                 flag: false,

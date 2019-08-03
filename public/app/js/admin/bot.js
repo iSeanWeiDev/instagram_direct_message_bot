@@ -75,6 +75,23 @@ $(document).ready(function () {
                             strIconUrl = 'assets/images/action_images/TypeError.png';
                             break;
                             
+                        case 8:
+                            strStyle = 'text-danger';
+                            strImageUrl = 'assets/images/action_images/blocked_bot.png';
+                            strIconUrl = 'assets/images/action_images/TypeError.png';
+                            break;
+
+                        case 9:
+                            strStyle = 'text-warning';
+                            strImageUrl = 'assets/images/action_images/action_required_bot.png';
+                            strIconUrl = 'assets/images/action_images/ParseError.png';
+                            break;
+
+                        case 10:
+                            strStyle = 'text-warning';
+                            strImageUrl = 'assets/images/action_images/action_required_bot.png';
+                            strIconUrl = 'assets/images/action_images/TypeError.png';
+                            break;
                         default:
                             break;
                     }

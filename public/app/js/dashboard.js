@@ -57,6 +57,15 @@ $(document).ready(function() {
                             case 7:
                                 imgUrl = 'assets/images/action_images/TypeError.png';
                                 break;
+                            case 8:
+                                imgUrl = 'assets/images/action_images/TypeError.png';
+                                break;
+                            case 9:
+                                imgUrl = 'assets/images/action_images/TypeError.png';
+                                break;
+                            case 10:
+                                imgUrl = 'assets/images/action_images/TypeError.png';
+                                break;
                             default:
                                 imgUrl = 'assets/images/action_images/Activated.png';
                                 break;
@@ -154,6 +163,15 @@ $(document).ready(function() {
                                 imgUrl = 'assets/images/action_images/ParseError.png';
                                 break;
                             case 7:
+                                imgUrl = 'assets/images/action_images/TypeError.png';
+                                break;
+                            case 8:
+                                imgUrl = 'assets/images/action_images/TypeError.png';
+                                break;
+                            case 9:
+                                imgUrl = 'assets/images/action_images/TypeError.png';
+                                break;
+                            case 10:
                                 imgUrl = 'assets/images/action_images/TypeError.png';
                                 break;
                             default:

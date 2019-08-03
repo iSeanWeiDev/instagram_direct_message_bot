@@ -62,7 +62,7 @@ BotService.updateFiltersByBotid = updateFiltersByBotid;
 BotService.updateCommentsByBotid = updateCommentsByBotid;
 BotService.updateRepliesByBotid = updateRepliesByBotid;
 BotService.updateFUMsByBotid = updateFUMsByBotid;
-// BotService.UpdateBotForChallenge = UpdateBotForChallenge;
+BotService.UpdateBotForChallenge = UpdateBotForChallenge;
 
 // challenge
 BotService.getChallengeList = getChallengeList; 
@@ -2017,26 +2017,26 @@ function updateFUMsByBotid(botId, data, cb) {
  * @param {INTEGER} challengeId 
  * @param {OBJECT} cb 
  */
-// function UpdateBotForChallenge(botId, challengeId, cb) {
-//     var updateData = {
-//         state: parseInt(challengeId) + 1,
-//         is_activated: 'N'
-//     }
-//     BotModel.update(updateData, {
-//         where: {
-//             id: botId
-//         }
-//     }).then(function(result) {
-//         if(result[0] == 1) {
-//             cb(true);
-//         } else {
-//             cb(false);
-//         }
-//     }).catch(function(error) {
-//         cb(false);
-//         console.log("update bot for challenge error: " + error);
-//     });
-// }
+function UpdateBotForChallenge(botId, challengeId, cb) {
+    var updateData = {
+        state: parseInt(challengeId) + 1,
+        is_activated: 'N'
+    }
+    BotModel.update(updateData, {
+        where: {
+            id: botId
+        }
+    }).then(function(result) {
+        if(result[0] == 1) {
+            cb(true);
+        } else {
+            cb(false);
+        }
+    }).catch(function(error) {
+        cb(false);
+        console.log("update bot for challenge error: " + error);
+    });
+}
 
 
 /**

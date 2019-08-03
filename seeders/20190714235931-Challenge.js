@@ -15,7 +15,7 @@ module.exports = {
 
    return queryInterface.bulkInsert('Challenges', [
       {
-        type: 'S',
+        type: 'ASE',
         data: 'ActionSpamError',
         message: 'The bot was registered with spam on Instagram and paused by our platform, so you need to update your bot now. Please lower your daily comments or add more variations of comments.',
         state: '1',
@@ -23,7 +23,7 @@ module.exports = {
         updatedAt : new Date(),
       },
       {
-        type: 'F',
+        type: 'RE',
         data: 'RequestError',
         message: 'The bot had made an unknown action to Instagram and paused by our platform. Please report the problem to Metamedias support team.',
         state: '1',
@@ -31,7 +31,7 @@ module.exports = {
         updatedAt : new Date(),
       },
       {
-        type: 'C',
+        type: 'CPE',
         data: 'CheckpointError',
         message: 'Please verify your phone number with Instagram using the "challenge button" here: ',
         state: '1',
@@ -39,7 +39,7 @@ module.exports = {
         updatedAt : new Date(),
       },
       {
-        type: 'B',
+        type: 'SBE',
         data: 'SentryBlockError',
         message: 'It was blocked from Instagram and paused by our platform, the bot will be able to use after 4~8 hours.',
         state: '1',
@@ -47,7 +47,7 @@ module.exports = {
         updatedAt : new Date(),
       },
       {
-        type: 'P',
+        type: 'PE',
         data: 'ParseError',
         message: 'The bot can not parse the response from Instagram, so it was paused by our platform. Please delete bot and reconnect using correct details',
         state: '1',
@@ -55,7 +55,7 @@ module.exports = {
         updatedAt : new Date(),
       },
       {
-        type: 'T',
+        type: 'TE',
         data: 'TypeError',
         message: 'The bot can not filter using your hashtag, so it was paused by our platform. Please check your bot details and try to update or delete.',
         state: '1',
@@ -63,7 +63,7 @@ module.exports = {
         updatedAt : new Date(),
       },
       {
-        type: 'N',
+        type: 'NFE',
         data: 'NoFilterError',
         message: 'The bot can not filter using your hashtag, so it was paused by our platform. Please check your bot details and try to update or delete.',
         state: '1',
@@ -71,7 +71,7 @@ module.exports = {
         updatedAt : new Date(),
       },
       {
-        type: 'NN',
+        type: 'NTFE',
         data: 'NotFoundError',
         message: 'The bot can not filter using your hashtag, so it was paused by our platform. Please check your bot details and try to update or delete.',
         state: '1',
@@ -79,7 +79,7 @@ module.exports = {
         updatedAt : new Date(),
       },
       {
-        type: 'U',
+        type: 'UE',
         data: 'UnknownError',
         message: 'The bot had made an unknown action to Instagram and paused by our platform. Please report the problem to Metamedias support team.',
         state: '1',
