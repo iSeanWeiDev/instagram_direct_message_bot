@@ -1719,6 +1719,7 @@ function getBotGeneralDetail(data, cb) {
  */
 function changeBotStatusById(data, cb) {
     var updateData = {
+        state: 1,
         is_activated: data.is_activated
     }
 
