@@ -8,6 +8,7 @@ var gGlobalIntervalTime = 8000; // milisecond
 var gSession = {};
 var gMediaIdList = []; // initialize the global media list.
 var gStartCommentTime = 0; // initialize the start time for comment
+var gStartFollowTime = 0; // initialize the start time for comment
 var gStartDirectMessageTime = 0; // initialize the start time for direct message.
 var gIndexOfFUM = 0; //follow up message list index.
 var gStartUnFollowTime = (new Date()).getTime(); // initialize the start time for un-follow.
@@ -98,6 +99,7 @@ setInterval(() => {
             var botId = initializeData.bot.id;
             var messageDelay = initializeData.bot.message_delay;
             var maxComment = initializeData.bot.max_comment;
+            var maxFollow = parseInt(maxComment) * 12;
             var arrFilter = initializeData.filters;
             var arrComment = initializeData.comments;
             var arrReply = initializeData.replies;
@@ -111,6 +113,7 @@ setInterval(() => {
             var countOfFilters = arrFilter.length;
             var miliDay = 1000 * 60 * 60 * 24;// milisecond
             var deltaCommentTime = parseInt(miliDay/maxComment);
+            var deltaFollowTime = parseInt(miliDay/maxFollow);
             
             var crrCommentServerTime = (new Date()).getTime(); // milisecond.
 
@@ -125,12 +128,13 @@ setInterval(() => {
                     var followClientId = gMediaIdList[countOfMediaList].clientId;
                     var indexOfComment = getRandomInt(arrComment.length); 
                     var commentText = arrComment[indexOfComment].text;
-                    var commentId = arrComment[indexOfComment].id;   
+                    var commentId = arrComment[indexOfComment].id;
                     
                     // Don't make comment duplicated media id again.
                     //BotService.getHistoryMediaIdList();
 
                     // comment to post by media id.
+                    
                     BotService.commitByMediaId(gSession, mediaId, commentText, function(resultOfCommit) {
                         if(resultOfCommit.flag == true) {
                             // Define new commit history data
@@ -149,33 +153,36 @@ setInterval(() => {
                             });
 
                             // follow users by client id.
-                            BotService.followUserById(gSession, followClientId, function(followCB) {
-                                if(followCB.flag == true) {
-                                    var followHistoryData = {
-                                        bot_id: botId,
-                                        client_id: followClientId,
-                                        is_follow: 'Y'
-                                    }
-
-                                    // save follower history to database.
-                                    BotService.saveFollowUserHistory(followHistoryData, function(historyCB) {
-                                        if(historyCB.flag == true) {
-                                            console.log("Pendding follow user success"+botId);
+                            // add follow logic with maxFollow
+                            if(crrCommentServerTime - gStartFollowTime > deltaFollowTime) {
+                                BotService.followUserById(gSession, followClientId, function(followCB) {
+                                    if(followCB.flag == true) {
+                                        var followHistoryData = {
+                                            bot_id: botId,
+                                            client_id: followClientId,
+                                            is_follow: 'Y'
                                         }
-                                    });
-                                } else {
-                                    // Challenge => follow user by id.
-                                    process.send({
-                                        type: 5,
-                                        flag: true,
-                                        botId: botId,
-                                        message: followCB.data
-                                    });
 
-                                    gMediaIdList = [];
-                                }
-                            });
+                                        // save follower history to database.
+                                        BotService.saveFollowUserHistory(followHistoryData, function(historyCB) {
+                                            if(historyCB.flag == true) {
+                                                console.log("Pendding follow user success"+botId);
+                                            }
+                                        });
+                                    } else {
+                                        // Challenge => follow user by id.
+                                        process.send({
+                                            type: 5,
+                                            flag: true,
+                                            botId: botId,
+                                            message: followCB.data
+                                        });
 
+                                        gMediaIdList = [];
+                                    }
+                                });
+                                gStartFollowTime = crrCommentServerTime
+                            }
                         } else {
                             // Challenge => commit by media id.
                             process.send({
@@ -529,32 +536,38 @@ setInterval(() => {
                             });
 
                             // follow users by client id.
-                            BotService.followUserById(gSession, followClientId, function(followCB) {
-                                if(followCB.flag == true) {
-                                    var followHistoryData = {
-                                        bot_id: botId,
-                                        client_id: followClientId,
-                                        is_follow: 'Y'
-                                    }
-
-                                    // save follower history to database.
-                                    BotService.saveFollowUserHistory(followHistoryData, function(historyCB) {
-                                        if(historyCB.flag == true) {
-                                            console.log("Pendding follow user success"+botId);
+                            // follow users by client id.
+                            // add follow logic with maxFollow
+                            if(crrCommentServerTime - gStartFollowTime > deltaFollowTime) {
+                                BotService.followUserById(gSession, followClientId, function(followCB) {
+                                    if(followCB.flag == true) {
+                                        var followHistoryData = {
+                                            bot_id: botId,
+                                            client_id: followClientId,
+                                            is_follow: 'Y'
                                         }
-                                    });
-                                } else {
-                                    // Challenge => follow user by id.
-                                    process.send({
-                                        type: 5,
-                                        flag: true,
-                                        botId: botId,
-                                        message: followCB.data
-                                    });
 
-                                    gMediaIdList = [];
-                                }
-                            });
+                                        // save follower history to database.
+                                        BotService.saveFollowUserHistory(followHistoryData, function(historyCB) {
+                                            if(historyCB.flag == true) {
+                                                console.log("Pendding follow user success"+botId);
+                                            }
+                                        });
+                                    } else {
+                                        // Challenge => follow user by id.
+                                        process.send({
+                                            type: 5,
+                                            flag: true,
+                                            botId: botId,
+                                            message: followCB.data
+                                        });
+
+                                        gMediaIdList = [];
+                                    }
+                                });
+                                
+                                gStartFollowTime = crrCommentServerTime
+                            }
 
                         } else {
                             // Challenge => commit by media id.
