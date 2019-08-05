@@ -157,7 +157,7 @@ function saveBotDetail(data, proxyData, cb) {
                     .then(function(history) {
                         cb({
                             flag: true,
-                            message: 'Successfully created your bot!',
+                            message: 'Successfully validated your bot!',
                             botId: history.dataValues.bot_id
                         });
                     })

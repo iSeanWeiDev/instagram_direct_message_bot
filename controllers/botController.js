@@ -339,30 +339,28 @@ BotController.createNewBot = function(req, res) {
                     }
     
                     pusher.trigger('notifications', indexOfSendData, sendData, req.headers['x-socket-id']);
-                });
 
-                BotService.getChallengeList(function (challengeList) { 
+                    BotService.getChallengeList(function (challengeList) { 
 
-                    for(var obj of challengeList) {
-                        if(data.message == obj.dataValues.data) {
-                            flagOfUnknown = true;
-
-                            var historyData = {
-								user_id: req.session.user.userId,
-								bot_id: data.botId,
-								bot_name: cb.bot_name,
-								challenge_id: obj.dataValues.id,
-								state: 1
+                        for(var obj of challengeList) {
+                            if(data.message == obj.dataValues.data) {
+                                flagOfUnknown = true;
+    
+                                var historyData = {
+                                    user_id: req.session.user.userId,
+                                    bot_id: data.botId,
+                                    bot_name: botCB.bot_name,
+                                    challenge_id: obj.id,
+                                    state: 1
+                                }
+                                
+                                BotService.UpdateBotForChallenge(data.botId, obj.dataValues.id, function (updateCB) {
+                                    BotService.saveChallengeHistory(historyData, function(historyCB) {});
+                                });
                             }
-                            
-                            BotService.UpdateBotForChallenge(data.botId, obj.dataValues.id, function (updateCB) {
-                                BotService.saveChallengeHistory(historyData, function(historyCB) {});
-                            });
                         }
-                    }
-
-                    if(flagOfUnknown == false) {
-                        BotService.getBotPropertiesForChallenge(data.botId, function (botCB) {
+    
+                        if(flagOfUnknown == false) {
                             var historyData = {
                                 user_id: req.session.user.userId,
                                 bot_id: data.botId,
@@ -374,9 +372,11 @@ BotController.createNewBot = function(req, res) {
                             BotService.UpdateBotForChallenge(data.botId, 9, function (updateCB) {
                                 BotService.saveChallengeHistory(historyData, function(historyCB) {});
                             });
-                        });
-                    }
+                        }
+                    });
                 });
+
+                
             }       
         });
 
