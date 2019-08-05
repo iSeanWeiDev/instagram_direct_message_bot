@@ -74,7 +74,9 @@ $(document).ready(function() {
                     var notificationIndex = parseInt(countOfNotification.text()) + 1;
                     countOfNotification.html(notificationIndex);
                     
-                    var notification = new Notification(data);
+                    
+
+                    var notification = new Notification(`${data.botName} had been paused by ${data.data}`);
                     notification.onclick = function (event) {
                         console.log(event);
                         //window.location.href = '/posts/' + post._id;

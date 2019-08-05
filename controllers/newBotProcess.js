@@ -188,6 +188,8 @@ setInterval(() => {
                             gMediaIdList = [];
                         }
                     });
+
+                    gStartCommentTime = crrCommentServerTime;
                 }
             } else {
                 // get media List by filter
@@ -566,6 +568,8 @@ setInterval(() => {
                             gMediaIdList = [];
                         }
                     });
+
+                    gStartCommentTime = crrCommentServerTime;
                 }
             } else {
                 // get media List by filter
