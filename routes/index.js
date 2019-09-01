@@ -23,9 +23,16 @@ router.get('/', function(req, res) {
     res.redirect('dashboard');
   }
 
-  res.render('pages/auth/login');
-  // UserManagerController.init(req, res);
+  res.render('pages/home');
+});
 
+/* GET login page. */
+router.get('/login', function(req, res) {
+  if(req.session.authenticated) {
+    res.redirect('dashboard');
+  }
+
+  res.render('pages/auth/login');
 });
 
 /* GET signup page. */

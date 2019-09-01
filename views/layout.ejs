@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -9,32 +10,52 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons" rel="stylesheet">
 
     <!-- Begin import core css files -->
-    <link href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" rel="stylesheet" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+    <link  href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" rel="stylesheet" crossorigin="anonymous">
+    <link  rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
     <!-- plugins:css -->
-    <link rel="stylesheet" href="assets/vendors/iconfonts/mdi/css/materialdesignicons.min.css">
-    <link rel="stylesheet" href="assets/vendors/iconfonts/ionicons/css/ionicons.css">
-    <link rel="stylesheet" href="assets/vendors/iconfonts/typicons/src/font/typicons.css">
-    <link rel="stylesheet" href="assets/vendors/iconfonts/flag-icon-css/css/flag-icon.min.css">
-    <link rel="stylesheet" href="assets/vendors/css/vendor.bundle.base.css">
-    <link rel="stylesheet" href="assets/vendors/css/vendor.bundle.addons.css">
-    <link rel="stylesheet" href="app/css/jquery.datetimepicker.min.css">
+    <link  rel="stylesheet" href="assets/vendors/iconfonts/mdi/css/materialdesignicons.min.css">
+    <link  rel="stylesheet" href="assets/vendors/iconfonts/ionicons/css/ionicons.css">
+    <link  rel="stylesheet" href="assets/vendors/iconfonts/typicons/src/font/typicons.css">
+    <link  rel="stylesheet" href="assets/vendors/iconfonts/flag-icon-css/css/flag-icon.min.css">
+    <link  rel="stylesheet" href="assets/vendors/css/vendor.bundle.base.css">
+    <link  rel="stylesheet" href="assets/vendors/css/vendor.bundle.addons.css">
+    <link  rel="stylesheet" href="app/css/jquery.datetimepicker.min.css">
 
     <!-- endinject -->
     <!-- inject:css -->
-    <link rel="stylesheet" href="assets/css/shared/style.css">
+    <link  rel="stylesheet" href="assets/css/shared/style.css">
     <!-- endinject -->
     <!-- Layout styles -->
-    <link rel="stylesheet" href="assets/css/demo/style.css">
-    <link rel="stylesheet" href="app/css/mk-notifications.css">
-    <link rel="stylesheet" href="app/css/custom-style.css">
+    <link  rel="stylesheet" href="assets/css/demo/style.css">
+    <link  rel="stylesheet" href="app/css/mk-notifications.css">
+    <link  rel="stylesheet" href="app/css/custom-style.css">
 
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.jqueryui.min.css">
+    <link  rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link  rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.jqueryui.min.css">
 
     <link rel="icon" href="assets/images/favicon/favicon.ico" type="image/x-icon">
+    <script src="assets/js/jquery.min.js"></script>
 </head>
+
+<script>
+    if(window.location.href.split('/')[3] == "" || window.location.href.split('/')[3] == "#") {
+        $('link').remove();
+        $('head').html(`<meta charset="utf-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+                        <meta name="description" content="Social chat bots">
+                        <meta name="author" content="MetaMedia">
+                        <title>MetaMedias - Marketing automation. Social bot software.</title>
+                        <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+                        <link rel="stylesheet" type="text/css" href="assets/css/font-awesome.min.css">
+                        <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons" rel="stylesheet">
+                        <link rel="stylesheet" type="text/css" href="assets/css/slick-team-slider.css" />
+                        <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+                        <link rel="icon" href="assets/images/favicon/favicon.ico" type="image/x-icon">`);
+    }
+</script>
     <%- body %>
 
     <script src="app/js/main/_navbar.js"></script>
+
+    
 </html>

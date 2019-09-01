@@ -9,6 +9,7 @@
 // Import project sub modules.
 const UserModel = require('../models').User;
 var UserService = require('../services/userService');
+var nodemailer = require('nodemailer');
 
 // Define user controller.
 var UserController = {}; 
@@ -162,7 +163,36 @@ UserController.saveProfilebyId = function(req, res) {
     });
 }
 
+// contact us for customers
+UserController.contactUs = function (req, res) {
+    var data = req.body;
+    async function main() {
+        // create reusable transporter object using the default SMTP transport
+        let transporter = nodemailer.createTransport({
+            host: 'gmail',
+            auth: {
+                user: process.env.TO_EMAIL, // generated ethereal user
+                pass: process.env.TO_EMAIL_PASS // generated ethereal password
+            }
+        });
 
+        const mailOptions = {
+            from: data.email, // sender address
+            to: process.env.TO_EMAIL, // list of receivers
+            subject: 'Hello Sebastian, I am ' + data.name + '✔ ' + data.subject, // Subject line
+            text: data.message // plain text body
+        };
+
+        await transporter.sendMail(mailOptions, function (err, info) {
+            if(err)
+              console.log(err)
+            else
+              console.log(info);
+         });
+    }
+
+    main().catch(console.error);
+}
 
 // Export module with UserController.
 module.exports = UserController;

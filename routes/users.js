@@ -35,5 +35,8 @@ router.post('/create', UserController.createUser);
 /* POST update current user profile */
 router.post('/update/profile', UserController.saveProfilebyId);
 
+/* POST emailing for customers */
+router.post('/contactus', UserController.contactUs);
+
 
 module.exports = router;

@@ -6,6 +6,7 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "@types/dotenv": "^6.1.1",
     "bcrypt-nodejs": "0.0.3",
     "bluebird": "^3.5.4",
     "body-parser": "^1.19.0",
@@ -27,6 +28,7 @@
     "morgan": "~1.9.1",
     "node-cron": "^2.0.3",
     "node-schedule": "^1.3.2",
+    "nodemailer": "^6.3.0",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
     "path": "^0.12.7",
