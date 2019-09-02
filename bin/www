@@ -11,15 +11,15 @@ var config = require('../config/env');
 var https = require('https');
 var fs = require('fs');
 
-// const privateKey = fs.readFileSync('/etc/letsencrypt/live/metamedias.co/privkey.pem', 'utf8');
-// const certificate = fs.readFileSync('/etc/letsencrypt/live/metamedias.co/cert.pem', 'utf8');
-// const ca = fs.readFileSync('/etc/letsencrypt/live/metamedias.co/chain.pem', 'utf8');
+const privateKey = fs.readFileSync('/etc/letsencrypt/live/metamedias.co/privkey.pem', 'utf8');
+const certificate = fs.readFileSync('/etc/letsencrypt/live/metamedias.co/cert.pem', 'utf8');
+const ca = fs.readFileSync('/etc/letsencrypt/live/metamedias.co/chain.pem', 'utf8');
 
-// const credentials = {
-// 	key: privateKey,
-// 	cert: certificate,
-// 	ca: ca
-// };
+const credentials = {
+	key: privateKey,
+	cert: certificate,
+	ca: ca
+};
 
 /**
  * Get port from environment and store in Express.
@@ -32,8 +32,8 @@ app.set('port', port);
  * Create HTTPS server.
  */
 
-var server = http.createServer(app);
-// var server = https.createServer(credentials, app);
+// var server = http.createServer(app);
+var server = https.createServer(credentials, app);
 
 /**
  * Listen on provided port, on all network interfaces.
